@@ -29,11 +29,11 @@ public class UserAction {
     public UserAction(HRPerson hrPerson, Person person, int action) {
         entry = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)+": ";
         entry += hrPerson.getFirstName()+" ";
-        entry += hrPerson.getLastName()+" - ";
+        entry += hrPerson.getLastName()+" -> ";
         if (action >= 0 && action < actionDescription.length) {
+            entry += actionDescription[action]+" (";
             entry += person.getFirstName()+" ";
-            entry += person.getLastName()+" - ";
-            entry += actionDescription[action];
+            entry += person.getLastName()+")";
         } else {
             entry += "unknown action";
         }

@@ -18,7 +18,7 @@ public class LogBook {
     private boolean fileWritingEnabled;
 
     /**
-     * Creates a Logbook. Is private because of Singleton pattern.
+     * Creates a Logbook. Is private because of usage of the singleton pattern.
      */
     private LogBook() {
         File f = new File("logboook.log");
@@ -28,7 +28,7 @@ public class LogBook {
                 readFile();
                 reader.close();
             }
-            writer = new BufferedWriter(new FileWriter(f));
+            writer = new BufferedWriter(new FileWriter(f, true));
             fileWritingEnabled = true;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,7 +54,6 @@ public class LogBook {
         if (fileWritingEnabled) {
             entries.add(entry);
             writeFile(entry);
-
         }
     }
 
