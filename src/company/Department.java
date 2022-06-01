@@ -12,6 +12,10 @@ public class Department {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void addMember(Person person) {
         members.add(person);
     }
