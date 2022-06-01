@@ -19,10 +19,6 @@ public class HRPerson extends Person {
         LogBook.getLogBookInstance().addEntry(ua.getEntry());
     }
 
-    public void change(Person person, int modus) {
-
-    }
-
     public int getModus() {
         return modus;
     }
