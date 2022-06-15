@@ -1,9 +1,9 @@
-package testing;
+package ch.bzz.testing;
 
-import employees.HRPerson;
-import employees.Person;
-import log.LogBook;
-import log.UserAction;
+import ch.bzz.employees.HRPerson;
+import ch.bzz.employees.Person;
+import ch.bzz.log.LogBook;
+import ch.bzz.log.UserAction;
 
 import javax.swing.*;
 

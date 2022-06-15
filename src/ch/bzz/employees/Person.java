@@ -1,8 +1,9 @@
-package employees;
+package ch.bzz.employees;
 
 import javax.swing.*;
 
 public class Person {
+    private String uuid;
     private ImageIcon photo;
     private String firstName;
     private String lastName;
@@ -40,4 +41,19 @@ public class Person {
     }
 
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Participation getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(Participation participation) {
+        this.participation = participation;
+    }
 }

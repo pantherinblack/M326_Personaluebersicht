@@ -1,4 +1,4 @@
-package log;
+package ch.bzz.log;
 
 import java.io.*;
 import java.util.Vector;

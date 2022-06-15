@@ -1,20 +1,18 @@
-package employees;
-
-import company.*;
+package ch.bzz.employees;
 
 import java.util.Vector;
 
 public class Participation {
-    private Vector<JobFunctions> functions;
-    private Vector<Teams> teams;
+    private Vector<String> functions;
+    private Vector<String> teams;
 
     public Participation() {}
 
-    public void addFunction(JobFunctions jobFunction) {
+    public void addFunction(String jobFunction) {
         functions.add(jobFunction);
     }
 
-    public JobFunctions getFunction(int index) {
+    public String getFunction(int index) {
         return functions.get(index);
     }
 
@@ -26,11 +24,11 @@ public class Participation {
         return functions.size();
     }
 
-    public void addTeam(Teams team) {
+    public void addTeam(String team) {
         teams.add(team);
     }
 
-    public Teams getTeam(int index) {
+    public String getTeam(int index) {
         return teams.get(index);
     }
 

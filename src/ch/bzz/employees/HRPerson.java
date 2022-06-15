@@ -1,8 +1,7 @@
-package employees;
+package ch.bzz.employees;
 
-import log.LogBook;
-import log.UserAction;
-import employees.*;
+import ch.bzz.log.LogBook;
+import ch.bzz.log.UserAction;
 
 import javax.swing.*;
 

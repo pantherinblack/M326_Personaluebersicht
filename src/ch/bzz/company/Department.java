@@ -1,6 +1,6 @@
-package company;
+package ch.bzz.company;
 
-import employees.Person;
+import ch.bzz.employees.Person;
 
 import java.util.Vector;
 

@@ -1,4 +1,4 @@
-package company;
+package ch.bzz.company;
 
 import java.util.Vector;
 
