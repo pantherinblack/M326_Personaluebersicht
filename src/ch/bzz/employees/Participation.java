@@ -1,8 +1,49 @@
 package ch.bzz.employees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Vector;
 
 public class Participation {
+
+
+    private Vector<String> functions = new Vector<>();
+    private Vector<String> teams = new Vector<>();
+
+    public Participation() {}
+    @JsonIgnore
+    public void addFunction(String jobFunction) {
+        functions.add(jobFunction);
+    }
+    @JsonIgnore
+    public String getFunction(int index) {
+        return functions.get(index);
+    }
+    @JsonIgnore
+    public void removeFunction(int index) {
+        functions.remove(index);
+    }
+    @JsonIgnore
+    public int getNumberOfFunctions() {
+        return functions.size();
+    }
+    @JsonIgnore
+    public void addTeam(String team) {
+        teams.add(team);
+    }
+    @JsonIgnore
+    public String getTeam(int index) {
+        return teams.get(index);
+    }
+    @JsonIgnore
+    public void removeTeam(int index) {
+        teams.remove(index);
+    }
+    @JsonIgnore
+    public int getNumberOfTeams() {
+        return teams.size();
+    }
+
     public Vector<String> getFunctions() {
         return functions;
     }
@@ -17,42 +58,5 @@ public class Participation {
 
     public void setTeams(Vector<String> teams) {
         this.teams = teams;
-    }
-
-    private Vector<String> functions;
-    private Vector<String> teams;
-
-    public Participation() {}
-
-    public void addFunction(String jobFunction) {
-        functions.add(jobFunction);
-    }
-
-    public String getFunction(int index) {
-        return functions.get(index);
-    }
-
-    public void removeFunction(int index) {
-        functions.remove(index);
-    }
-
-    public int getNumberOfFunctions() {
-        return functions.size();
-    }
-
-    public void addTeam(String team) {
-        teams.add(team);
-    }
-
-    public String getTeam(int index) {
-        return teams.get(index);
-    }
-
-    public void removeTeam(int index) {
-        teams.remove(index);
-    }
-
-    public int getNumberOfTeams() {
-        return teams.size();
     }
 }

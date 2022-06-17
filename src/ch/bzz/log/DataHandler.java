@@ -17,9 +17,7 @@ public class DataHandler {
     private static Company company;
     private static DataHandler instance;
 
-    private DataHandler() {
-        loadApp();
-    }
+    private DataHandler() {}
 
     public void saveApp(Company company) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -32,25 +30,26 @@ public class DataHandler {
             writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8));
 
             objectWriter.writeValue(writer, company);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Company loadApp() {
         try {
+            if (!Files.exists(Paths.get("data.json"))) Files.createFile(Paths.get("data.json"));
             byte[] jsonData = Files.readAllBytes(Paths.get("data.json"));
             ObjectMapper objectMapper = new ObjectMapper();
             company = objectMapper.readValue(jsonData, Company.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (company==null) {
             company = new Company("Empty");
         }
+
         return company;
     }
 
     public static DataHandler getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new DataHandler();
         }
         return instance;

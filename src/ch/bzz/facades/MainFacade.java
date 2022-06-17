@@ -12,8 +12,8 @@ import java.util.*;
 
 public class MainFacade {
     private Company company;
-    private static MainFacade instance;
-    private List<ChangesModel> changesModels = new ArrayList<>();
+    private static MainFacade instance = null;
+    private Vector<ChangesModel> changesModels = new Vector<>();
 
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
@@ -52,7 +52,7 @@ public class MainFacade {
     }
 
     private Department getDepartmentByName(String name) {
-        for (int d = 0; d< company.getNumberOfDepartments(); d++) {
+        for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             if (company.getDepartment(d).getName().equals(name)) return company.getDepartment(d);
         }
         return null;
@@ -185,29 +185,30 @@ public class MainFacade {
         return false;
     }
 
-    public List<Person> getAllPeople() {
-        List<Person> people = new ArrayList<>();
+    public Vector<Person> getAllPeople() {
+        Vector<Person> people = new Vector<>();
         for (int i=0; i<company.getNumberOfDepartments(); i++) {
             for (int j=0; j<company.getDepartment(i).getNumberOfMembers(); j++) {
                 Person person = company.getDepartment(i).getMember(i);
                 people.add(person);
             }
         }
-        return new ArrayList<>(people);
+        return new Vector<>(people);
     }
 
     public void fire() {
         for (ChangesModel changesModel : changesModels) {
             changesModel.fireContentsChanged(this, 0,-1);
         }
+        DataHandler.getInstance().saveApp(company);
     }
 
     public Person getPerson(int index) {
-        return getPerson(index,null, null, null,null, null);
+        return getAllPeople().get(index);
     }
 
-    public List<Person> sortPeople(String name, String function, String department, String team, String sort) {
-        List<Person> people = getAllPeople();
+    public Vector<Person> sortPeople(String name, String function, String department, String team, String sort) {
+        Vector<Person> people = getAllPeople();
         if (function!= null && !function.isEmpty()) {
             people.removeIf(person -> !getFunctionsByUuid(person.getUuid()).contains(function));
         }
@@ -243,6 +244,7 @@ public class MainFacade {
     }
 
     public static MainFacade getInstance() {
+        if (instance==null) instance = new MainFacade();
         return instance;
     }
 
@@ -261,14 +263,18 @@ public class MainFacade {
 
     public void addFunction(String uuid, String function) {
         addFunction(uuid, function, getFunctionsByUuid(uuid).size());
-        fire();
     }
 
     public void addTeam(String uuid, String department, int index) {
         getTeamsByUuid(uuid).insertElementAt(department, index);
+        fire();
     }
 
     public void addTeam(String uuid, String department) {
         addFunction(uuid,department, getTeamsByUuid(uuid).size());
+    }
+
+    public Company getCompany() {
+        return company;
     }
 }

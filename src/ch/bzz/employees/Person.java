@@ -1,9 +1,11 @@
 package ch.bzz.employees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.swing.*;
+import java.util.UUID;
 
 /**
  *
@@ -26,9 +28,11 @@ public class Person {
     private Participation participation;
 
     public Person(String fName, String lName, ImageIcon photo) {
+        this.uuid = UUID.randomUUID().toString();
         setFirstName(fName);
         setLastName(lName);
         setPhoto(photo);
+        participation = new Participation();
     }
 
     public ImageIcon getPhoto() {
@@ -72,6 +76,9 @@ public class Person {
         this.participation = participation;
     }
 
+    public Person() {
+    }
+    @JsonIgnore
     public String getFullName() {
         return firstName+" "+lastName;
     }
