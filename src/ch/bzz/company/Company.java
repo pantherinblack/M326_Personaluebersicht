@@ -20,7 +20,7 @@ public class Company {
         departments.add(department);
     }
 
-    public Department detDepartment(int index) {
+    public Department getDepartment(int index) {
         return departments.get(index);
     }
 

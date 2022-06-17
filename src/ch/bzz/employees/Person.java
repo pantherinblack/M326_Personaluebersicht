@@ -1,7 +1,22 @@
 package ch.bzz.employees;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.swing.*;
 
+/**
+ *
+ *
+ *
+ */
+/* start erro@author Lorenzo Giuntini (Medox36) */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = HRPerson.class, name = "HRPerson")})
+/* end @author Lorenzo Giuntini (Medox36) */
 public class Person {
     private String uuid;
     private ImageIcon photo;
@@ -55,5 +70,9 @@ public class Person {
 
     public void setParticipation(Participation participation) {
         this.participation = participation;
+    }
+
+    public String getFullName() {
+        return firstName+" "+lastName;
     }
 }

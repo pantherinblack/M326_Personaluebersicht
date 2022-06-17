@@ -2,6 +2,7 @@ package ch.bzz.employees;
 
 import ch.bzz.log.LogBook;
 import ch.bzz.log.UserAction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.swing.*;
 

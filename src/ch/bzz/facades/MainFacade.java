@@ -1,18 +1,23 @@
-/*
-package ch.bzz.Interface;
+
+package ch.bzz.facades;
 
 import ch.bzz.company.Company;
 import ch.bzz.company.Department;
 import ch.bzz.employees.Participation;
 import ch.bzz.employees.Person;
+import ch.bzz.log.DataHandler;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Vector;
+import java.util.*;
 
-public class PersonFacade {
+public class MainFacade {
     private Company company;
+    private static MainFacade instance;
+    private List<ChangesModel> changesModels = new ArrayList<>();
+
+    private MainFacade() {
+        company = DataHandler.getInstance().loadApp();
+    }
 
     private Person getPersonByUuid(String uuid) {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
@@ -39,19 +44,11 @@ public class PersonFacade {
     }
 
     private Vector<String> getTeamsByParticipation(Participation participation) {
-        Vector<String> cache = new Vector<>();
-        for (int i = 0; i < participation.getNumberOfTeams(); i++) {
-            cache.add(participation.getTeam(i));
-        }
-        return cache;
+        return participation.getTeams();
     }
 
     private Vector<String> getFunctionByParticipation(Participation participation) {
-        Vector<String> cache = new Vector<>();
-        for (int i = 0; i < participation.getNumberOfFunctions(); i++) {
-            cache.add(participation.getFunction(i));
-        }
-        return cache;
+        return participation.getFunctions();
     }
 
     private Department getDepartmentByName(String name) {
@@ -109,8 +106,10 @@ public class PersonFacade {
         Person person = getPersonByUuid(uuid);
         if (person!=null) {
             person.setPhoto(photo);
+            fire();
             return true;
         }
+        fire();
         return false;
     }
 
@@ -119,8 +118,10 @@ public class PersonFacade {
         if (person!=null) {
             person.setFirstName(fullName.split(" ")[0]);
             person.setLastName(fullName.split(" ")[1]);
+            fire();
             return true;
         }
+        fire();
         return false;
     }
 
@@ -134,8 +135,10 @@ public class PersonFacade {
                 if (department1.getMember(i).equals(person)) department1.removeMember(i);
             }
             department2.addMember(person);
+            fire();
             return true;
         }
+        fire();
         return false;
     }
 
@@ -147,11 +150,13 @@ public class PersonFacade {
                     Participation participation = getParticipationByPerson(person);
                     if (participation != null) {
                         participation.addFunction(function);
+                        fire();
                         return true;
                     }
                 }
             }
         }
+        fire();
         return false;
     }
 
@@ -159,8 +164,10 @@ public class PersonFacade {
         Department department1 = getDepartmentByName(department);
         if (department1 != null) {
             department1.addMember(new Person(fName,lName, photo));
+            fire();
             return true;
         }
+        fire();
         return false;
     }
 
@@ -170,26 +177,98 @@ public class PersonFacade {
         for (int i = 0; i< department.getNumberOfMembers(); i++) {
             if (department.getMember(i).equals(person)) {
                 department.removeMember(i);
+                fire();
                 return true;
             }
         }
+        fire();
         return false;
     }
 
-    public HashSet<HashMap<String, String>> getAllPeople() {
-        HashSet<HashMap<String, String>> people = new HashSet<>();
+    public List<Person> getAllPeople() {
+        List<Person> people = new ArrayList<>();
         for (int i=0; i<company.getNumberOfDepartments(); i++) {
             for (int j=0; j<company.getDepartment(i).getNumberOfMembers(); j++) {
                 Person person = company.getDepartment(i).getMember(i);
-                HashMap<String, String> stringPerson = new HashMap<>();
-                stringPerson.put("fname", person.getFirstName());
-                stringPerson.put("lname", person.getLastName());
-                stringPerson.put("uuid", person.getUuid());
-                people.add(stringPerson);
+                people.add(person);
+            }
+        }
+        return new ArrayList<>(people);
+    }
+
+    public void fire() {
+        for (ChangesModel changesModel : changesModels) {
+            changesModel.fireContentsChanged(this, 0,-1);
+        }
+    }
+
+    public Person getPerson(int index) {
+        return getPerson(index,null, null, null,null, null);
+    }
+
+    public List<Person> sortPeople(String name, String function, String department, String team, String sort) {
+        List<Person> people = getAllPeople();
+        if (function!= null && !function.isEmpty()) {
+            people.removeIf(person -> !getFunctionsByUuid(person.getUuid()).contains(function));
+        }
+
+        if (department!= null && !department.isEmpty()) {
+            people.removeIf(person -> !getDepartmentByPerson(person).getName().equals(department));
+        }
+
+        if (team!= null && !team.isEmpty()) {
+            people.removeIf(person -> !getTeamsByUuid(person.getUuid()).contains(team));
+        }
+
+        if (name!=null && !name.isEmpty()) {
+            people.removeIf(person -> !person.getFullName().contains(name));
+        }
+
+        if (sort!=null && !sort.isEmpty()) {
+
+            switch (sort) {
+                case "asc":
+                    people.sort(Comparator.comparing(Person::getFullName));
+                case "dsc":
+                    people.sort(Comparator.comparing(Person::getFullName));
+                    Collections.reverse(people);
             }
         }
         return people;
     }
-}
 
- */
+    public Person getPerson(int index, String name, String function, String department, String team, String sort) {
+        return sortPeople(name, function, department, team, sort).get(index);
+
+    }
+
+    public static MainFacade getInstance() {
+        return instance;
+    }
+
+    public void addModel(ChangesModel changesModel) {
+        changesModels.add(changesModel);
+    }
+
+    public void removeModel(ChangesModel changesModel) {
+        changesModels.remove(changesModel);
+    }
+
+    public void addFunction(String uuid,String function, int index) {
+        getFunctionsByUuid(uuid).insertElementAt(function, index);
+        fire();
+    }
+
+    public void addFunction(String uuid, String function) {
+        addFunction(uuid, function, getFunctionsByUuid(uuid).size());
+        fire();
+    }
+
+    public void addTeam(String uuid, String department, int index) {
+        getTeamsByUuid(uuid).insertElementAt(department, index);
+    }
+
+    public void addTeam(String uuid, String department) {
+        addFunction(uuid,department, getTeamsByUuid(uuid).size());
+    }
+}

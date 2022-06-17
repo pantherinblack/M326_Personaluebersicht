@@ -3,6 +3,22 @@ package ch.bzz.employees;
 import java.util.Vector;
 
 public class Participation {
+    public Vector<String> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(Vector<String> functions) {
+        this.functions = functions;
+    }
+
+    public Vector<String> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Vector<String> teams) {
+        this.teams = teams;
+    }
+
     private Vector<String> functions;
     private Vector<String> teams;
 
