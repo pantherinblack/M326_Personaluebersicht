@@ -10,7 +10,6 @@ import javax.swing.*;
 public class LogTest {
 
     public static void main(String[]args){
-        //Ich habe die Testklasse etwas abgeändert, um dem Klasendiagramm zu entsprechen
         HRPerson hrp = new HRPerson("Max", "Muster", null, 0);
         Person pe = new Person("Maila", "Maurer", null);
 

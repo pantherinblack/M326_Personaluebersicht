@@ -10,7 +10,7 @@ import javax.swing.*;
  * @version 1.5
  * @since 17.06.2022
  */
-public class PersonFunctionListModel extends DefaultListModel<String> implements ChangesModel {
+public class ParticipationListModel extends DefaultListModel<String> implements ChangesModel {
     private final String uuid;
     private final int mode;
     public static final int MODE_FUNCTION = 0;
@@ -20,7 +20,7 @@ public class PersonFunctionListModel extends DefaultListModel<String> implements
      * constructor for the ListModel, for a person
      * @param uuid of the person
      */
-    public PersonFunctionListModel(String uuid, int mode) {
+    public ParticipationListModel(String uuid, int mode) {
         MainFacade.getInstance().addModel(this);
         this.uuid = uuid;
         this.mode = mode;

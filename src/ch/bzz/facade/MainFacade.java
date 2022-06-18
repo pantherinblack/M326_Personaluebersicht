@@ -332,4 +332,36 @@ public class MainFacade {
         }
         return false;
     }
+
+    public List<Department> getAllDepartments() {
+        return company.getDepartments();
+    }
+
+    public List<String> getAllFunctions() {
+        return company.getFunctions().getDesignations();
+    }
+
+    public List<String> getAllTeams() {
+        return company.getTeams().getDesignations();
+    }
+
+    public Department getDepartment(int index) {
+        return getAllDepartments().get(index);
+    }
+
+    public String getFunction(int index) {
+        return getAllFunctions().get(index);
+    }
+
+    public String getTeam(int index) {
+        return getAllTeams().get(index);
+    }
+
+    public void removeDepartment(int index) {
+
+    }
+
+    public void removeDepartment(Department department) {
+
+    }
 }
