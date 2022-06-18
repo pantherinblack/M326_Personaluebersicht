@@ -6,18 +6,20 @@ import javax.swing.*;
 
 /**
  * Model representing the functions or teams of a person, defined by an uuid
+ *
  * @author Kevin
  * @version 1.5
  * @since 17.06.2022
  */
 public class ParticipationListModel extends DefaultListModel<String> implements ChangesModel {
-    private final String uuid;
-    private final int mode;
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
+    private final String uuid;
+    private final int mode;
 
     /**
      * constructor for the ListModel, for a person
+     *
      * @param uuid of the person
      */
     public ParticipationListModel(String uuid, int mode) {
@@ -27,6 +29,8 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
     }
 
     /**
+     * updates elements
+     *
      * @param source the <code>ListModel</code> that changed, typically "this"
      * @param index0 one end of the new interval
      * @param index1 the other end of the new interval
@@ -73,6 +77,7 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
 
     /**
      * Sets the element at the specific position
+     *
      * @param element what the component is to be set to
      * @param index   the specified index
      */
@@ -83,28 +88,38 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
                 MainFacade.getInstance().setFunction(uuid, element, index);
                 break;
             case 1:
-                MainFacade.getInstance().setTeam(uuid,element,index);
+                MainFacade.getInstance().setTeam(uuid, element, index);
                 break;
         }
     }
 
+    /**
+     * adds an element
+     *
+     * @param element the component to be added
+     */
     public void addElement(String element) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().addFunction(uuid,element);
+                MainFacade.getInstance().addFunction(uuid, element);
                 break;
             case 1:
-                MainFacade.getInstance().addTeam(uuid,element);
+                MainFacade.getInstance().addTeam(uuid, element);
         }
     }
 
+    /**
+     * removes a specific element using an index
+     *
+     * @param index the index of the object to remove
+     */
     public void removeElementAt(int index) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().removeFunction(uuid,getElementAt(index));
+                MainFacade.getInstance().removeFunction(uuid, getElementAt(index));
                 break;
             case 1:
-                MainFacade.getInstance().removeTeam(uuid,getElementAt(index));
+                MainFacade.getInstance().removeTeam(uuid, getElementAt(index));
         }
     }
 

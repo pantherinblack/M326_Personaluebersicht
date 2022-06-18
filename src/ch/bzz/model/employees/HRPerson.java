@@ -3,14 +3,14 @@ package ch.bzz.model.employees;
 import ch.bzz.log.LogBook;
 import ch.bzz.log.UserAction;
 
-import javax.swing.*;
 import java.nio.file.Path;
 
 /**
  * Model for an HR-Person
+ *
  * @author Kevin
- * @since 18.05.2022
  * @version 1.0
+ * @since 18.05.2022
  */
 public class HRPerson extends Person {
     private int modus;
@@ -18,6 +18,7 @@ public class HRPerson extends Person {
 
     /**
      * generates a HR-Person
+     *
      * @param fName firstname
      * @param lName lastname
      * @param photo photo (ImageIcon)
@@ -30,6 +31,7 @@ public class HRPerson extends Person {
 
     /**
      * writes a logEntry using the logbook
+     *
      * @param action performed
      * @param person modified
      */
@@ -40,6 +42,7 @@ public class HRPerson extends Person {
 
     /**
      * gets the mode
+     *
      * @return mode
      */
     public int getModus() {
@@ -48,6 +51,7 @@ public class HRPerson extends Person {
 
     /**
      * sets the mode
+     *
      * @param modus to be set
      */
     public void setModus(int modus) {
@@ -56,6 +60,7 @@ public class HRPerson extends Person {
 
     /**
      * gets the password
+     *
      * @return password
      */
     public String getPwd() {
@@ -64,9 +69,19 @@ public class HRPerson extends Person {
 
     /**
      * sets the password
+     *
      * @param pwd (password)
      */
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    /**
+     * changes an HRPerson to a Person
+     *
+     * @return Person
+     */
+    public Person changeToPerson() {
+        return new Person(getFirstName(), getLastName(), getPhoto());
     }
 }

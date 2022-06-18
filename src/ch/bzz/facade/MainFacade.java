@@ -1,26 +1,30 @@
-
 package ch.bzz.facade;
 
 import ch.bzz.exception.DuplicateEntryException;
 import ch.bzz.exception.NotExistentException;
+import ch.bzz.interfaces.ChangesModel;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
+import ch.bzz.model.employees.HRPerson;
 import ch.bzz.model.employees.Participation;
 import ch.bzz.model.employees.Person;
-import ch.bzz.interfaces.ChangesModel;
 import ch.bzz.util.DataHandler;
 
-import javax.swing.*;
 import java.nio.file.Path;
 import java.util.*;
 
 public class MainFacade {
-    private final Company company;
     private static MainFacade instance = null;
+    private final Company company;
     private final Vector<ChangesModel> changesModels = new Vector<>();
 
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
+    }
+
+    public static MainFacade getInstance() {
+        if (instance == null) instance = new MainFacade();
+        return instance;
     }
 
     private Person getPersonByUuid(String uuid) throws NotExistentException {
@@ -102,7 +106,7 @@ public class MainFacade {
         Person person = getPersonByUuid(uuid);
         Department department1 = getDepartmentByPerson(person);
 
-        for (int i = 0; i<department1.getNumberOfMembers(); i++) {
+        for (int i = 0; i < department1.getNumberOfMembers(); i++) {
             if (department1.getMember(i).equals(person)) {
                 department1.removeMember(i);
                 getDepartmentByName(department).addMember(person);
@@ -114,7 +118,7 @@ public class MainFacade {
     }
 
     public void addTeamByUuid(String uuid, String function) throws NotExistentException {
-        for (int i = 0; i< company.getNumberOfFunction(); i++) {
+        for (int i = 0; i < company.getNumberOfFunction(); i++) {
             if (company.getFunction(i).equals(function)) {
                 getParticipationByPerson(getPersonByUuid(uuid)).addFunction(function);
                 fire();
@@ -125,13 +129,13 @@ public class MainFacade {
     }
 
     public void createPerson(String fName, String lName, Path photo, String department) {
-        getDepartmentByName(department).addMember(new Person(fName,lName, photo));
+        getDepartmentByName(department).addMember(new Person(fName, lName, photo));
         fire();
     }
 
     public void removePerson(String uuid) throws NotExistentException {
         Department department = getDepartmentByUuid(uuid);
-        for (int i = 0; i< department.getNumberOfMembers(); i++) {
+        for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i).equals(getPersonByUuid(uuid))) {
                 department.removeMember(i);
                 fire();
@@ -143,8 +147,8 @@ public class MainFacade {
 
     public Vector<Person> getAllPeople() {
         Vector<Person> people = new Vector<>();
-        for (int i=0; i<company.getNumberOfDepartments(); i++) {
-            for (int j=0; j<company.getDepartment(i).getNumberOfMembers(); j++) {
+        for (int i = 0; i < company.getNumberOfDepartments(); i++) {
+            for (int j = 0; j < company.getDepartment(i).getNumberOfMembers(); j++) {
                 people.add(company.getDepartment(i).getMember(j));
             }
         }
@@ -153,7 +157,7 @@ public class MainFacade {
 
     public void fire() {
         for (ChangesModel changesModel : changesModels) {
-            changesModel.fireContentsChanged(this, 0,-1);
+            changesModel.fireContentsChanged(this, 0, -1);
         }
         DataHandler.getInstance().saveApp();
     }
@@ -164,23 +168,23 @@ public class MainFacade {
 
     public Vector<Person> sortPeople(String name, String function, String department, String team, String sort) {
         Vector<Person> people = getAllPeople();
-        if (function!= null && !function.isEmpty()) {
+        if (function != null && !function.isEmpty()) {
             people.removeIf(person -> !getFunctionsByUuid(person.getUuid()).contains(function));
         }
 
-        if (department!= null && !department.isEmpty()) {
+        if (department != null && !department.isEmpty()) {
             people.removeIf(person -> !getDepartmentByPerson(person).getName().equals(department));
         }
 
-        if (team!= null && !team.isEmpty()) {
+        if (team != null && !team.isEmpty()) {
             people.removeIf(person -> !getTeamsByUuid(person.getUuid()).contains(team));
         }
 
-        if (name!=null && !name.isEmpty()) {
+        if (name != null && !name.isEmpty()) {
             people.removeIf(person -> !person.getFullName().contains(name));
         }
 
-        if (sort!=null && !sort.isEmpty()) {
+        if (sort != null && !sort.isEmpty()) {
 
             switch (sort) {
                 case "asc":
@@ -200,11 +204,6 @@ public class MainFacade {
 
     }
 
-    public static MainFacade getInstance() {
-        if (instance==null) instance = new MainFacade();
-        return instance;
-    }
-
     public void addModel(ChangesModel changesModel) {
         changesModels.add(changesModel);
     }
@@ -213,7 +212,7 @@ public class MainFacade {
         changesModels.remove(changesModel);
     }
 
-    public void addFunction(String uuid,String function) throws DuplicateEntryException, NotExistentException {
+    public void addFunction(String uuid, String function) throws DuplicateEntryException, NotExistentException {
         if (!stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).add(function);
@@ -225,7 +224,7 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void removeFunction(String uuid,String function) throws NotExistentException {
+    public void removeFunction(String uuid, String function) throws NotExistentException {
         if (stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).remove(function);
@@ -236,7 +235,7 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public void setFunction(String uuid,String function, int index) throws DuplicateEntryException, NotExistentException {
+    public void setFunction(String uuid, String function, int index) throws DuplicateEntryException, NotExistentException {
         if (!stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).set(index, function);
@@ -289,7 +288,7 @@ public class MainFacade {
     }
 
     public void setTeam(String uuid, String department) {
-        setTeam(uuid,department, getTeamsByUuid(uuid).size());
+        setTeam(uuid, department, getTeamsByUuid(uuid).size());
     }
 
     public Company getCompany() {
@@ -309,21 +308,22 @@ public class MainFacade {
     }
 
     public boolean isExistentFunction(String function) {
-        for (int i=0; i < company.getNumberOfFunction(); i++) {
+        for (int i = 0; i < company.getNumberOfFunction(); i++) {
             if (company.getFunction(i).equals(function)) return true;
         }
         return false;
     }
 
     public boolean isExistentTeam(String team) {
-        for (int i=0; i < company.getNumberOfTeams(); i++) {
+        for (int i = 0; i < company.getNumberOfTeams(); i++) {
             if (company.getTeam(i).equals(team)) return true;
         }
         return false;
     }
 
     public void changeDepartmentName(String oldName, String newName) {
-
+        getDepartmentByName(oldName).setName(newName);
+        fire();
     }
 
     public boolean stringContains(List<String> list, String object) {
@@ -357,11 +357,79 @@ public class MainFacade {
         return getAllTeams().get(index);
     }
 
-    public void removeDepartment(int index) {
+    public void addDepartment(Department department) {
+        company.addDepartment(department);
+        fire();
+    }
 
+    public void addDepartment(String department) {
+        addDepartment(new Department(department));
+    }
+
+    public void addFunction(String function) {
+        company.addFunction(function);
+        fire();
+    }
+
+    public void addTeam(String team) {
+        company.addTeam(team);
+        fire();
+    }
+
+    public void removeDepartment(int index) {
+        company.removeDepartment(index);
+        fire();
     }
 
     public void removeDepartment(Department department) {
+        company.removeDepartment(department);
+        fire();
+    }
 
+    public void removeFunction(int index) {
+        company.removeFunction(index);
+        fire();
+    }
+
+    public void removeFunction(String function) {
+        company.removeFunction(function);
+        fire();
+    }
+
+    public void removeTeam(int index) {
+        company.removeTeam(index);
+        fire();
+    }
+
+    public void removeTeam(String team) {
+        company.removeTeam(team);
+        fire();
+    }
+
+    public void changeToHR(String uuid, int modus, String pwd) {
+        changeToHR(getPersonByUuid(uuid), modus, pwd);
+    }
+
+    public void changeToHR(Person person, int modus, String pwd) {
+        Department department = getDepartmentByPerson(person);
+        for (int i = 0; i < department.getNumberOfMembers(); i++) {
+            if (department.getMember(i).equals(person)) department.setMember(i, person.toHRPerson(modus, pwd));
+        }
+        fire();
+    }
+
+    public void changeToPerson(String uuid) throws InputMismatchException {
+        Person person = getPersonByUuid(uuid);
+        if (person instanceof HRPerson)
+            changeToPerson((HRPerson) person);
+        else throw new InputMismatchException();
+    }
+
+    public void changeToPerson(HRPerson person) {
+        Department department = getDepartmentByPerson(person);
+        for (int i = 0; i < department.getNumberOfMembers(); i++) {
+            if (department.getMember(i).equals(person)) department.setMember(i, person);
+        }
+        fire();
     }
 }

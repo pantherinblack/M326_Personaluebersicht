@@ -6,9 +6,10 @@ import java.util.Vector;
 
 /**
  * Model for indicating the functions and teams a person can have
+ *
  * @author Kevin
- * @since 18.05.2022
  * @version 1.1
+ * @since 18.05.2022
  */
 public class Participation {
     private Vector<String> functions = new Vector<>();
@@ -18,10 +19,12 @@ public class Participation {
      * empty constructor
      * Needed for ObjectMapper
      */
-    public Participation() {}
+    public Participation() {
+    }
 
     /**
      * Adds a function to the person
+     *
      * @param jobFunction to add
      */
     @JsonIgnore
@@ -31,6 +34,7 @@ public class Participation {
 
     /**
      * gets the function of the person, by the index
+     *
      * @param index of the function
      * @return function
      */
@@ -41,6 +45,7 @@ public class Participation {
 
     /**
      * removes a function of a person using an index
+     *
      * @param index of the function to be removed
      */
     @JsonIgnore
@@ -50,6 +55,7 @@ public class Participation {
 
     /**
      * gets the number of functions
+     *
      * @return number of function
      */
     @JsonIgnore
@@ -59,6 +65,7 @@ public class Participation {
 
     /**
      * adds a team to the person
+     *
      * @param team to be added
      */
     @JsonIgnore
@@ -68,6 +75,7 @@ public class Participation {
 
     /**
      * gets the team of a person by a index
+     *
      * @param index of the team
      * @return team
      */
@@ -78,6 +86,7 @@ public class Participation {
 
     /**
      * removes a team of the person using an index
+     *
      * @param index of teh team
      */
     @JsonIgnore
@@ -87,6 +96,7 @@ public class Participation {
 
     /**
      * gets the number of teams of the person
+     *
      * @return number of teams
      */
     @JsonIgnore
@@ -96,6 +106,7 @@ public class Participation {
 
     /**
      * gets the functions of the person
+     *
      * @return functions
      */
     public Vector<String> getFunctions() {
@@ -105,6 +116,7 @@ public class Participation {
     /**
      * sets the functions of the person
      * Needed for ObjectMapper
+     *
      * @param functions to be set
      */
     private void setFunctions(Vector<String> functions) {
@@ -113,6 +125,7 @@ public class Participation {
 
     /**
      * gets the teams of the person
+     *
      * @return teams
      */
     public Vector<String> getTeams() {
@@ -122,6 +135,7 @@ public class Participation {
     /**
      * sets the teams of a person
      * Needed for ObjectMapper
+     *
      * @param teams to be set
      */
     public void setTeams(Vector<String> teams) {

@@ -1,7 +1,7 @@
 package ch.bzz.facade;
 
-import ch.bzz.model.employees.Person;
 import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.model.employees.Person;
 
 import javax.swing.*;
 
@@ -57,7 +57,8 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
     }
 
     /**
-     * Sets the element at the specific position
+     * updates elements
+     *
      * @param source the <code>ListModel</code> that changed, typically "this"
      * @param index0 one end of the new interval
      * @param index1 the other end of the new interval

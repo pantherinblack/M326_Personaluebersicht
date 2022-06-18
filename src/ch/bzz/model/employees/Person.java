@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import javax.swing.*;
 import java.nio.file.Path;
 import java.util.UUID;
 
 /**
  * Model for a person
+ *
  * @author Kevin
- * @since 18.05.2022
  * @version 1.2
+ * @since 18.05.2022
  */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -30,6 +30,7 @@ public class Person {
 
     /**
      * constructor sets default values for the person
+     *
      * @param fName firstname
      * @param lName lastname
      * @param photo photo (ImageIcon)
@@ -43,7 +44,14 @@ public class Person {
     }
 
     /**
+     * empty constructor needed for ObjectMapper
+     */
+    public Person() {
+    }
+
+    /**
      * gets the photo of the person
+     *
      * @return photo (ImageIcon)
      */
     @JsonIgnore
@@ -53,6 +61,7 @@ public class Person {
 
     /**
      * sets the photo of the person
+     *
      * @param photo (ImageIcon)
      */
     @JsonIgnore
@@ -62,6 +71,7 @@ public class Person {
 
     /**
      * gets the firstname of the person
+     *
      * @return firstname
      */
     public String getFirstName() {
@@ -70,6 +80,7 @@ public class Person {
 
     /**
      * sets the firstname of the person
+     *
      * @param firstName of the person
      */
     public void setFirstName(String firstName) {
@@ -78,6 +89,7 @@ public class Person {
 
     /**
      * gets the lastname of the person
+     *
      * @return lastname
      */
     public String getLastName() {
@@ -86,6 +98,7 @@ public class Person {
 
     /**
      * sets the lastname of the person
+     *
      * @param lastName of the person
      */
     public void setLastName(String lastName) {
@@ -94,6 +107,7 @@ public class Person {
 
     /**
      * gets the uuid of the person
+     *
      * @return uuid
      */
     public String getUuid() {
@@ -103,6 +117,7 @@ public class Person {
     /**
      * sets the uuid of the person
      * Needed for ObjectMapper
+     *
      * @param uuid
      */
     protected void setUuid(String uuid) {
@@ -111,6 +126,7 @@ public class Person {
 
     /**
      * gets the participation of the person
+     *
      * @return participation
      */
     public Participation getParticipation() {
@@ -120,6 +136,7 @@ public class Person {
     /**
      * sets the participation for this person
      * Needed for ObjectMapper
+     *
      * @param participation if the person
      */
     private void setParticipation(Participation participation) {
@@ -127,23 +144,26 @@ public class Person {
     }
 
     /**
-     * empty constructor needed for ObjectMapper
-     */
-    public Person() {}
-
-    /**
      * gets the full name
+     *
      * @return firstname + lastname combined
      */
     @JsonIgnore
     public String getFullName() {
-        return firstName+" "+lastName;
+        return firstName + " " + lastName;
     }
 
-    protected void toHRPerson(int modus, String pwd) {
+    /**
+     * converts a Person to an HRPerson
+     *
+     * @param modus of the HRPerson
+     * @param pwd   of the HRPerson
+     * @return HRPerson
+     */
+    public HRPerson toHRPerson(int modus, String pwd) {
         HRPerson hrPerson = new HRPerson(firstName, lastName, photo, modus);
         hrPerson.setPwd(pwd);
         hrPerson.setUuid(uuid);
-
+        return hrPerson;
     }
 }

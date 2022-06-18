@@ -13,15 +13,16 @@ import java.nio.file.Paths;
 
 /**
  * Class to Load the application state or save it.
+ *
  * @author Kevin
- * @since 18.06.2022
  * @version 1.0
+ * @since 18.06.2022
  */
 public class DataHandler {
 
+    public static final Path path = Paths.get(ConfigReader.readConfig("dataPath") + "\\data.json");
     private static Company company;
     private static DataHandler instance;
-    public static final Path path = Paths.get(ConfigReader.readConfig("dataPath")+"\\data.json");
 
     /**
      * Constructor generates paths and files, if not existent
@@ -34,6 +35,18 @@ public class DataHandler {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * gets the instance of the singleton
+     *
+     * @return instance
+     */
+    public static DataHandler getInstance() {
+        if (instance == null) {
+            instance = new DataHandler();
+        }
+        return instance;
     }
 
     /**
@@ -57,6 +70,7 @@ public class DataHandler {
 
     /**
      * loads the application.
+     *
      * @return company (containing all Models)
      */
     public Company loadApp() {
@@ -70,16 +84,5 @@ public class DataHandler {
         }
 
         return company;
-    }
-
-    /**
-     * gets the instance of the singleton
-     * @return instance
-     */
-    public static DataHandler getInstance() {
-        if (instance == null) {
-            instance = new DataHandler();
-        }
-        return instance;
     }
 }

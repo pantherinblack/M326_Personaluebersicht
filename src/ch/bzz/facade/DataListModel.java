@@ -7,18 +7,20 @@ import javax.swing.*;
 
 /**
  * Model representing the base-date of the application
+ *
  * @author Kevin
- * @since 18.06.2022
  * @version 1.0
+ * @since 18.06.2022
  */
 public class DataListModel extends DefaultComboBoxModel<String> implements ChangesModel {
-    private final int mode;
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
     public static final int MODE_DEPARTMENT = 2;
+    private final int mode;
 
     /**
      * constructor sets the mode of the Model
+     *
      * @param mode to be used
      */
     public DataListModel(int mode) {
@@ -83,7 +85,8 @@ public class DataListModel extends DefaultComboBoxModel<String> implements Chang
 
     /**
      * adds am element
-     * @param element   the component to be added
+     *
+     * @param element the component to be added
      */
     public void addElement(String element) {
         switch (mode) {
@@ -101,18 +104,19 @@ public class DataListModel extends DefaultComboBoxModel<String> implements Chang
 
     /**
      * removes am element at a position
-     * @param index   the index of the object to remove
+     *
+     * @param index the index of the object to remove
      */
     public void removeElementAt(int index) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().getAllFunctions().remove(index);
+                MainFacade.getInstance().removeFunction(index);
                 break;
             case 1:
-                MainFacade.getInstance().getAllTeams().remove(index);
+                MainFacade.getInstance().removeTeam(index);
                 break;
             case 2:
-                MainFacade.getInstance().getAllDepartments().remove(index);
+                MainFacade.getInstance().removeDepartment(index);
                 break;
         }
     }

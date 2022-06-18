@@ -1,25 +1,20 @@
 package ch.bzz.testing;
 
+import ch.bzz.facade.MainFacade;
 import ch.bzz.facade.ParticipationListModel;
 import ch.bzz.model.company.Department;
-import ch.bzz.facade.MainFacade;
 import org.junit.Test;
 
 import javax.swing.*;
 
 
 public class MainFacadeTest {
-    @Test
-    public void init() {
-
-    }
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test");
 
         frame.setVisible(true);
         MainFacade mF = MainFacade.getInstance();
-        JList<String> list = new JList<>(new ParticipationListModel(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), ParticipationListModel.MODE_FUNCTION));
+        JList<String> list = new JList<>(new ParticipationListModel(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), ParticipationListModel.MODE_FUNCTION));
 
         frame.add(list);
         mF.addFunction("TestFunction");
@@ -30,10 +25,15 @@ public class MainFacadeTest {
         mF.getCompany().addTeam("TestTeam2");
         mF.getCompany().addTeam("TestTeam3");
         mF.createPerson("Niklas", "Vogel", null, "TestDepartment");
-        mF.addFunction(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), "TestFunction");
-        mF.addTeam(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), "TestTeam");
+        mF.addFunction(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction");
+        mF.addTeam(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam");
 
 
-        mF.addFunction(mF.getPerson(mF.getAllPeople().size()-1).getUuid(),"TestFunction2");
+        mF.addFunction(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction2");
+    }
+
+    @Test
+    public void init() {
+
     }
 }

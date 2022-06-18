@@ -7,23 +7,23 @@ import java.util.Vector;
 
 /**
  * Class to manage the Logbook. Is able to Read and Write.
- * @author Kevin
- * @since 18.05.2022
- * @version 1.0
  *
+ * @author Kevin
+ * @version 1.0
+ * @since 18.05.2022
  */
 public class LogBook {
-    private Vector<String> entries = new Vector<>();
     private static LogBook instance;
-    private BufferedWriter writer;
+    private final Vector<String> entries = new Vector<>();
+    private final BufferedWriter writer;
+    private final boolean fileWritingEnabled;
     private BufferedReader reader;
-    private boolean fileWritingEnabled;
 
     /**
      * Creates a Logbook. Is private because of usage of the singleton pattern.
      */
     private LogBook() {
-        File f = new File(ConfigReader.readConfig("dataPath")+"\\logbook.log");
+        File f = new File(ConfigReader.readConfig("dataPath") + "\\logbook.log");
         try {
             if (!f.createNewFile()) {
                 reader = new BufferedReader(new FileReader(f));
@@ -40,6 +40,7 @@ public class LogBook {
     /**
      * Creates an instance if not existing.
      * - Singleton pattern.
+     *
      * @return instance.
      */
     public static LogBook getLogBookInstance() {
@@ -50,6 +51,7 @@ public class LogBook {
 
     /**
      * Adds an entry and saves it to the File.
+     *
      * @param entry to be added.
      */
     public void addEntry(String entry) {
@@ -61,6 +63,7 @@ public class LogBook {
 
     /**
      * Gives the requested entry in form of a String.
+     *
      * @param index of the entry stored.
      * @return String of the entry.
      */
@@ -70,6 +73,7 @@ public class LogBook {
 
     /**
      * Gives back the number of entries stored.
+     *
      * @return int size.
      */
     public int getSize() {
@@ -99,6 +103,7 @@ public class LogBook {
 
     /**
      * writes the entry to a file (appending).
+     *
      * @param entry to be appended.
      */
     private void writeFile(String entry) {
@@ -113,9 +118,10 @@ public class LogBook {
 
     /**
      * Reads all entrys in form of stings and stores it in the attribute.
+     *
      * @throws IOException
      */
-    private void readFile() throws IOException{
+    private void readFile() throws IOException {
         while (reader.ready()) {
             entries.add(reader.readLine());
         }
