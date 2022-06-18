@@ -84,6 +84,6 @@ public class DataHandler {
         }
 
         //TODO
-        return new Company("Empty");
+        return company;
     }
 }
