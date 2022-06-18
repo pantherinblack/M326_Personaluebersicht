@@ -1,7 +1,7 @@
 package ch.bzz.log;
 
-import ch.bzz.employees.HRPerson;
-import ch.bzz.employees.Person;
+import ch.bzz.model.employees.HRPerson;
+import ch.bzz.model.employees.Person;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

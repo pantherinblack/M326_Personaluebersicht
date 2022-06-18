@@ -1,4 +1,4 @@
-package ch.bzz.company;
+package ch.bzz.model.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

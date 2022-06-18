@@ -1,10 +1,10 @@
-package ch.bzz.company;
+package ch.bzz.model.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Vector;
 
-public class Teams {
+public class JobFunctions {
     public Vector<String> getDesignations() {
         return designations;
     }
@@ -14,17 +14,18 @@ public class Teams {
     }
 
     private Vector<String> designations = new Vector<>();
-    public Teams() {}
+
+    public JobFunctions() {}
     @JsonIgnore
-    public void addTeam(String team) {
-        designations.add(team);
+    public void addJobFunction(String function) {
+        designations.add(function);
     }
     @JsonIgnore
-    public String getTeam(int index) {
+    public String getJobFunction(int index) {
         return designations.get(index);
     }
     @JsonIgnore
-    public void removeTeam(int index) {
+    public void removeJobFunction(int index) {
         designations.remove(index);
     }
     @JsonIgnore

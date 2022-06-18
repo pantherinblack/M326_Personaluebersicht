@@ -1,4 +1,4 @@
-package ch.bzz.facades;
+package ch.bzz.interfaces;
 
 
 public interface ChangesModel {

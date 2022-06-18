@@ -1,32 +1,40 @@
-package ch.bzz.log;
+package ch.bzz.util;
 
-import ch.bzz.company.Company;
+import ch.bzz.model.company.Company;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DataHandler {
 
     private static Company company;
     private static DataHandler instance;
+    public static final Path path = Paths.get(ConfigReader.readConfig("dataPath")+"\\data.json");
 
-    private DataHandler() {}
+    private DataHandler() {
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-    public void saveApp(Company company) {
+    public void saveApp() {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer(new DefaultPrettyPrinter());
         FileOutputStream fileOutputStream = null;
         Writer writer = null;
 
         try {
-            fileOutputStream = new FileOutputStream("data.json");
+            fileOutputStream = new FileOutputStream(path.toString());
             writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8));
 
             objectWriter.writeValue(writer, company);
@@ -37,8 +45,8 @@ public class DataHandler {
 
     public Company loadApp() {
         try {
-            if (!Files.exists(Paths.get("data.json"))) Files.createFile(Paths.get("data.json"));
-            byte[] jsonData = Files.readAllBytes(Paths.get("data.json"));
+            if (!Files.exists(path)) Files.createFile(path);
+            byte[] jsonData = Files.readAllBytes(path);
             ObjectMapper objectMapper = new ObjectMapper();
             company = objectMapper.readValue(jsonData, Company.class);
         } catch (IOException e) {

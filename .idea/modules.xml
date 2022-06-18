@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/M326_Personaluebersicht.iml" filepath="$PROJECT_DIR$/.idea/M326_Personaluebersicht.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Applicationmanager.iml" filepath="$PROJECT_DIR$/Applicationmanager.iml" />
     </modules>
   </component>
 </project>

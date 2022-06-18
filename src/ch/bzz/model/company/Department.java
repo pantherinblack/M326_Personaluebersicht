@@ -1,6 +1,6 @@
-package ch.bzz.company;
+package ch.bzz.model.company;
 
-import ch.bzz.employees.Person;
+import ch.bzz.model.employees.Person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Vector;

@@ -1,4 +1,6 @@
-package ch.bzz.facades;
+package ch.bzz.facade;
+
+import ch.bzz.interfaces.ChangesModel;
 
 import javax.swing.*;
 
@@ -41,9 +43,6 @@ public class PersonFunctionListModel extends DefaultListModel<String> implements
         return MainFacade.getInstance().getFunctionsByUuid(uuid).get(index);
     }
 
-    public void setFilter(String uuid) {
-        this.uuid = uuid;
-    }
 
     @Override
     public void setElementAt(String element, int index) {

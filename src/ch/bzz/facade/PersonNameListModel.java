@@ -1,6 +1,7 @@
-package ch.bzz.facades;
+package ch.bzz.facade;
 
-import ch.bzz.employees.Person;
+import ch.bzz.model.employees.Person;
+import ch.bzz.interfaces.ChangesModel;
 
 import javax.swing.*;
 

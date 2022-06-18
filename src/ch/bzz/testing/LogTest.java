@@ -1,7 +1,7 @@
 package ch.bzz.testing;
 
-import ch.bzz.employees.HRPerson;
-import ch.bzz.employees.Person;
+import ch.bzz.model.employees.HRPerson;
+import ch.bzz.model.employees.Person;
 import ch.bzz.log.LogBook;
 import ch.bzz.log.UserAction;
 

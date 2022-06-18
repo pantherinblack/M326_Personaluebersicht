@@ -1,42 +1,45 @@
 
-package ch.bzz.facades;
+package ch.bzz.facade;
 
-import ch.bzz.company.Company;
-import ch.bzz.company.Department;
-import ch.bzz.employees.Participation;
-import ch.bzz.employees.Person;
-import ch.bzz.log.DataHandler;
+import ch.bzz.exception.DuplicateEntryException;
+import ch.bzz.exception.NotExistentException;
+import ch.bzz.model.company.Company;
+import ch.bzz.model.company.Department;
+import ch.bzz.model.employees.Participation;
+import ch.bzz.model.employees.Person;
+import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.util.DataHandler;
 
 import javax.swing.*;
 import java.util.*;
 
 public class MainFacade {
-    private Company company;
+    private final Company company;
     private static MainFacade instance = null;
-    private Vector<ChangesModel> changesModels = new Vector<>();
+    private final Vector<ChangesModel> changesModels = new Vector<>();
 
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
     }
 
-    private Person getPersonByUuid(String uuid) {
+    private Person getPersonByUuid(String uuid) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             for (int p = 0; p < company.getDepartment(d).getNumberOfMembers(); p++) {
                 if (company.getDepartment(d).getMember(p).getUuid().equals(uuid))
                     return company.getDepartment(d).getMember(p);
             }
         }
-        return null;
+        throw new NotExistentException();
     }
 
-    private Department getDepartmentByPerson(Person person) {
+    private Department getDepartmentByPerson(Person person) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             for (int p = 0; p < company.getDepartment(d).getNumberOfMembers(); p++) {
                 if (company.getDepartment(d).getMember(p).equals(person))
                     return company.getDepartment(d);
             }
         }
-        return null;
+        throw new NotExistentException();
     }
 
     private Participation getParticipationByPerson(Person person) {
@@ -51,29 +54,23 @@ public class MainFacade {
         return participation.getFunctions();
     }
 
-    private Department getDepartmentByName(String name) {
+    private Department getDepartmentByName(String name) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             if (company.getDepartment(d).getName().equals(name)) return company.getDepartment(d);
         }
-        return null;
+        throw new NotExistentException();
     }
 
     public ImageIcon getPhotoByUuid(String uuid) {
-        Person person = getPersonByUuid(uuid);
-        if (person != null) return person.getPhoto();
-        return null;
+        return getPersonByUuid(uuid).getPhoto();
     }
 
     public String getLastNameByUuid(String uuid) {
-        Person person = getPersonByUuid(uuid);
-        if (person!=null) return person.getLastName();
-        return null;
+        return getPersonByUuid(uuid).getLastName();
     }
 
     public String getFirstNameByUuid(String uuid) {
-        Person person = getPersonByUuid(uuid);
-        if (person!=null) return person.getFirstName();
-        return null;
+        return getPersonByUuid(uuid).getFirstName();
     }
 
     public Department getDepartmentByUuid(String uuid) {
@@ -81,116 +78,73 @@ public class MainFacade {
     }
 
     public Vector<String> getTeamsByUuid(String uuid) {
-        Person person = getPersonByUuid(uuid);
-        if (person!= null) {
-            Participation participation = getParticipationByPerson(person);
-            if (participation!= null) {
-                return getTeamsByParticipation(participation);
-            }
-        }
-        return null;
+        return getTeamsByParticipation(getParticipationByPerson(getPersonByUuid(uuid)));
     }
 
     public Vector<String> getFunctionsByUuid(String uuid) {
-        Person person = getPersonByUuid(uuid);
-        if (person!= null) {
-            Participation participation = getParticipationByPerson(person);
-            if (participation!= null) {
-                return getFunctionByParticipation(participation);
-            }
-        }
-        return null;
+        return getFunctionByParticipation(getParticipationByPerson(getPersonByUuid(uuid)));
     }
 
-    public boolean setPhotoByUuid(String uuid, ImageIcon photo) {
-        Person person = getPersonByUuid(uuid);
-        if (person!=null) {
-            person.setPhoto(photo);
-            fire();
-            return true;
-        }
+    public void setPhotoByUuid(String uuid, ImageIcon photo) {
+        getPersonByUuid(uuid).setPhoto(photo);
         fire();
-        return false;
     }
 
-    public boolean setFullNameByUuid(String uuid, String fullName) {
+    public void setFullNameByUuid(String uuid, String fullName) {
         Person person = getPersonByUuid(uuid);
-        if (person!=null) {
-            person.setFirstName(fullName.split(" ")[0]);
-            person.setLastName(fullName.split(" ")[1]);
-            fire();
-            return true;
-        }
+        person.setFirstName(fullName.split(" ")[0]);
+        person.setLastName(fullName.split(" ")[1]);
         fire();
-        return false;
     }
 
-    public boolean changeDepartmentByUuid(String uuid, String department) {
+    public void changeDepartmentByUuid(String uuid, String department) throws NotExistentException {
         Person person = getPersonByUuid(uuid);
         Department department1 = getDepartmentByPerson(person);
-        Department department2 = getDepartmentByName(department);
 
-        if (person != null && department1!= null && department2!= null) {
-            for (int i = 0; i<department1.getNumberOfMembers(); i++) {
-                if (department1.getMember(i).equals(person)) department1.removeMember(i);
+        for (int i = 0; i<department1.getNumberOfMembers(); i++) {
+            if (department1.getMember(i).equals(person)) {
+                department1.removeMember(i);
+                getDepartmentByName(department).addMember(person);
+                fire();
+                return;
             }
-            department2.addMember(person);
-            fire();
-            return true;
         }
-        fire();
-        return false;
+        throw new NotExistentException();
     }
 
-    public boolean addTeamByUuid(String uuid, String function) {
+    public void addTeamByUuid(String uuid, String function) throws NotExistentException {
         for (int i = 0; i< company.getNumberOfFunction(); i++) {
             if (company.getFunction(i).equals(function)) {
-                Person person = getPersonByUuid(uuid);
-                if (person != null) {
-                    Participation participation = getParticipationByPerson(person);
-                    if (participation != null) {
-                        participation.addFunction(function);
-                        fire();
-                        return true;
-                    }
-                }
+                getParticipationByPerson(getPersonByUuid(uuid)).addFunction(function);
+                fire();
+                return;
             }
         }
-        fire();
-        return false;
+        throw new NotExistentException();
     }
 
-    public boolean createPerson(String fName, String lName, ImageIcon photo, String department) {
-        Department department1 = getDepartmentByName(department);
-        if (department1 != null) {
-            department1.addMember(new Person(fName,lName, photo));
-            fire();
-            return true;
-        }
+    public void createPerson(String fName, String lName, ImageIcon photo, String department) {
+        getDepartmentByName(department).addMember(new Person(fName,lName, photo));
         fire();
-        return false;
     }
 
-    public boolean removePerson(String uuid) {
+    public void removePerson(String uuid) throws NotExistentException {
         Department department = getDepartmentByUuid(uuid);
-        Person person = getPersonByUuid(uuid);
         for (int i = 0; i< department.getNumberOfMembers(); i++) {
-            if (department.getMember(i).equals(person)) {
+            if (department.getMember(i).equals(getPersonByUuid(uuid))) {
                 department.removeMember(i);
                 fire();
-                return true;
+                return;
             }
         }
-        fire();
-        return false;
+        throw new NotExistentException();
     }
 
     public Vector<Person> getAllPeople() {
         Vector<Person> people = new Vector<>();
         for (int i=0; i<company.getNumberOfDepartments(); i++) {
             for (int j=0; j<company.getDepartment(i).getNumberOfMembers(); j++) {
-                Person person = company.getDepartment(i).getMember(i);
-                people.add(person);
+                people.add(company.getDepartment(i).getMember(j));
             }
         }
         return new Vector<>(people);
@@ -200,7 +154,7 @@ public class MainFacade {
         for (ChangesModel changesModel : changesModels) {
             changesModel.fireContentsChanged(this, 0,-1);
         }
-        DataHandler.getInstance().saveApp(company);
+        DataHandler.getInstance().saveApp();
     }
 
     public Person getPerson(int index) {
@@ -230,9 +184,11 @@ public class MainFacade {
             switch (sort) {
                 case "asc":
                     people.sort(Comparator.comparing(Person::getFullName));
+                    break;
                 case "dsc":
                     people.sort(Comparator.comparing(Person::getFullName));
                     Collections.reverse(people);
+                    break;
             }
         }
         return people;
@@ -256,25 +212,76 @@ public class MainFacade {
         changesModels.remove(changesModel);
     }
 
-    public void addFunction(String uuid,String function, int index) {
-        getFunctionsByUuid(uuid).insertElementAt(function, index);
-        fire();
+    public void addFunction(String uuid,String function, int index) throws DuplicateEntryException, NotExistentException {
+        if (!stringContains(getFunctionsByUuid(uuid), function)) {
+            if (isExistentFunction(function)) {
+                getFunctionsByUuid(uuid).insertElementAt(function, index);
+                fire();
+                return;
+            }
+            throw new NotExistentException();
+        }
+        throw new DuplicateEntryException();
     }
 
     public void addFunction(String uuid, String function) {
         addFunction(uuid, function, getFunctionsByUuid(uuid).size());
     }
 
-    public void addTeam(String uuid, String department, int index) {
-        getTeamsByUuid(uuid).insertElementAt(department, index);
-        fire();
+    public void addTeam(String uuid, String team, int index) throws DuplicateEntryException, NotExistentException {
+        if (!stringContains(getTeamsByUuid(uuid), team)) {
+            if (isExistentTeam(team)) {
+                getTeamsByUuid(uuid).insertElementAt(team, index);
+                fire();
+                return;
+            }
+            throw new NotExistentException();
+        }
+        throw new DuplicateEntryException();
     }
 
     public void addTeam(String uuid, String department) {
-        addFunction(uuid,department, getTeamsByUuid(uuid).size());
+        addTeam(uuid,department, getTeamsByUuid(uuid).size());
     }
 
     public Company getCompany() {
         return company;
+    }
+
+    public boolean isExistentDepartment(String department) {
+        List<Department> departments = company.getDepartments();
+        for (Department department1 : departments) {
+            if (department1.getName().equals(department)) return true;
+        }
+        return false;
+    }
+
+    public boolean isExistentDepartment(Department department) {
+        return company.getDepartments().contains(department);
+    }
+
+    public boolean isExistentFunction(String function) {
+        for (int i=0; i < company.getNumberOfFunction(); i++) {
+            if (company.getFunction(i).equals(function)) return true;
+        }
+        return false;
+    }
+
+    public boolean isExistentTeam(String team) {
+        for (int i=0; i < company.getNumberOfTeams(); i++) {
+            if (company.getTeam(i).equals(team)) return true;
+        }
+        return false;
+    }
+
+    public void changeDepartmentName(String oldName, String newName) {
+
+    }
+
+    public boolean stringContains(List<String> list, String object) {
+        for (String obj : list) {
+            if (object.equals(obj)) return true;
+        }
+        return false;
     }
 }

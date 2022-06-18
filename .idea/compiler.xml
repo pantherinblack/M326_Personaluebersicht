@@ -7,9 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="M326_Personaluebersicht" />
+        <module name="Applicationmanager" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Applicationmanager" target="1.8" />
       <module name="M326_Personaluebersicht" target="1.8" />
     </bytecodeTargetLevel>
   </component>
