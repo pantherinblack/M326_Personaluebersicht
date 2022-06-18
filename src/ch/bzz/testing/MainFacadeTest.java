@@ -30,7 +30,7 @@ public class MainFacadeTest {
         mF.getCompany().addTeam("TestTeam2");
         mF.getCompany().addTeam("TestTeam3");
         mF.createPerson("Niklas", "Vogel", null, "TestDepartment");
-        list.setModel(new PersonFunctionListModel(mF.getPerson(mF.getAllPeople().size()-1).getUuid()));
+        list.setModel(new PersonFunctionListModel(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), PersonFunctionListModel.MODE_FUNCTION));
         mF.addFunction(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), "TestFunction");
         mF.addTeam(mF.getPerson(mF.getAllPeople().size()-1).getUuid(), "TestTeam");
 

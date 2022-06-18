@@ -56,9 +56,26 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
         MainFacade.getInstance().fire();
     }
 
+    /**
+     * Sets the element at the specific position
+     * @param source the <code>ListModel</code> that changed, typically "this"
+     * @param index0 one end of the new interval
+     * @param index1 the other end of the new interval
+     */
     @Override
     public void fireContentsChanged(Object source, int index0, int index1) {
         if (index1 == -1) super.fireContentsChanged(source, index0, getSize());
         else super.fireContentsChanged(source, index0, index1);
+    }
+
+    public void removeElementAt(int index) {
+        MainFacade.getInstance().removePerson(getUuidAt(index));
+    }
+
+    /**
+     * removes the model from the MainFacade
+     */
+    public void remove() {
+        MainFacade.getInstance().removeModel(this);
     }
 }

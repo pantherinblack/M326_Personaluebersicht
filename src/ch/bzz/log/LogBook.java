@@ -1,5 +1,7 @@
 package ch.bzz.log;
 
+import ch.bzz.util.ConfigReader;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -21,7 +23,7 @@ public class LogBook {
      * Creates a Logbook. Is private because of usage of the singleton pattern.
      */
     private LogBook() {
-        File f = new File("logboook.log");
+        File f = new File(ConfigReader.readConfig("dataPath")+"\\logbook.log");
         try {
             if (!f.createNewFile()) {
                 reader = new BufferedReader(new FileReader(f));

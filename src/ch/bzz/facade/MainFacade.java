@@ -212,10 +212,10 @@ public class MainFacade {
         changesModels.remove(changesModel);
     }
 
-    public void addFunction(String uuid,String function, int index) throws DuplicateEntryException, NotExistentException {
+    public void addFunction(String uuid,String function) throws DuplicateEntryException, NotExistentException {
         if (!stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
-                getFunctionsByUuid(uuid).insertElementAt(function, index);
+                getFunctionsByUuid(uuid).add(function);
                 fire();
                 return;
             }
@@ -224,14 +224,37 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void addFunction(String uuid, String function) {
-        addFunction(uuid, function, getFunctionsByUuid(uuid).size());
+    public void removeFunction(String uuid,String function) throws NotExistentException {
+        if (stringContains(getFunctionsByUuid(uuid), function)) {
+            if (isExistentFunction(function)) {
+                getFunctionsByUuid(uuid).remove(function);
+                fire();
+                return;
+            }
+        }
+        throw new NotExistentException();
     }
 
-    public void addTeam(String uuid, String team, int index) throws DuplicateEntryException, NotExistentException {
+    public void setFunction(String uuid,String function, int index) throws DuplicateEntryException, NotExistentException {
+        if (!stringContains(getFunctionsByUuid(uuid), function)) {
+            if (isExistentFunction(function)) {
+                getFunctionsByUuid(uuid).set(index, function);
+                fire();
+                return;
+            }
+            throw new NotExistentException();
+        }
+        throw new DuplicateEntryException();
+    }
+
+    public void setFunction(String uuid, String function) {
+        setFunction(uuid, function, getFunctionsByUuid(uuid).size());
+    }
+
+    public void addTeam(String uuid, String team) throws DuplicateEntryException, NotExistentException {
         if (!stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
-                getTeamsByUuid(uuid).insertElementAt(team, index);
+                getTeamsByUuid(uuid).add(team);
                 fire();
                 return;
             }
@@ -240,8 +263,32 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void addTeam(String uuid, String department) {
-        addTeam(uuid,department, getTeamsByUuid(uuid).size());
+    public void removeTeam(String uuid, String team) throws NotExistentException {
+        if (!stringContains(getTeamsByUuid(uuid), team)) {
+            if (isExistentTeam(team)) {
+                getTeamsByUuid(uuid).remove(team);
+                fire();
+                return;
+            }
+
+        }
+        throw new NotExistentException();
+    }
+
+    public void setTeam(String uuid, String team, int index) throws DuplicateEntryException, NotExistentException {
+        if (!stringContains(getTeamsByUuid(uuid), team)) {
+            if (isExistentTeam(team)) {
+                getTeamsByUuid(uuid).set(index, team);
+                fire();
+                return;
+            }
+            throw new NotExistentException();
+        }
+        throw new DuplicateEntryException();
+    }
+
+    public void setTeam(String uuid, String department) {
+        setTeam(uuid,department, getTeamsByUuid(uuid).size());
     }
 
     public Company getCompany() {
