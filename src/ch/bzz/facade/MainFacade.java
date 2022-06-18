@@ -1,6 +1,7 @@
 package ch.bzz.facade;
 
 import ch.bzz.exception.DuplicateEntryException;
+import ch.bzz.exception.InUseException;
 import ch.bzz.exception.NotExistentException;
 import ch.bzz.interfaces.ChangesModel;
 import ch.bzz.model.company.Company;
@@ -15,7 +16,7 @@ import java.util.*;
 
 public class MainFacade {
     private static MainFacade instance = null;
-    private final Company company;
+    private Company company;
     private final Vector<ChangesModel> changesModels = new Vector<>();
 
     private MainFacade() {
@@ -40,7 +41,7 @@ public class MainFacade {
     private Department getDepartmentByPerson(Person person) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             for (int p = 0; p < company.getDepartment(d).getNumberOfMembers(); p++) {
-                if (company.getDepartment(d).getMember(p).equals(person))
+                if (company.getDepartment(d).getMember(p) == person)
                     return company.getDepartment(d);
             }
         }
@@ -59,7 +60,7 @@ public class MainFacade {
         return participation.getFunctions();
     }
 
-    private Department getDepartmentByName(String name) throws NotExistentException {
+    public Department getDepartmentByName(String name) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             if (company.getDepartment(d).getName().equals(name)) return company.getDepartment(d);
         }
@@ -107,9 +108,10 @@ public class MainFacade {
         Department department1 = getDepartmentByPerson(person);
 
         for (int i = 0; i < department1.getNumberOfMembers(); i++) {
-            if (department1.getMember(i).equals(person)) {
+            if (department1.getMember(i) == person) {
                 department1.removeMember(i);
                 getDepartmentByName(department).addMember(person);
+                Department department2 = getDepartmentByName(department);
                 fire();
                 return;
             }
@@ -136,7 +138,7 @@ public class MainFacade {
     public void removePerson(String uuid) throws NotExistentException {
         Department department = getDepartmentByUuid(uuid);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
-            if (department.getMember(i).equals(getPersonByUuid(uuid))) {
+            if (department.getMember(i) == getPersonByUuid(uuid)) {
                 department.removeMember(i);
                 fire();
                 return;
@@ -169,7 +171,7 @@ public class MainFacade {
     public Vector<Person> sortPeople(String name, String function, String department, String team, String sort) {
         Vector<Person> people = getAllPeople();
         if (function != null && !function.isEmpty()) {
-            people.removeIf(person -> !getFunctionsByUuid(person.getUuid()).contains(function));
+            people.removeIf(person -> !stringContains(getFunctionsByUuid(person.getUuid()), function));
         }
 
         if (department != null && !department.isEmpty()) {
@@ -177,7 +179,7 @@ public class MainFacade {
         }
 
         if (team != null && !team.isEmpty()) {
-            people.removeIf(person -> !getTeamsByUuid(person.getUuid()).contains(team));
+            people.removeIf(person -> !stringContains(getTeamsByUuid(person.getUuid()),team));
         }
 
         if (name != null && !name.isEmpty()) {
@@ -291,11 +293,7 @@ public class MainFacade {
         setTeam(uuid, department, getTeamsByUuid(uuid).size());
     }
 
-    public Company getCompany() {
-        return company;
-    }
-
-    public boolean isExistentDepartment(String department) {
+    private boolean isExistentDepartment(String department) {
         List<Department> departments = company.getDepartments();
         for (Department department1 : departments) {
             if (department1.getName().equals(department)) return true;
@@ -303,18 +301,18 @@ public class MainFacade {
         return false;
     }
 
-    public boolean isExistentDepartment(Department department) {
+    private boolean isExistentDepartment(Department department) {
         return company.getDepartments().contains(department);
     }
 
-    public boolean isExistentFunction(String function) {
+    private boolean isExistentFunction(String function) {
         for (int i = 0; i < company.getNumberOfFunction(); i++) {
             if (company.getFunction(i).equals(function)) return true;
         }
         return false;
     }
 
-    public boolean isExistentTeam(String team) {
+    private boolean isExistentTeam(String team) {
         for (int i = 0; i < company.getNumberOfTeams(); i++) {
             if (company.getTeam(i).equals(team)) return true;
         }
@@ -357,7 +355,8 @@ public class MainFacade {
         return getAllTeams().get(index);
     }
 
-    public void addDepartment(Department department) {
+    public void addDepartment(Department department) throws DuplicateEntryException {
+        if (isExistentDepartment(department)) throw new DuplicateEntryException();
         company.addDepartment(department);
         fire();
     }
@@ -366,42 +365,50 @@ public class MainFacade {
         addDepartment(new Department(department));
     }
 
-    public void addFunction(String function) {
+    public void addFunction(String function) throws DuplicateEntryException {
+        if (isExistentFunction(function)) throw new DuplicateEntryException();
         company.addFunction(function);
         fire();
     }
 
-    public void addTeam(String team) {
+    public void addTeam(String team) throws DuplicateEntryException {
+        if (isExistentTeam(team)) throw new DuplicateEntryException();
         company.addTeam(team);
         fire();
     }
 
-    public void removeDepartment(int index) {
+    public void removeDepartment(int index) throws InUseException {
+        if (isDepartmentInUse(company.getDepartment(index))) throw new InUseException();
         company.removeDepartment(index);
         fire();
     }
 
-    public void removeDepartment(Department department) {
+    public void removeDepartment(Department department) throws InUseException {
+        if (isDepartmentInUse(department)) throw new InUseException();
         company.removeDepartment(department);
         fire();
     }
 
-    public void removeFunction(int index) {
+    public void removeFunction(int index) throws InUseException {
+        if (isFunctionInUse(getFunction(index))) throw new InUseException();
         company.removeFunction(index);
         fire();
     }
 
-    public void removeFunction(String function) {
+    public void removeFunction(String function) throws InUseException {
+        if (isFunctionInUse(function)) throw new InUseException();
         company.removeFunction(function);
         fire();
     }
 
-    public void removeTeam(int index) {
+    public void removeTeam(int index) throws InUseException {
+        if (isTeamInUse(getTeam(index))) throw new InUseException();
         company.removeTeam(index);
         fire();
     }
 
-    public void removeTeam(String team) {
+    public void removeTeam(String team) throws InUseException {
+        if (isTeamInUse(team)) throw new InUseException();
         company.removeTeam(team);
         fire();
     }
@@ -413,7 +420,7 @@ public class MainFacade {
     public void changeToHR(Person person, int modus, String pwd) {
         Department department = getDepartmentByPerson(person);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
-            if (department.getMember(i).equals(person)) department.setMember(i, person.toHRPerson(modus, pwd));
+            if (department.getMember(i) == person) department.setMember(i, person.toHRPerson(modus, pwd));
         }
         fire();
     }
@@ -428,8 +435,36 @@ public class MainFacade {
     public void changeToPerson(HRPerson person) {
         Department department = getDepartmentByPerson(person);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
-            if (department.getMember(i).equals(person)) department.setMember(i, person);
+            if (department.getMember(i) == person) department.setMember(i, person);
         }
         fire();
+    }
+
+    private boolean isFunctionInUse(String function) {
+        List<Person> people = getAllPeople();
+        for (Person person : people) {
+            if (stringContains(getFunctionsByUuid(person.getUuid()), function)) return true;
+        }
+        return false;
+    }
+
+    private boolean isTeamInUse(String team) {
+        List<Person> people = getAllPeople();
+        for (Person person : people) {
+            if (stringContains(getTeamsByUuid(person.getUuid()), team)) return true;
+        }
+        return false;
+    }
+
+    private boolean isDepartmentInUse(String department) {
+        return isDepartmentInUse(getDepartmentByName(department));
+    }
+
+    private boolean isDepartmentInUse(Department department) {
+        return (department.getNumberOfMembers() > 0);
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

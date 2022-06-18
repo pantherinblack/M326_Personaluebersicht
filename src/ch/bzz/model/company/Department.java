@@ -9,6 +9,8 @@ public class Department {
     private String name;
     private Vector<Person> members = new Vector<>();
 
+    private Department() {}
+
     /**
      * constructor setting the name of the department
      *

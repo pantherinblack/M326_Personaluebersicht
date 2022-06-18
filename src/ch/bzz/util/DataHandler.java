@@ -83,6 +83,7 @@ public class DataHandler {
             company = new Company("Empty");
         }
 
-        return company;
+        //TODO
+        return new Company("Empty");
     }
 }

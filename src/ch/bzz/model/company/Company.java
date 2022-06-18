@@ -2,6 +2,7 @@ package ch.bzz.model.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Vector;
  */
 public class Company {
     private String name;
-    private Vector<Department> departments = new Vector<>();
+    private List<Department> departments = new Vector<>();
     private JobFunctions functions = new JobFunctions();
     private Teams teams = new Teams();
 
@@ -68,7 +69,7 @@ public class Company {
      *
      * @return departments
      */
-    public Vector<Department> getDepartments() {
+    public List<Department> getDepartments() {
         return departments;
     }
 
@@ -78,7 +79,7 @@ public class Company {
      *
      * @param departments to be set
      */
-    public void setDepartments(Vector<Department> departments) {
+    public void setDepartments(List<Department> departments) {
         this.departments = departments;
     }
 

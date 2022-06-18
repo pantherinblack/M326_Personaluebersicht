@@ -1,27 +1,27 @@
 package ch.bzz.exception;
 
 /**
- * Exception to be thrown, when an element given py a parameter already exist and must be unique
+ * Exception to be thrown, when an element can not be deleted, to keep data integrity because it is still used somewhere else
  *
  * @author Kevin
  * @version 1.0
  * @since 18.005.2022
  */
-public class DuplicateEntryException extends Error {
+public class InUseException extends Error {
 
     /**
      * Constructor for the Exception with a definable message
      *
      * @param message to be shown
      */
-    public DuplicateEntryException(String message) {
+    public InUseException(String message) {
         super(message);
     }
 
     /**
      * Constructor for the Exception with a predefined message
      */
-    public DuplicateEntryException() {
-        this("This element already exists!");
+    public InUseException() {
+        this("This Element can not be removed, because it is still in use");
     }
 }
