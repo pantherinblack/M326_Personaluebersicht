@@ -4,6 +4,7 @@ import ch.bzz.log.LogBook;
 import ch.bzz.log.UserAction;
 
 import javax.swing.*;
+import java.nio.file.Path;
 
 /**
  * Model for an HR-Person
@@ -22,7 +23,7 @@ public class HRPerson extends Person {
      * @param photo photo (ImageIcon)
      * @param modus mode
      */
-    public HRPerson(String fName, String lName, ImageIcon photo, int modus) {
+    public HRPerson(String fName, String lName, Path photo, int modus) {
         super(fName, lName, photo);
         this.modus = modus;
     }

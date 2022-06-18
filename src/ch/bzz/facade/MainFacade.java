@@ -11,6 +11,7 @@ import ch.bzz.interfaces.ChangesModel;
 import ch.bzz.util.DataHandler;
 
 import javax.swing.*;
+import java.nio.file.Path;
 import java.util.*;
 
 public class MainFacade {
@@ -61,7 +62,7 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public ImageIcon getPhotoByUuid(String uuid) {
+    public Path getPhotoByUuid(String uuid) {
         return getPersonByUuid(uuid).getPhoto();
     }
 
@@ -85,7 +86,7 @@ public class MainFacade {
         return getFunctionByParticipation(getParticipationByPerson(getPersonByUuid(uuid)));
     }
 
-    public void setPhotoByUuid(String uuid, ImageIcon photo) {
+    public void setPhotoByUuid(String uuid, Path photo) {
         getPersonByUuid(uuid).setPhoto(photo);
         fire();
     }
@@ -123,7 +124,7 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public void createPerson(String fName, String lName, ImageIcon photo, String department) {
+    public void createPerson(String fName, String lName, Path photo, String department) {
         getDepartmentByName(department).addMember(new Person(fName,lName, photo));
         fire();
     }

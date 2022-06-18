@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.swing.*;
+import java.nio.file.Path;
 import java.util.UUID;
 
 /**
@@ -20,7 +21,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = HRPerson.class, name = "HRPerson")})
 public class Person {
     private String uuid;
-    private ImageIcon photo;
+    @JsonIgnore
+    private Path photo;
     private String firstName;
     private String lastName;
 
@@ -32,7 +34,7 @@ public class Person {
      * @param lName lastname
      * @param photo photo (ImageIcon)
      */
-    public Person(String fName, String lName, ImageIcon photo) {
+    public Person(String fName, String lName, Path photo) {
         this.uuid = UUID.randomUUID().toString();
         setFirstName(fName);
         setLastName(lName);
@@ -44,7 +46,8 @@ public class Person {
      * gets the photo of the person
      * @return photo (ImageIcon)
      */
-    public ImageIcon getPhoto() {
+    @JsonIgnore
+    public Path getPhoto() {
         return photo;
     }
 
@@ -52,7 +55,8 @@ public class Person {
      * sets the photo of the person
      * @param photo (ImageIcon)
      */
-    public void setPhoto(ImageIcon photo) {
+    @JsonIgnore
+    public void setPhoto(Path photo) {
         this.photo = photo;
     }
 
