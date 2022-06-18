@@ -10,6 +10,7 @@ import ch.bzz.model.employees.HRPerson;
 import ch.bzz.model.employees.Participation;
 import ch.bzz.model.employees.Person;
 import ch.bzz.util.DataHandler;
+import ch.bzz.util.StringListCompare;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -119,17 +120,6 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public void addTeamByUuid(String uuid, String function) throws NotExistentException {
-        for (int i = 0; i < company.getNumberOfFunction(); i++) {
-            if (company.getFunction(i).equals(function)) {
-                getParticipationByPerson(getPersonByUuid(uuid)).addFunction(function);
-                fire();
-                return;
-            }
-        }
-        throw new NotExistentException();
-    }
-
     public void createPerson(String fName, String lName, Path photo, String department) {
         getDepartmentByName(department).addMember(new Person(fName, lName, photo));
         fire();
@@ -171,7 +161,7 @@ public class MainFacade {
     public Vector<Person> sortPeople(String name, String function, String department, String team, String sort) {
         Vector<Person> people = getAllPeople();
         if (function != null && !function.isEmpty()) {
-            people.removeIf(person -> !stringContains(getFunctionsByUuid(person.getUuid()), function));
+            people.removeIf(person -> !StringListCompare.stringContains(getFunctionsByUuid(person.getUuid()), function));
         }
 
         if (department != null && !department.isEmpty()) {
@@ -179,7 +169,7 @@ public class MainFacade {
         }
 
         if (team != null && !team.isEmpty()) {
-            people.removeIf(person -> !stringContains(getTeamsByUuid(person.getUuid()),team));
+            people.removeIf(person -> !StringListCompare.stringContains(getTeamsByUuid(person.getUuid()),team));
         }
 
         if (name != null && !name.isEmpty()) {
@@ -214,8 +204,8 @@ public class MainFacade {
         changesModels.remove(changesModel);
     }
 
-    public void addFunction(String uuid, String function) throws DuplicateEntryException, NotExistentException {
-        if (!stringContains(getFunctionsByUuid(uuid), function)) {
+    public void addFunctionAtPerson(String uuid, String function) throws DuplicateEntryException, NotExistentException {
+        if (!StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).add(function);
                 fire();
@@ -226,8 +216,8 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void removeFunction(String uuid, String function) throws NotExistentException {
-        if (stringContains(getFunctionsByUuid(uuid), function)) {
+    public void removeFunctionAtPerson(String uuid, String function) throws NotExistentException {
+        if (StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).remove(function);
                 fire();
@@ -237,8 +227,8 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public void setFunction(String uuid, String function, int index) throws DuplicateEntryException, NotExistentException {
-        if (!stringContains(getFunctionsByUuid(uuid), function)) {
+    public void setFunctionAtPerson(String uuid, String function, int index) throws DuplicateEntryException, NotExistentException {
+        if (!StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).set(index, function);
                 fire();
@@ -249,12 +239,12 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void setFunction(String uuid, String function) {
-        setFunction(uuid, function, getFunctionsByUuid(uuid).size());
+    public void setFunctionAtPerson(String uuid, String function) {
+        setFunctionAtPerson(uuid, function, getFunctionsByUuid(uuid).size());
     }
 
-    public void addTeam(String uuid, String team) throws DuplicateEntryException, NotExistentException {
-        if (!stringContains(getTeamsByUuid(uuid), team)) {
+    public void addTeamAtPerson(String uuid, String team) throws DuplicateEntryException, NotExistentException {
+        if (!StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).add(team);
                 fire();
@@ -265,8 +255,8 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void removeTeam(String uuid, String team) throws NotExistentException {
-        if (!stringContains(getTeamsByUuid(uuid), team)) {
+    public void removeTeamAtPerson(String uuid, String team) throws NotExistentException {
+        if (StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).remove(team);
                 fire();
@@ -277,8 +267,8 @@ public class MainFacade {
         throw new NotExistentException();
     }
 
-    public void setTeam(String uuid, String team, int index) throws DuplicateEntryException, NotExistentException {
-        if (!stringContains(getTeamsByUuid(uuid), team)) {
+    public void setTeamAtPerson(String uuid, String team, int index) throws DuplicateEntryException, NotExistentException {
+        if (!StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).set(index, team);
                 fire();
@@ -289,8 +279,8 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void setTeam(String uuid, String department) {
-        setTeam(uuid, department, getTeamsByUuid(uuid).size());
+    public void setTeamAtPerson(String uuid, String department) {
+        setTeamAtPerson(uuid, department, getTeamsByUuid(uuid).size());
     }
 
     private boolean isExistentDepartment(String department) {
@@ -324,13 +314,6 @@ public class MainFacade {
         fire();
     }
 
-    public boolean stringContains(List<String> list, String object) {
-        for (String obj : list) {
-            if (object.equals(obj)) return true;
-        }
-        return false;
-    }
-
     public List<Department> getAllDepartments() {
         return company.getDepartments();
     }
@@ -343,15 +326,15 @@ public class MainFacade {
         return company.getTeams().getDesignations();
     }
 
-    public Department getDepartment(int index) {
+    public Department getDepartmentByIndex(int index) {
         return getAllDepartments().get(index);
     }
 
-    public String getFunction(int index) {
+    public String getFunctionByIndex(int index) {
         return getAllFunctions().get(index);
     }
 
-    public String getTeam(int index) {
+    public String getTeamByIndex(int index) {
         return getAllTeams().get(index);
     }
 
@@ -390,7 +373,7 @@ public class MainFacade {
     }
 
     public void removeFunction(int index) throws InUseException {
-        if (isFunctionInUse(getFunction(index))) throw new InUseException();
+        if (isFunctionInUse(getFunctionByIndex(index))) throw new InUseException();
         company.removeFunction(index);
         fire();
     }
@@ -402,7 +385,7 @@ public class MainFacade {
     }
 
     public void removeTeam(int index) throws InUseException {
-        if (isTeamInUse(getTeam(index))) throw new InUseException();
+        if (isTeamInUse(getTeamByIndex(index))) throw new InUseException();
         company.removeTeam(index);
         fire();
     }
@@ -443,7 +426,7 @@ public class MainFacade {
     private boolean isFunctionInUse(String function) {
         List<Person> people = getAllPeople();
         for (Person person : people) {
-            if (stringContains(getFunctionsByUuid(person.getUuid()), function)) return true;
+            if (StringListCompare.stringContains(getFunctionsByUuid(person.getUuid()), function)) return true;
         }
         return false;
     }
@@ -451,7 +434,7 @@ public class MainFacade {
     private boolean isTeamInUse(String team) {
         List<Person> people = getAllPeople();
         for (Person person : people) {
-            if (stringContains(getTeamsByUuid(person.getUuid()), team)) return true;
+            if (StringListCompare.stringContains(getTeamsByUuid(person.getUuid()), team)) return true;
         }
         return false;
     }

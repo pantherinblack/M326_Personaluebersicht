@@ -85,10 +85,10 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
     public void setElementAt(String element, int index) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().setFunction(uuid, element, index);
+                MainFacade.getInstance().setFunctionAtPerson(uuid, element, index);
                 break;
             case 1:
-                MainFacade.getInstance().setTeam(uuid, element, index);
+                MainFacade.getInstance().setTeamAtPerson(uuid, element, index);
                 break;
         }
     }
@@ -101,10 +101,10 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
     public void addElement(String element) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().addFunction(uuid, element);
+                MainFacade.getInstance().addFunctionAtPerson(uuid, element);
                 break;
             case 1:
-                MainFacade.getInstance().addTeam(uuid, element);
+                MainFacade.getInstance().addTeamAtPerson(uuid, element);
         }
     }
 
@@ -116,10 +116,10 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
     public void removeElementAt(int index) {
         switch (mode) {
             case 0:
-                MainFacade.getInstance().removeFunction(uuid, getElementAt(index));
+                MainFacade.getInstance().removeFunctionAtPerson(uuid, getElementAt(index));
                 break;
             case 1:
-                MainFacade.getInstance().removeTeam(uuid, getElementAt(index));
+                MainFacade.getInstance().removeTeamAtPerson(uuid, getElementAt(index));
         }
     }
 
