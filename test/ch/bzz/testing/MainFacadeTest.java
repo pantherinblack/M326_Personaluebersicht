@@ -1,5 +1,7 @@
 package ch.bzz.testing;
 
+import ch.bzz.exception.DuplicateEntryException;
+import ch.bzz.exception.NotExistentException;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
@@ -16,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainFacadeTest {
 
-    private MainFacade mF = MainFacade.getInstance();
+    private final MainFacade mF = MainFacade.getInstance();
 
     @BeforeEach
     public void setUp() {
@@ -39,16 +41,35 @@ class MainFacadeTest {
 
     @Test
     void getInstance() {
-        assertNotEquals(null, MainFacade.getInstance());
+        assertNotNull(MainFacade.getInstance());
+    }
+
+    @Test
+    void getCorrectUuid() {
+        assertEquals(mF.getPerson(0).getFirstName(), mF.getFirstNameByUuid(mF.getPerson(0).getUuid()));
+    }
+
+    /**
+     * couts for all methods using the uuid, beacuse they use the similar method to get the merosn
+     */
+    @Test
+    void getWrongUuid() {
+        assertThrowsExactly(NotExistentException.class, () -> mF.getFirstNameByUuid("no uuid"));
     }
 
     @Test
     void getDepartmentByName() {
+        assertNotNull(mF.getDepartmentByName("TestDepartment1"));
+    }
+
+    @Test
+    void getDepartmentByWrongName() {
+        assertThrowsExactly(NotExistentException.class, () -> mF.getDepartmentByName("TestDepartment"));
     }
 
     @Test
     void getPhotoByUuid() {
-        assertNotEquals(null, mF.getPhotoByUuid(mF.getPerson(0).getUuid()));
+        assertNotNull(mF.getPhotoByUuid(mF.getPerson(0).getUuid()));
     }
 
     @Test
@@ -86,10 +107,21 @@ class MainFacadeTest {
 
     @Test
     void createPerson() {
+        mF.createPerson("Adras", "Tarlos", null, "TestDepartment2");
+        assertEquals(3, mF.getAllPeople().size());
     }
 
     @Test
     void removePerson() {
+        mF.removePerson(mF.getPerson(0).getUuid());
+        assertEquals(1, mF.getAllPeople().size());
+    }
+
+    @Test
+    void removeToManyPerson() {
+        mF.removePerson(mF.getPerson(0).getUuid());
+        mF.removePerson(mF.getPerson(0).getUuid());
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class, () -> mF.getPerson(-1));
     }
 
     @Test
@@ -97,18 +129,26 @@ class MainFacadeTest {
         assertEquals(2,mF.getAllPeople().size());
     }
 
-    @Test
-    void fire() {
-    }
 
     @Test
     void getPerson() {
+        assertNotNull(mF.getPerson(0));
+    }
+
+    @Test
+    void getPersonNegative() {
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class, () -> mF.getPerson(-1));
+    }
+
+    @Test
+    void getPersonToHigh() {
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class, () -> mF.getPerson(2));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleEmpty() {
         Vector<Person> all = mF.getAllPeople();
-        assertEquals(all, mF.sortPeople("Niklas", null, "TestDepartment1", null, ""));
+        assertEquals(all, mF.sortPeople(null, null, null, null, null));
     }
 
     @org.junit.jupiter.api.Test
@@ -156,22 +196,50 @@ class MainFacadeTest {
 
     @Test
     void testGetPerson() {
+        assertEquals(mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "").get(0),
+                mF.getPerson(0, "Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", ""));
     }
 
     @Test
     void addFunctionAtPerson() {
+        mF.addFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction3");
+        assertEquals(2, mF.getFunctionsByUuid(mF.getPerson(0).getUuid()).size());
+    }
+
+    @Test
+    void addFunctionAtPersonDuplicate() {
+        assertThrowsExactly(DuplicateEntryException.class,
+                () -> mF.addFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction1"));
     }
 
     @Test
     void removeFunctionAtPerson() {
+        mF.removeFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction1");
+        assertEquals(0, mF.getFunctionsByUuid(mF.getPerson(0).getUuid()).size());
+    }
+
+    @Test
+    void removeFunctionAtPersonNotExisting() {
+        assertThrowsExactly(NotExistentException.class,
+                () -> mF.removeFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction"));
     }
 
     @Test
     void setFunctionAtPerson() {
+        mF.setFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction2", 0);
+        assertEquals("TestFunction2", mF.getFunctionsByUuid(mF.getPerson(0).getUuid()).get(0));
     }
 
     @Test
-    void testSetFunctionAtPerson() {
+    void setFunctionAtPersonNotFunction() {
+        assertThrowsExactly(NotExistentException.class,
+                () -> mF.setFunctionAtPerson(mF.getPerson(0).getUuid(), "TestFunction", 0));
+    }
+
+    @Test
+    void setFunctionAtPersonOutOfBounds() {
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class,
+                () -> mF.setFunctionAtPerson(mF.getPerson(2).getUuid(), "TestFunction2", 0));
     }
 
     @Test
@@ -182,21 +250,56 @@ class MainFacadeTest {
     }
 
     @Test
+    void addTeamAtPersonAlreadyExists() {
+        assertThrowsExactly(DuplicateEntryException.class,
+                () -> mF.addTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam1"));
+    }
+
+    @Test
     void removeTeamAtPerson() {
         mF.removeTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam1");
-        assertEquals(1,mF.getTeamsByUuid(mF.getPerson(0).getUuid()));
+        assertEquals(0,mF.getTeamsByUuid(mF.getPerson(0).getUuid()).size());
     }
 
     @Test
     void setTeamAtPerson() {
+        mF.setTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam2", 0);
+        assertEquals("TestTeam2", mF.getTeamsByUuid(mF.getPerson(0).getUuid()).get(0));
     }
 
     @Test
-    void testSetTeamAtPerson() {
+    void setTeamAtPersonNoTeam() {
+        assertThrowsExactly(NotExistentException.class,
+                () -> mF.setTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam", 0));
+    }
+
+    @Test
+    void setTeamAtPersonOutOfBounds() {
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class,
+                () -> mF.setTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam2", 1));
     }
 
     @Test
     void changeDepartmentName() {
+        mF.changeDepartmentName("TestDepartment1", "Dep");
+        assertNotNull(mF.getDepartmentByName("Dep"));
+        assertEquals("Dep", mF.getDepartmentByUuid(mF.getPerson(0).getUuid()).getName());
+    }
+
+    @Test
+    void changeDepartmentNameNotExisting() {
+        assertThrowsExactly(NotExistentException.class,
+                () -> mF.changeDepartmentName("TestDepart", "Dep"));
+    }
+
+    @Test
+    void changeTeamName() {
+
+    }
+
+    @Test
+    void changeFunctionName() {
+
     }
 
     @Test

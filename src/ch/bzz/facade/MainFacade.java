@@ -112,7 +112,6 @@ public class MainFacade {
             if (department1.getMember(i) == person) {
                 department1.removeMember(i);
                 getDepartmentByName(department).addMember(person);
-                Department department2 = getDepartmentByName(department);
                 fire();
                 return;
             }
@@ -239,10 +238,6 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void setFunctionAtPerson(String uuid, String function) {
-        setFunctionAtPerson(uuid, function, getFunctionsByUuid(uuid).size());
-    }
-
     public void addTeamAtPerson(String uuid, String team) throws DuplicateEntryException, NotExistentException {
         if (!StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
@@ -279,10 +274,6 @@ public class MainFacade {
         throw new DuplicateEntryException();
     }
 
-    public void setTeamAtPerson(String uuid, String department) {
-        setTeamAtPerson(uuid, department, getTeamsByUuid(uuid).size());
-    }
-
     private boolean isExistentDepartment(String department) {
         List<Department> departments = company.getDepartments();
         for (Department department1 : departments) {
@@ -311,6 +302,36 @@ public class MainFacade {
 
     public void changeDepartmentName(String oldName, String newName) {
         getDepartmentByName(oldName).setName(newName);
+        fire();
+    }
+
+    public void changeTeamName(String oldName, String newName) throws NotExistentException {
+        if (!isExistentTeam(oldName)) throw new NotExistentException();
+        for (int i = 0; i < getAllTeams().size(); i++) {
+            if (getAllTeams().get(i).equals(oldName)) getAllTeams().set(i, newName);
+        }
+        for (Person person : getAllPeople()) {
+            Participation part = person.getParticipation();
+            for (int i=0; i < part.getNumberOfTeams(); i++) {
+                if (part.getTeams().get(i).equals(oldName))
+                    part.getTeams().set(i, newName);
+            }
+        }
+        fire();
+    }
+
+    public void changeFunctionName(String oldName, String newName) throws NotExistentException {
+        if (!isExistentFunction(oldName)) throw new NotExistentException();
+        for (int i = 0; i < getAllTeams().size(); i++) {
+            if (getAllFunctions().get(i).equals(oldName)) getAllFunctions().set(i, newName);
+        }
+        for (Person person : getAllPeople()) {
+            Participation part = person.getParticipation();
+            for (int i=0; i < part.getNumberOfFunctions(); i++) {
+                if (part.getFunctions().get(i).equals(oldName))
+                    part.getFunctions().set(i, newName);
+            }
+        }
         fire();
     }
 
