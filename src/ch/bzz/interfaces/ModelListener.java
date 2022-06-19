@@ -7,7 +7,7 @@ package ch.bzz.interfaces;
  * @version 1.0
  * @since 18.05.2022
  */
-public interface ChangesModel {
+public interface ModelListener {
 
     /**
      * updates elements

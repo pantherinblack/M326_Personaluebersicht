@@ -3,7 +3,8 @@ package ch.bzz.facade;
 import ch.bzz.exception.DuplicateEntryException;
 import ch.bzz.exception.InUseException;
 import ch.bzz.exception.NotExistentException;
-import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.interfaces.ModelListener;
+import ch.bzz.interfaces.ViewListener;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
@@ -17,8 +18,9 @@ import java.util.*;
 
 public class MainFacade {
     private static MainFacade instance = null;
+    private final Vector<ModelListener> modelListeners = new Vector<>();
+    private final Vector<ViewListener> viewListeners = new Vector<>();
     private Company company;
-    private final Vector<ChangesModel> changesModels = new Vector<>();
 
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
@@ -73,8 +75,18 @@ public class MainFacade {
     }
 
 
+    //TODO
     public String getFirstNameByUuid(String uuid) {
         return getPersonByUuid(uuid).getFirstName();
+    }
+
+    //TODO
+    public String getLastNameByUuid(String uuid) {
+        return getPersonByUuid(uuid).getLastName();
+    }
+
+    public String getFullNameByUuid(String uuid) {
+        return getPersonByUuid(uuid).getFirstName() + " " + getPersonByUuid(uuid).getLastName();
     }
 
     public Department getDepartmentByUuid(String uuid) {
@@ -144,10 +156,16 @@ public class MainFacade {
     }
 
     public void fire() {
-        for (ChangesModel changesModel : changesModels) {
-            changesModel.fireContentsChanged(this, 0, -1);
+        for (ModelListener modelListener : modelListeners) {
+            modelListener.fireContentsChanged(this, 0, -1);
         }
         DataHandler.getInstance().saveApp();
+    }
+
+    public void fireSelected(String uuid) {
+        for (ViewListener viewListener : viewListeners) {
+            viewListener.fireChanges(uuid);
+        }
     }
 
     public Person getPerson(int index) {
@@ -165,7 +183,7 @@ public class MainFacade {
         }
 
         if (team != null && !team.isEmpty()) {
-            people.removeIf(person -> !StringListCompare.stringContains(getTeamsByUuid(person.getUuid()),team));
+            people.removeIf(person -> !StringListCompare.stringContains(getTeamsByUuid(person.getUuid()), team));
         }
 
         if (name != null && !name.isEmpty()) {
@@ -192,12 +210,20 @@ public class MainFacade {
 
     }
 
-    public void addModel(ChangesModel changesModel) {
-        changesModels.add(changesModel);
+    public void addModelListener(ModelListener modelListener) {
+        modelListeners.add(modelListener);
     }
 
-    public void removeModel(ChangesModel changesModel) {
-        changesModels.remove(changesModel);
+    public void removeModelListener(ModelListener modelListener) {
+        modelListeners.remove(modelListener);
+    }
+
+    public void addViewListener(ViewListener viewListener) {
+        viewListeners.add(viewListener);
+    }
+
+    public void removeViewListener(ViewListener viewListener) {
+        viewListeners.remove(viewListener);
     }
 
     public void addFunctionAtPerson(String uuid, String function) throws DuplicateEntryException, NotExistentException {
@@ -312,7 +338,7 @@ public class MainFacade {
         }
         for (Person person : getAllPeople()) {
             Participation part = person.getParticipation();
-            for (int i=0; i < part.getNumberOfTeams(); i++) {
+            for (int i = 0; i < part.getNumberOfTeams(); i++) {
                 if (part.getTeams().get(i).equals(oldName))
                     part.getTeams().set(i, newName);
             }
@@ -327,7 +353,7 @@ public class MainFacade {
         }
         for (Person person : getAllPeople()) {
             Participation part = person.getParticipation();
-            for (int i=0; i < part.getNumberOfFunctions(); i++) {
+            for (int i = 0; i < part.getNumberOfFunctions(); i++) {
                 if (part.getFunctions().get(i).equals(oldName))
                     part.getFunctions().set(i, newName);
             }

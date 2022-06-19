@@ -1,11 +1,11 @@
 package ch.bzz.facade;
 
-import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.interfaces.ModelListener;
 import ch.bzz.model.employees.Person;
 
 import javax.swing.*;
 
-public class PersonNameListModel extends DefaultListModel<String> implements ChangesModel {
+public class PersonNameListModel extends DefaultListModel<String> implements ModelListener {
     private String name = null;
     private String function = null;
     private String department = null;
@@ -13,7 +13,7 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
     private String sort = null;
 
     public PersonNameListModel() {
-        MainFacade.getInstance().addModel(this);
+        MainFacade.getInstance().addModelListener(this);
     }
 
     /**
@@ -77,6 +77,6 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
      * removes the model from the MainFacade
      */
     public void remove() {
-        MainFacade.getInstance().removeModel(this);
+        MainFacade.getInstance().removeModelListener(this);
     }
 }
