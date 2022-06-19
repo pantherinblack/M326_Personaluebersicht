@@ -13,6 +13,8 @@ import java.nio.file.Path;
  * @since 18.05.2022
  */
 public class HRPerson extends Person {
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_ADMIN = 1;
     private int modus;
     private String pwd;
 

@@ -43,7 +43,7 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
         person.setLastName(element.split(" ")[1]);
     }
 
-    public String getUuidAt(int index) {
+    public String getUuid(int index) {
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getUuid();
     }
 
@@ -70,7 +70,7 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
     }
 
     public void removeElementAt(int index) {
-        MainFacade.getInstance().removePerson(getUuidAt(index));
+        MainFacade.getInstance().removePerson(getUuid(index));
     }
 
     /**

@@ -72,9 +72,6 @@ public class MainFacade {
         return getPersonByUuid(uuid).getPhoto();
     }
 
-    public String getLastNameByUuid(String uuid) {
-        return getPersonByUuid(uuid).getLastName();
-    }
 
     public String getFirstNameByUuid(String uuid) {
         return getPersonByUuid(uuid).getFirstName();
@@ -283,7 +280,10 @@ public class MainFacade {
     }
 
     private boolean isExistentDepartment(Department department) {
-        return company.getDepartments().contains(department);
+        for (int i = 0; i < company.getNumberOfDepartments(); i++) {
+            if (company.getDepartment(i).getName().equals(department.getName())) return true;
+        }
+        return false;
     }
 
     private boolean isExistentFunction(String function) {
@@ -387,21 +387,9 @@ public class MainFacade {
         fire();
     }
 
-    public void removeDepartment(Department department) throws InUseException {
-        if (isDepartmentInUse(department)) throw new InUseException();
-        company.removeDepartment(department);
-        fire();
-    }
-
     public void removeFunction(int index) throws InUseException {
         if (isFunctionInUse(getFunctionByIndex(index))) throw new InUseException();
         company.removeFunction(index);
-        fire();
-    }
-
-    public void removeFunction(String function) throws InUseException {
-        if (isFunctionInUse(function)) throw new InUseException();
-        company.removeFunction(function);
         fire();
     }
 
@@ -411,17 +399,11 @@ public class MainFacade {
         fire();
     }
 
-    public void removeTeam(String team) throws InUseException {
-        if (isTeamInUse(team)) throw new InUseException();
-        company.removeTeam(team);
-        fire();
-    }
-
     public void changeToHR(String uuid, int modus, String pwd) {
         changeToHR(getPersonByUuid(uuid), modus, pwd);
     }
 
-    public void changeToHR(Person person, int modus, String pwd) {
+    private void changeToHR(Person person, int modus, String pwd) {
         Department department = getDepartmentByPerson(person);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == person) department.setMember(i, person.toHRPerson(modus, pwd));
@@ -436,7 +418,7 @@ public class MainFacade {
         else throw new InputMismatchException();
     }
 
-    public void changeToPerson(HRPerson person) {
+    private void changeToPerson(HRPerson person) {
         Department department = getDepartmentByPerson(person);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == person) department.setMember(i, person);
