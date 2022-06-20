@@ -21,12 +21,11 @@ import java.util.Vector;
  */
 public class Uebersicht extends JPanel {
 
-    private JPanel uebersichtPane;
-
-
+    //panel for the right-lower part (filter menu)
     private JPanel filterPane;
     private JPanel filterComponentPane;
 
+    //panel for the left-lower part (sort menu)
     private JPanel sortierPane;
     private JPanel sortierPaneH;
     private JPanel sortierPaneW;
@@ -36,9 +35,8 @@ public class Uebersicht extends JPanel {
     private JPanel personPane;
     private JScrollPane personPaneList;
 
-
+    //panel for the right-upper part (view of the chosen person)
     private JPanel detailPane;
-
     private JPanel detailPanePerson;
     private JPanel detailPanePersonL;
     private JPanel detailPanePersonLH;
@@ -49,9 +47,11 @@ public class Uebersicht extends JPanel {
     private JPanel detailPanePersonH;
     private JPanel detailPanePersonW;
 
+    //panel für funktionenliste
     private JPanel funktionPane;
     private JScrollPane funktionPaneList;
 
+    //panel für teamliste
     private JPanel teamPane;
     private JScrollPane teamPaneList;
 
@@ -68,20 +68,30 @@ public class Uebersicht extends JPanel {
     private JRadioButton aToZ;
     private JRadioButton zToA;
 
-    private JPanel uebersichtPersonenPane = new JPanel(new GridBagLayout());
+    //panel for the left-upper part of übersicht (worker list, lens, searchbar)
+    private JPanel uebersichtPane = new JPanel(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
 
+
+    /**
+     * Constructor of the class.
+     */
     public Uebersicht() {
 
         setLayout(new GridBagLayout());
         Startseite startseite = new Startseite();
 
+        //main panel
         uebersichtPane = new JPanel(new GridBagLayout());
 
+
+        //dropdowns of filter menu
         abteilungen = new JComboBox<>(new Vector<>());
+        abteilungen.setPreferredSize(new Dimension(150, 20));
         funktionen = new JComboBox<>(new Vector<>());
         teams = new JComboBox<>(new Vector<>());
 
+        //all components of the filter menu
         filterPane = new JPanel();
         filterComponentPane = new JPanel(new GridLayout(3,2,10,0));
         filterComponentPane.add(new JLabel("Abteilung:"));
@@ -94,6 +104,8 @@ public class Uebersicht extends JPanel {
         filterPane.setPreferredSize(new Dimension(340, 125));
         filterPane.setBorder(new TitledBorder("Filter:"));
 
+        //all components of the sort menu
+        //H & W mean height & width, used for nested component
         sortierPane = new JPanel();
         sortierPaneH = new JPanel();
         sortierPaneW = new JPanel();
@@ -114,17 +126,21 @@ public class Uebersicht extends JPanel {
         sortierPaneW.add(sortierPaneH, BorderLayout.NORTH);
         sortierPaneW.setBorder(new TitledBorder("Sortierung:"));
 
+        //creates panel with title and list of workers
+        //H & W mean height & width, used for nested component
         personPane = startseite.createList(personPane, "Übersicht:", personPaneList, 120, 360);
         JPanel personPaneH = new JPanel(new BorderLayout());
         JPanel personPaneW = new JPanel(new BorderLayout());
         personPaneH.add(personPane, BorderLayout.WEST);
         personPaneW.add(personPaneH, BorderLayout.NORTH);
 
+        //adds workerlist to the left-upper part
         c.gridx = 0;
         c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
-        uebersichtPersonenPane.add(personPaneW, c);
+        uebersichtPane.add(personPaneW, c);
 
+        //adds lens icon to the left-upper part
         try {
             lupeBild = ImageIO.read(new File("src/images/lens.png"));
         } catch (IOException e) {
@@ -132,14 +148,18 @@ public class Uebersicht extends JPanel {
         }
         JLabel lupe = new JLabel(new ImageIcon(lupeBild));
         c.gridy = 1;
-        uebersichtPersonenPane.add(lupe, c);
+        uebersichtPane.add(lupe, c);
 
+        //adds search bar to the left-upper part
         JTextField suche = new JTextField();
         c.gridy = 2;
-        uebersichtPersonenPane.add(suche, c);
+        uebersichtPane.add(suche, c);
 
+        //detailPane is the right-upper part
         detailPane = new JPanel(new GridLayout(2,1));
 
+        //detailPanePerson is upper half with name, image and abteilung
+        //labels and textfields + image in separate Borderlayout (detailPanePersonL + detailPanePersonR)
         detailPanePerson = new JPanel(new BorderLayout());
         detailPanePerson.setPreferredSize(new Dimension(290, 420));
         detailPanePersonL = new JPanel(new BorderLayout());
@@ -147,6 +167,7 @@ public class Uebersicht extends JPanel {
         detailPanePersonR = new JPanel(new BorderLayout());
         detailPanePersonR.setPreferredSize(new Dimension(170, 170));
 
+        //H & W mean height & width, used for nested component
         JLabel detailName = new JLabel("Name:");
         detailName.setAlignmentX(CENTER_ALIGNMENT);
         JLabel detailAbteilung = new JLabel("Abteilung:");
@@ -164,6 +185,7 @@ public class Uebersicht extends JPanel {
         }
         JLabel bildLabel = new JLabel(new ImageIcon(personBild));
 
+        //H & W mean height & width, used for nested component
         JTextField detailNameText = new JTextField();
         detailNameText.setEditable(false);
         JTextField detailAbteilungText = new JTextField();
@@ -184,22 +206,26 @@ public class Uebersicht extends JPanel {
         detailPanePersonH.add(detailPanePerson, BorderLayout.WEST);
         detailPanePersonW.add(detailPanePersonH, BorderLayout.NORTH);
 
+        //funktionPane includes list with functions of chosen person
         funktionPane = startseite.createList(funktionPane, "Funktion:", funktionPaneList, 100, 160);
         JPanel funktionPanelH = new JPanel(new BorderLayout());
         JPanel funktionPanelW = new JPanel(new BorderLayout());
         funktionPanelH.add(funktionPane, BorderLayout.WEST);
         funktionPanelW.add(funktionPanelH, BorderLayout.NORTH);
 
+        //teamPane includes list with teams of chosen person
         teamPane = startseite.createList(teamPane, "Teams:", teamPaneList, 100, 160);
         JPanel teamPanelH = new JPanel(new BorderLayout());
         JPanel teamPanelW = new JPanel(new BorderLayout());
         teamPanelH.add(teamPane, BorderLayout.WEST);
         teamPanelW.add(teamPanelH, BorderLayout.NORTH);
 
+        //panel for combination of functionlist and teamlist
         funktionTeamPane = new JPanel(new GridLayout(1,2));
         funktionTeamPane.add(funktionPanelW);
         funktionTeamPane.add(teamPanelW);
 
+        //adds upper and lower half of detail panel
         detailPane.add(detailPanePersonW);
         detailPane.add(funktionTeamPane);
         detailPane.setPreferredSize(new Dimension(340, 415));
@@ -213,9 +239,9 @@ public class Uebersicht extends JPanel {
         c.gridy = 0;
         c.fill = GridBagConstraints.BOTH;
         c.gridheight = GridBagConstraints.REMAINDER;
-        uebersichtPersonenPane.add(detailPanelW, c);
+        uebersichtPane.add(detailPanelW, c);
 
-        uebersichtPersonenPane.setBorder(new TitledBorder("Personen:"));
+        uebersichtPane.setBorder(new TitledBorder("Personen:"));
 
         GridBagConstraints c2 = new GridBagConstraints();
 
@@ -223,7 +249,7 @@ public class Uebersicht extends JPanel {
         c2.gridy = 0;
         c2.gridwidth = 2;
         c2.anchor = GridBagConstraints.NORTHWEST;
-        this.add(uebersichtPersonenPane, c2);
+        this.add(uebersichtPane, c2);
 
         c2.gridy = 1;
         c2.gridwidth = GridBagConstraints.RELATIVE;
@@ -237,5 +263,4 @@ public class Uebersicht extends JPanel {
 
         setSize(new Dimension(500,500));
     }
-
 }

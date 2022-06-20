@@ -53,6 +53,16 @@ public class Startseite extends JFrame {
         });
     }
 
+
+    /**
+     * method to create a list with all workers
+     * @param pane panel with all components inside, is returned and saved in a variable
+     * @param title title is saved in a lable that is used as a title for the list
+     * @param scrollPane scrollpanel in which list with workers is added
+     * @param width preferred width of the whole panel
+     * @param height preferred height of the whole panel
+     * @return
+     */
     public JPanel createList(JPanel pane, String title, JScrollPane scrollPane, int width, int height) {
         pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -69,6 +79,12 @@ public class Startseite extends JFrame {
         return pane;
     }
 
+    /**
+     * Methode erstellt ein Panel der Stammdaten-View
+     * @param titel titel-Parameter wird für das Label benutzt
+     * @param component component-Parameter wird zurückgegeben und in einer Variable gespeichert
+     * @return
+     */
     public JPanel createPanel(String titel, JPanel component) {
         GridBagConstraints c = new GridBagConstraints();
         JPanel scrollButton = new JPanel(new GridBagLayout());
@@ -98,18 +114,19 @@ public class Startseite extends JFrame {
         c.gridwidth = 3;
         c.anchor = GridBagConstraints.ABOVE_BASELINE;
         scrollButton.add(scrollPane, c);
+
         c.gridwidth = 1;
         c.gridy = 1;
         c.anchor = GridBagConstraints.BASELINE;
         scrollButton.add(hinzufuegen, c);
+
         c.gridx = 1;
         scrollButton.add(loeschen, c);
+
         c.gridx = 2;
         scrollButton.add(bearbeiten, c);
 
-
         component = new JPanel(new GridBagLayout());
-
 
         c.anchor = GridBagConstraints.NORTHWEST;
         c.fill = GridBagConstraints.NONE;
