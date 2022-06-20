@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -33,6 +34,8 @@ public class Startseite extends JFrame {
         background = new JPanel(new BorderLayout());
         tabbedPane.addTab("Übersicht", new Uebersicht());
         tabbedPane.addTab("Zuordnung", new Zuordnung());
+        tabbedPane.addTab("Personen", new Personen());
+        tabbedPane.addTab("Stammdaten", new Stammdaten());
         background.add(tabbedPane, BorderLayout.CENTER);
         getContentPane().add(background, BorderLayout.CENTER);
 
@@ -64,5 +67,59 @@ public class Startseite extends JFrame {
         pane.add(scrollPane);
         pane.setPreferredSize(new Dimension(width, height));
         return pane;
+    }
+
+    public JPanel createPanel(String titel, JPanel component) {
+        GridBagConstraints c = new GridBagConstraints();
+        JPanel scrollButton = new JPanel(new GridBagLayout());
+
+        JLabel label = new JLabel(titel);
+        label.setPreferredSize(new Dimension(90, 20));
+
+        Icon plus = new ImageIcon("src/images/plus.png");
+        Icon kreuz = new ImageIcon("src/images/kreuz.png");
+        Icon stift = new ImageIcon("src/images/stift.png");
+        JButton hinzufuegen = new JButton(plus);
+        hinzufuegen.setPreferredSize(new Dimension(40, 32));
+        JButton loeschen = new JButton(kreuz);
+        loeschen.setPreferredSize(new Dimension(40, 32));
+        JButton bearbeiten = new JButton(stift);
+        bearbeiten.setPreferredSize(new Dimension(40, 32));
+
+        Vector<String> daten = new Vector<>();
+        for (int i = 0; i < 10; i++) {
+            daten.add("Text");
+        }
+        JList<String> liste = new JList<>(daten);
+        JScrollPane scrollPane =  new JScrollPane(liste);
+        scrollPane.setPreferredSize(new Dimension(120,100));
+
+        c.gridx = 0;
+        c.gridwidth = 3;
+        c.anchor = GridBagConstraints.ABOVE_BASELINE;
+        scrollButton.add(scrollPane, c);
+        c.gridwidth = 1;
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.BASELINE;
+        scrollButton.add(hinzufuegen, c);
+        c.gridx = 1;
+        scrollButton.add(loeschen, c);
+        c.gridx = 2;
+        scrollButton.add(bearbeiten, c);
+
+
+        component = new JPanel(new GridBagLayout());
+
+
+        c.anchor = GridBagConstraints.NORTHWEST;
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weighty = 1.0;
+        component.add(label, c);
+        c.gridx = 1;
+        c.anchor = GridBagConstraints.BASELINE_TRAILING;
+        component.add(scrollButton, c);
+        return component;
     }
 }
