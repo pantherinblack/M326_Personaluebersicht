@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
@@ -16,6 +18,7 @@ import java.util.Vector;
 public class Startseite extends JFrame {
 
     JTabbedPane tabbedPane;
+    JPanel background;
 
     private Vector<String> daten;
 
@@ -27,13 +30,24 @@ public class Startseite extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         tabbedPane = new JTabbedPane();
-
+        background = new JPanel(new BorderLayout());
         tabbedPane.addTab("Übersicht", new Uebersicht());
-        getContentPane().add(tabbedPane);
+        tabbedPane.addTab("Zuordnung", new Zuordnung());
+        background.add(tabbedPane, BorderLayout.CENTER);
+        getContentPane().add(background, BorderLayout.CENTER);
 
-        setSize(new Dimension(500, 700));
+
         setResizable(true);
         setVisible(true);
+        pack();
+
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (tabbedPane.getSelectedIndex() == 1) {
+                }
+            }
+        });
     }
 
     public JPanel createList(JPanel pane, String title, JScrollPane scrollPane, int width, int height) {
