@@ -1,6 +1,6 @@
 package ch.bzz.view.component;
 
-import ch.bzz.facade.DataListModel;
+import ch.bzz.facade.DataBoxModel;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
@@ -32,9 +32,7 @@ public class BasicList extends JPanel {
         this.usage = usage;
         this.arg = arg;
 
-        scrollPane = new JScrollPane(list,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         initLayout();
     }
@@ -55,10 +53,10 @@ public class BasicList extends JPanel {
         buttonPanel.add(removeButton);
         buttonPanel.add(editButton);
 
-        addButton.setBorder(LIGHT_BORDER);
-        removeButton.setBorder(LIGHT_BORDER);
-        editButton.setBorder(LIGHT_BORDER);
-        topTitle.setBorder(LIGHT_BORDER);
+        addButton.setBorder(COMPONENT_BORDER);
+        removeButton.setBorder(COMPONENT_BORDER);
+        editButton.setBorder(COMPONENT_BORDER);
+        topTitle.setBorder(COMPONENT_BORDER);
 
         sideTitle.setVerticalAlignment(SwingConstants.TOP);
         sideTitle.setMinimumSize(new Dimension(80, 0));
@@ -69,7 +67,7 @@ public class BasicList extends JPanel {
 
         scrollPane.setBorder(LIGHT_BORDER);
 
-        list.setModel(new DataListModel(DataListModel.MODE_DEPARTMENT));
+        list.setModel(new DataBoxModel(DataBoxModel.MODE_DEPARTMENT));
         list.setSelectionBackground(EXTRA_LIGHT_GRAY);
         list.setSelectionForeground(DARK_RED);
         list.setForeground(DARK_RED);

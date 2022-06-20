@@ -1,5 +1,8 @@
 package ch.bzz.view.dialog;
 
+import ch.bzz.facade.HRPersonBoxModel;
+import ch.bzz.facade.MainFacade;
+import ch.bzz.model.employees.HRPerson;
 import ch.bzz.view.MainFrame;
 import layout.TableLayout;
 
@@ -19,7 +22,7 @@ public class Authentication extends JDialog {
     private final JLabel nameLabel = new JLabel("Name:");
     private final JLabel codeLabel = new JLabel("Code: ");
     private final JComboBox nameField = new JComboBox();
-    private final JTextField codeField = new JTextField();
+    private final JPasswordField codeField = new JPasswordField();
     private final JPanel buttonPanel = new JPanel();
     private final JButton cancelButton = new JButton("Abbrechen");
     private final JButton continueButton = new JButton("Weiter");
@@ -83,6 +86,9 @@ public class Authentication extends JDialog {
         continueButton.addActionListener(new AuthenticationContinueActionListener());
         cancelButton.addActionListener(new AuthenticationCancelActionListener());
 
+        nameField.setModel(new HRPersonBoxModel());
+        nameField.setSelectedIndex(0);
+
         pack();
         setVisible(true);
     }
@@ -129,7 +135,8 @@ public class Authentication extends JDialog {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (false) {//TODO
+            HRPersonBoxModel model = (HRPersonBoxModel) nameField.getModel();
+            if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) || model.getModeAt(nameField.getSelectedIndex())<mode) {
                 tries++;
                 JOptionPane.showMessageDialog(self, "Login failed try another combination.");
                 if (tries>=3) {
@@ -138,6 +145,9 @@ public class Authentication extends JDialog {
                     end();
                 }
             } else {
+                MainFacade.getInstance().setHrPerson(
+                        (HRPerson) MainFacade.getInstance().getPersonByUuid(
+                                model.getUuidAt(nameField.getSelectedIndex())));
                 owner.changeTab(tab);
                 end();
             }

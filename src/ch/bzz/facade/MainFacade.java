@@ -21,6 +21,7 @@ public class MainFacade {
     private final Vector<ModelListener> modelListeners = new Vector<>();
     private final Vector<ViewListener> viewListeners = new Vector<>();
     private Company company;
+    private HRPerson hrPerson;
 
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
@@ -31,7 +32,7 @@ public class MainFacade {
         return instance;
     }
 
-    private Person getPersonByUuid(String uuid) throws NotExistentException {
+    public Person getPersonByUuid(String uuid) throws NotExistentException {
         for (int d = 0; d < company.getNumberOfDepartments(); d++) {
             for (int p = 0; p < company.getDepartment(d).getNumberOfMembers(); p++) {
                 if (company.getDepartment(d).getMember(p).getUuid().equals(uuid))
@@ -478,5 +479,22 @@ public class MainFacade {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public void setHrPerson(HRPerson hrPerson) {
+        this.hrPerson = hrPerson;
+    }
+
+    public Vector<HRPerson> getHRPeople() {
+        Vector<HRPerson> hrPeople = new Vector<>();
+        for (Person person : getAllPeople()) {
+            if (person instanceof HRPerson) hrPeople.add((HRPerson) person);
+        }
+        return hrPeople;
+    }
+
+    public int isLoggedIn() {
+        if (hrPerson==null) return -1;
+        return hrPerson.getModus();
     }
 }

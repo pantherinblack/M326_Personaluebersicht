@@ -1,6 +1,7 @@
 package ch.bzz.view.tab;
 
 import ch.bzz.facade.MainFacade;
+import ch.bzz.interfaces.ModelListener;
 import ch.bzz.interfaces.ViewListener;
 import ch.bzz.log.LogBook;
 
@@ -12,7 +13,7 @@ import java.awt.*;
  * @since 19.06.2022
  * @version 1.0
  */
-public class LogBookPanel extends JPanel implements ViewListener {
+public class LogBookPanel extends JPanel implements ModelListener {
     private JScrollPane scrollPane;
     private JTextArea textArea = new JTextArea();
 
@@ -23,7 +24,7 @@ public class LogBookPanel extends JPanel implements ViewListener {
         scrollPane = new JScrollPane(textArea,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        MainFacade.getInstance().addViewListener(this);
+        MainFacade.getInstance().addModelListener(this);
         readAllLogs();
 
         textArea.setEditable(false);
@@ -36,11 +37,11 @@ public class LogBookPanel extends JPanel implements ViewListener {
      * Removes the listener form the mainfacade
      */
     public void remove() {
-        MainFacade.getInstance().removeViewListener(this);
+        MainFacade.getInstance().removeModelListener(this);
     }
 
     public void readAllLogs() {
-        String log = "test";
+        String log = "";
         for (int i = 0; i < LogBook.getLogBookInstance().getSize(); i++) {
             log += LogBook.getLogBookInstance().getEntry(i);
         }
@@ -48,11 +49,14 @@ public class LogBookPanel extends JPanel implements ViewListener {
     }
 
     /**
-     * acts, when something changes
-     * @param uuid ignored
+     * updates elements
+     *
+     * @param source the <code>ListModel</code> that changed, typically "this"
+     * @param index0 one end of the new interval
+     * @param index1 the other end of the new interval
      */
     @Override
-    public void fireChanges(String uuid) {
+    public void fireContentsChanged(Object source, int index0, int index1) {
         readAllLogs();
     }
 }
