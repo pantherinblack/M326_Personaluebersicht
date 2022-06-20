@@ -18,12 +18,15 @@ public class Authentifizierung extends JFrame {
         private JTextField codeTextField;
         private JButton abbrechen;
         private JButton weiter;
+        private JPanel nameCodePanel;
+        private JPanel leerPanel1;
         private JPanel combinedPanel;
         private JPanel buttonPanel;
-        private JPanel leerPanel;
+        private JPanel leerPanel2;
         private JPanel buttonLeerPanel;
 
         public Authentifizierung() {
+                setTitle("Authentifizierung");
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setLayout(new BorderLayout(20, 20));
 
@@ -36,19 +39,24 @@ public class Authentifizierung extends JFrame {
                 codeTextField = new JTextField("...", 35);
                 abbrechen = new JButton("Abbrechen");
                 weiter = new JButton("Weiter");
-                combinedPanel = new JPanel(new GridLayout(2,2));
+                nameCodePanel = new JPanel(new GridLayout(2,2));
+                leerPanel1 = new JPanel(new BorderLayout(20, 20));
+                combinedPanel = new JPanel(new GridLayout(1, 2));
                 buttonPanel = new JPanel(new GridLayout(1,2));
-                leerPanel = new JPanel(new BorderLayout(20, 20));
+                leerPanel2 = new JPanel(new BorderLayout(20, 20));
                 buttonLeerPanel = new JPanel(new GridLayout(1, 2));
 
-                combinedPanel.add(name);
-                combinedPanel.add(comboBox);
-                combinedPanel.add(code);
-                combinedPanel.add(codeTextField);
+                nameCodePanel.add(name);
+                nameCodePanel.add(comboBox);
+                nameCodePanel.add(code);
+                nameCodePanel.add(codeTextField);
+                leerPanel1.add(leer);
+                combinedPanel.add(leer);
+                combinedPanel.add(nameCodePanel);
 
                 buttonPanel.add(abbrechen);
                 buttonPanel.add(weiter);
-                leerPanel.add(leer);
+                leerPanel2.add(leer);
                 buttonLeerPanel.add(leer);
                 buttonLeerPanel.add(buttonPanel);
 
