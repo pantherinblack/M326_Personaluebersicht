@@ -21,8 +21,6 @@ import java.util.Vector;
  */
 public class Uebersicht extends JPanel {
 
-    private Personal personal;
-
     private JPanel uebersichtPane;
 
 
@@ -167,10 +165,12 @@ public class Uebersicht extends JPanel {
         JLabel bildLabel = new JLabel(new ImageIcon(personBild));
 
         JTextField detailNameText = new JTextField();
+        detailNameText.setEditable(false);
         JTextField detailAbteilungText = new JTextField();
+        detailAbteilungText.setEditable(false);
         detailPanePersonR.add(detailNameText, BorderLayout.NORTH);
         detailPanePersonR.add(detailAbteilungText, BorderLayout.SOUTH);
-        detailPanePersonR.add(bildLabel, BorderLayout.CENTER);
+        detailPanePersonR.add(bildLabel, BorderLayout.WEST);
         detailPanePersonRH = new JPanel(new BorderLayout());
         detailPanePersonRW = new JPanel(new BorderLayout());
         detailPanePersonRH.add(detailPanePersonR, BorderLayout.EAST);
@@ -234,6 +234,8 @@ public class Uebersicht extends JPanel {
         c2.gridwidth = GridBagConstraints.REMAINDER;
         c2.anchor = GridBagConstraints.SOUTHEAST;
         this.add(filterPane, c2);
+
+        setSize(new Dimension(500,500));
     }
 
 }
