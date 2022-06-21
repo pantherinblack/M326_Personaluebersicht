@@ -2,6 +2,8 @@ package gui2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.im.InputMethodRequests;
 
@@ -47,6 +49,23 @@ public class StammdatenBearbeiten extends JFrame {
 
         getContentPane().add(abteilungTextPanel, BorderLayout.CENTER);
         getContentPane().add(leerButtonPanel, BorderLayout.SOUTH);
+
+        abbrechen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Schliesst das Fenster
+                dispose();
+            }
+        });
+
+        /**
+        speichern.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        */
 
         setSize(415, 130);
         setResizable(false);

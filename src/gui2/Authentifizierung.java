@@ -2,6 +2,8 @@ package gui2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Morris Idahosa
@@ -63,6 +65,21 @@ public class Authentifizierung extends JFrame {
                 getContentPane().add(combinedPanel, BorderLayout.CENTER);
                 getContentPane().add(buttonLeerPanel, BorderLayout.SOUTH);
 
+                abbrechen.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                                dispose();
+                        }
+                });
+
+                /**
+                weiter.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                        }
+                });
+                */
 
                 setSize(415, 130);
                 setResizable(false);
