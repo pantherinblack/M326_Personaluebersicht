@@ -19,6 +19,12 @@ public class HRPerson extends Person {
     private String pwd;
 
     /**
+     * constructor
+     * Needed for ObjectMapper
+     */
+    private HRPerson() {}
+
+    /**
      * generates a HR-Person
      *
      * @param fName firstname

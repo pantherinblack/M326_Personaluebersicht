@@ -5,6 +5,8 @@ import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
 import ch.bzz.view.dialog.Authentication;
+import ch.bzz.view.tab.AssignPanel;
+import ch.bzz.view.tab.BaseDataPanel;
 import ch.bzz.view.tab.LogBookPanel;
 
 import javax.swing.*;
@@ -25,9 +27,9 @@ public class MainFrame extends JFrame {
         setIconImage(new ImageIcon("images/img.png").getImage());
 
         tabbedPane.addTab("Übersicht", new JLabel("Test"));
-        tabbedPane.addTab("Zuordnung", new JLabel("Test"));
+        tabbedPane.addTab("Zuordnung", new AssignPanel(self));
         tabbedPane.addTab("Personen", new JLabel("Test"));
-        tabbedPane.addTab("Stammdaten", new JLabel("Test"));
+        tabbedPane.addTab("Stammdaten", new BaseDataPanel(self));
         tabbedPane.addTab("Logbuch", new LogBookPanel());
 
         tabbedPane.addChangeListener(new MainFrameTabChangeListener());
@@ -35,6 +37,7 @@ public class MainFrame extends JFrame {
         setTitle("I am looking for");
         pack();
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     /**
@@ -65,23 +68,24 @@ public class MainFrame extends JFrame {
             if (MainFacade.getInstance().isLoggedIn()!=1) {
                 if (isUser) {
                     int tab = tabbedPane.getSelectedIndex();
-                    if (tabbedPane.getSelectedIndex() == 4 && MainFacade.getInstance().isLoggedIn()!=1) {
+                    if (tabbedPane.getSelectedIndex() == 4) {
                         changeTab(0);
                         new Authentication(self, HRPerson.MODE_ADMIN, tab);
-                    } else if (tabbedPane.getSelectedIndex() > 0) {
+                    } else if (tabbedPane.getSelectedIndex() > 0 && MainFacade.getInstance().isLoggedIn()!=0) {
                         changeTab(0);
                         new Authentication(self, HRPerson.MODE_NORMAL, tab);
 
                     }
-                    pack();
                 }
             }
+            pack();
         }
     }
     public static void main(String[] args) {
 
         MainFacade mF = MainFacade.getInstance();
-        mF.setCompany(new Company("test"));
+
+        /*
         for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3")) {
             mF.addFunction(s);
         }
@@ -95,8 +99,11 @@ public class MainFrame extends JFrame {
             mF.createPerson("Niklas", "Vogel", Paths.get("test.jpg"), "TestDepartment1");
             mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
             mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
-            mF.changeToHR(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), HRPerson.MODE_NORMAL, "1234");
+            mF.changeToHR(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), HRPerson.MODE_ADMIN, "1234");
         }
+
+         */
+
 
         new MainFrame();
     }

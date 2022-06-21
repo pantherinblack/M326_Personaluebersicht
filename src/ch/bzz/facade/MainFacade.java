@@ -90,6 +90,13 @@ public class MainFacade {
         return getPersonByUuid(uuid).getFirstName() + " " + getPersonByUuid(uuid).getLastName();
     }
 
+    public int getIndexOfDepartment(String department) {
+        for (int i= 0; i < getAllDepartments().size(); i++) {
+            if (getAllDepartments().get(i).getName().equals(department)) return i;
+        }
+        return 0;
+    }
+
     public Department getDepartmentByUuid(String uuid) {
         return getDepartmentByPerson(getPersonByUuid(uuid));
     }
@@ -281,7 +288,6 @@ public class MainFacade {
                 fire();
                 return;
             }
-
         }
         throw new NotExistentException();
     }
@@ -299,7 +305,7 @@ public class MainFacade {
     }
 
     private boolean isExistentDepartment(String department) {
-        List<Department> departments = company.getDepartments();
+        Vector<Department> departments = company.getDepartments();
         for (Department department1 : departments) {
             if (department1.getName().equals(department)) return true;
         }
@@ -362,15 +368,15 @@ public class MainFacade {
         fire();
     }
 
-    public List<Department> getAllDepartments() {
+    public Vector<Department> getAllDepartments() {
         return company.getDepartments();
     }
 
-    public List<String> getAllFunctions() {
+    public Vector<String> getAllFunctions() {
         return company.getFunctions().getDesignations();
     }
 
-    public List<String> getAllTeams() {
+    public Vector<String> getAllTeams() {
         return company.getTeams().getDesignations();
     }
 
@@ -454,7 +460,7 @@ public class MainFacade {
     }
 
     private boolean isFunctionInUse(String function) {
-        List<Person> people = getAllPeople();
+        Vector<Person> people = getAllPeople();
         for (Person person : people) {
             if (StringListCompare.stringContains(getFunctionsByUuid(person.getUuid()), function)) return true;
         }
@@ -462,7 +468,7 @@ public class MainFacade {
     }
 
     private boolean isTeamInUse(String team) {
-        List<Person> people = getAllPeople();
+        Vector<Person> people = getAllPeople();
         for (Person person : people) {
             if (StringListCompare.stringContains(getTeamsByUuid(person.getUuid()), team)) return true;
         }
@@ -496,5 +502,19 @@ public class MainFacade {
     public int isLoggedIn() {
         if (hrPerson==null) return -1;
         return hrPerson.getModus();
+    }
+
+    public String getCompanyName() {
+        return company.getName();
+    }
+
+    public void setCompanyName(String name) {
+        company.setName(name);
+        storeOnly();
+
+    }
+
+    public void storeOnly() {
+        DataHandler.getInstance().saveApp();
     }
 }

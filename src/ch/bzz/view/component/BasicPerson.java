@@ -68,10 +68,6 @@ public class BasicPerson extends JPanel implements ViewListener {
         add(smallPhoto, "2, 2");
 
         smallPhoto.setIcon(new ImageIcon(new ImageIcon("images/img.png").getImage().getScaledInstance(20, 20, Image.SCALE_FAST)));
-        nameLabel.setBorder(FRAME_BORDER);
-        nameField.setBorder(FRAME_BORDER);
-        smallPhoto.setBorder(FRAME_BORDER);
-        photo.setBorder(FRAME_BORDER);
         setBorder(FRAME_BORDER);
         smallPhoto.addMouseListener(new SmallPhotoListener());
     }

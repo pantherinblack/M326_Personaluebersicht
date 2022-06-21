@@ -136,7 +136,8 @@ public class Authentication extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             HRPersonBoxModel model = (HRPersonBoxModel) nameField.getModel();
-            if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) || model.getModeAt(nameField.getSelectedIndex())<mode) {
+            if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) ||
+                    model.getModeAt(nameField.getSelectedIndex())<mode) {
                 tries++;
                 JOptionPane.showMessageDialog(self, "Login failed try another combination.");
                 if (tries>=3) {

@@ -12,7 +12,7 @@ import javax.swing.*;
  * @version 1.0
  * @since 18.06.2022
  */
-public class DataBoxModel extends DefaultComboBoxModel<String> implements ModelListener {
+public class DataListModel extends DefaultComboBoxModel<String> implements ModelListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
     public static final int MODE_DEPARTMENT = 2;
@@ -23,7 +23,7 @@ public class DataBoxModel extends DefaultComboBoxModel<String> implements ModelL
      *
      * @param mode to be used
      */
-    public DataBoxModel(int mode) {
+    public DataListModel(int mode) {
         MainFacade.getInstance().addModelListener(this);
         this.mode = mode;
     }

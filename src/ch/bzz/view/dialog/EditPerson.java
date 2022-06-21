@@ -1,7 +1,7 @@
 package ch.bzz.view.dialog;
 
 import ch.bzz.exception.NotExistentException;
-import ch.bzz.facade.DataBoxModel;
+import ch.bzz.facade.DataListModel;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
@@ -75,7 +75,7 @@ public class EditPerson extends JDialog {
         hrCheckBox.addActionListener(new HRCheckBoxListener());
 
 
-        departmentBox.setModel(new DataBoxModel(DataBoxModel.MODE_DEPARTMENT));
+        departmentBox.setModel(new DataListModel(DataListModel.MODE_DEPARTMENT));
         departmentBox.setSelectedIndex(0);
 
 

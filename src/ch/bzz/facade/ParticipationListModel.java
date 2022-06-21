@@ -11,10 +11,10 @@ import javax.swing.*;
  * @version 1.5
  * @since 17.06.2022
  */
-public class ParticipationListModel extends DefaultListModel<String> implements ModelListener {
+public class ParticipationListModel extends DefaultComboBoxModel<String> implements ModelListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
-    private final String uuid;
+    private String uuid;
     private final int mode;
 
     /**
@@ -26,6 +26,11 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
         MainFacade.getInstance().addModelListener(this);
         this.uuid = uuid;
         this.mode = mode;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+        MainFacade.getInstance().fire();
     }
 
     /**
@@ -81,7 +86,6 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
      * @param element what the component is to be set to
      * @param index   the specified index
      */
-    @Override
     public void setElementAt(String element, int index) {
         switch (mode) {
             case 0:
