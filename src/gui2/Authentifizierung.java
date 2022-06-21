@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * @author Morris Idahosa
  * @version 1.0
- * @date    06.04.2022
+ * @date    21.06.2022
  */
 public class Authentifizierung extends JFrame {
 

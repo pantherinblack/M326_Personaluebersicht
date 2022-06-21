@@ -2,51 +2,60 @@ package gui2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputMethodEvent;
+import java.awt.im.InputMethodRequests;
+
+/**
+ * @author Morris Idahosa
+ * @version 1.0
+ * @date    21.06.2022
+ */
 
 public class StammdatenBearbeiten extends JFrame {
 
-    //Attribute
-    JLabel abteilung;
-    JLabel leer;
-    JTextField textField;
-    JButton abbrechen;
-    JButton speichern;
-    JPanel abteilungTextfieldPanel;
-    JPanel leerPanel;
-    JPanel buttonsPanel;
-    JPanel leerButtonsPanel;
+    private JLabel abteilung;
+    private JLabel leer;
+    private JTextField textField;
+    private JButton abbrechen;
+    private JButton speichern;
+    private JPanel abteilungTextPanel;
+    private JPanel buttonPanel;
+    private JPanel leerButtonPanel;
 
     public StammdatenBearbeiten() {
         setTitle("Funktion erfassen/bearbeiten");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(20, 20));
-        setSize(400, 130);
 
         abteilung = new JLabel("Abteilung:");
+        leer = new JLabel("");
         textField = new JTextField("Text eingeben", 35);
-        abteilungTextfieldPanel = new JPanel(new GridLayout(2, 1));
-        abteilungTextfieldPanel.add(abteilung, textField);
-
         abbrechen = new JButton("Abbrechen");
         speichern = new JButton("Speichern");
-        buttonsPanel = new JPanel(new GridLayout(2, 1));
-        buttonsPanel.add(abbrechen, speichern);
+        abteilungTextPanel = new JPanel(new GridLayout(1, 2));
+        buttonPanel = new JPanel(new GridLayout(1, 2));
+        leerButtonPanel = new JPanel(new GridLayout(1, 2));
 
-        leer = new JLabel("");
-        leerPanel = new JPanel(new BorderLayout(5, 5));
-        leerPanel.add(leer);
+        abteilungTextPanel.add(abteilung);
+        abteilungTextPanel.add(textField);
 
-        leerButtonsPanel = new JPanel(new GridLayout(2,1));
-        leerButtonsPanel.add(leerPanel, buttonsPanel);
+        buttonPanel.add(abbrechen);
+        buttonPanel.add(speichern);
 
-        getContentPane().add(abteilungTextfieldPanel, BorderLayout.CENTER);
-        getContentPane().add(leerButtonsPanel, BorderLayout.SOUTH);
+        leerButtonPanel.add(leer);
+        leerButtonPanel.add(buttonPanel);
 
+        getContentPane().add(abteilungTextPanel, BorderLayout.CENTER);
+        getContentPane().add(leerButtonPanel, BorderLayout.SOUTH);
+
+        setSize(415, 130);
+        setResizable(false);
         setVisible(true);
-
     }
 
     public static void main(String[] args) {
-        StammdatenBearbeiten  stammdatenBearbeiten = new StammdatenBearbeiten();
+        StammdatenBearbeiten stammdatenBearbeiten = new StammdatenBearbeiten();
     }
 }
+
+
