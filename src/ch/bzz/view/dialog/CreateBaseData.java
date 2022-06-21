@@ -1,6 +1,7 @@
 package ch.bzz.view.dialog;
 
 import ch.bzz.facade.MainFacade;
+import ch.bzz.util.ColorCodes;
 import layout.TableLayout;
 
 import javax.swing.*;
@@ -62,6 +63,8 @@ public class CreateBaseData extends JDialog {
 
         cancelButton.addActionListener(new CancelButtonListener());
         saveButton.addActionListener(new SaveButtonListener());
+
+        input.setForeground(DARK_RED);
 
         switch (mode) {
             case 0:

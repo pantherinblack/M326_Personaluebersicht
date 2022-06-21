@@ -21,7 +21,6 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = HRPerson.class, name = "HRPerson")})
 public class Person {
     private String uuid;
-    @JsonIgnore
     private Path photo;
     private String firstName;
     private String lastName;
@@ -54,7 +53,6 @@ public class Person {
      *
      * @return photo (ImageIcon)
      */
-    @JsonIgnore
     public Path getPhoto() {
         return photo;
     }
@@ -64,7 +62,6 @@ public class Person {
      *
      * @param photo (ImageIcon)
      */
-    @JsonIgnore
     public void setPhoto(Path photo) {
         this.photo = photo;
     }

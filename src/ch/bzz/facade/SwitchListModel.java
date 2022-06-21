@@ -17,6 +17,12 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
     private String uuid;
     private final MainFacade mF;
 
+    /**
+     * initializes the object and defines working parameters.
+     * @param side on which it will be shown
+     * @param mode what will be shown
+     * @param uuid of a person (if needed)
+     */
     public SwitchListModel(int side, int mode, String uuid) {
         this.side = side;
         this.mode = mode;
@@ -26,11 +32,18 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
         mF.fire();
     }
 
+    /**
+     * sets the uuid;
+     * @param uuid to be set
+     */
     public void setUuid(String uuid) {
         this.uuid = uuid;
         mF.fire();
     }
 
+    /**
+     * removes the listener in the MainFacade
+     */
     public void removeSelf() {
         MainFacade.getInstance().removeModelListener(this);
     }

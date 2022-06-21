@@ -5,6 +5,7 @@ import ch.bzz.facade.SwitchListModel;
 import ch.bzz.interfaces.ViewListener;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
+import ch.bzz.util.ColorCodes;
 import layout.TableLayout;
 
 import javax.swing.*;
@@ -102,6 +103,9 @@ public class SwitchList extends JPanel implements ViewListener {
         rightTitle.setMinimumSize(new Dimension(120, 0));
         rightList.setMinimumSize(new Dimension(120, 0));
         leftList.setMinimumSize(new Dimension(120, 0));
+
+        leftList.setForeground(ColorCodes.DARK_RED);
+        rightList.setForeground(ColorCodes.DARK_RED);
     }
 
     private void update() {

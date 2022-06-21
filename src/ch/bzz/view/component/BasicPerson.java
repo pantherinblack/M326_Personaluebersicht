@@ -2,6 +2,8 @@ package ch.bzz.view.component;
 
 import ch.bzz.facade.MainFacade;
 import ch.bzz.interfaces.ViewListener;
+import ch.bzz.util.ColorCodes;
+import ch.bzz.util.ConfigReader;
 import layout.TableLayout;
 
 import javax.swing.*;
@@ -18,28 +20,29 @@ public class BasicPerson extends JPanel implements ViewListener {
     public static final int MODE_SHOW = 0;
     public static final int MODE_EDIT = 1;
     public BasicPerson self;
+    private String uuid;
     private int mode;
-    private Path photoPath = Paths.get("images/img.png");
+    private Path photoPath = Paths.get(ConfigReader.readConfig("picturePath"));
     private JLabel nameLabel = new JLabel("Name: ");
-    private JTextField nameField = new JTextField("Unknown");
+    private JTextField nameField = new JTextField("");
     private JLabel photo = new JLabel();
     private JLabel smallPhoto = new JLabel();
 
     public BasicPerson(int mode, String uuid) {
-        this(mode);
-        fireChanges(uuid);
-    }
-
-    public BasicPerson(int mode) {
         this.self = this;
         this.mode = mode;
+        this.uuid = uuid;
         if (mode == 0) {
             smallPhoto.setVisible(false);
             nameField.setEditable(false);
         }
-        initLayout();
-        fireChanges(null);
         nameLabel.setMinimumSize(new Dimension(80, 0));
+        initLayout();
+        fireChanges(uuid);
+    }
+
+    public BasicPerson(int mode) {
+        this(mode, null);
     }
 
     public static void main(String[] args) {
@@ -54,11 +57,12 @@ public class BasicPerson extends JPanel implements ViewListener {
     }
 
     public String getPhoto() {
-        return null;
+        return photoPath.toString();
     }
 
     private void initLayout() {
-        double[][] order = {{-3, -2, -3}, {-3, -1, -3,-3}};
+        double[][] order = {{-3, -2, -3}, {-3, -1, -3, -3}};
+        photoPath = Paths.get(ConfigReader.readConfig("picturePath"));
 
         setLayout(new TableLayout(order));
 
@@ -67,9 +71,19 @@ public class BasicPerson extends JPanel implements ViewListener {
         add(photo, "1, 1, 1, 2");
         add(smallPhoto, "2, 2");
 
-        smallPhoto.setIcon(new ImageIcon(new ImageIcon("images/img.png").getImage().getScaledInstance(20, 20, Image.SCALE_FAST)));
+        if (uuid != null && !uuid.isEmpty()) {
+            if (MainFacade.getInstance().getPhotoByUuid(uuid) != null)
+                photoPath = MainFacade.getInstance().getPhotoByUuid(uuid);
+            nameField.setText(MainFacade.getInstance().getFullNameByUuid(uuid));
+        }
+
+        smallPhoto.setIcon(new ImageIcon(new ImageIcon(ConfigReader.readConfig("picturePath")).getImage().getScaledInstance(20, 20, Image.SCALE_FAST)));
         setBorder(FRAME_BORDER);
         smallPhoto.addMouseListener(new SmallPhotoListener());
+
+        nameField.setForeground(ColorCodes.DARK_RED);
+
+
     }
 
     public Path getPhotoPath() {
@@ -77,16 +91,27 @@ public class BasicPerson extends JPanel implements ViewListener {
     }
 
     public void fireChanges(String uuid) {
+        if (!this.uuid.equals(uuid)) {
+            photoPath = Paths.get(ConfigReader.readConfig("picturePath"));
+            this.uuid = uuid;
+        }
+
+
         if (uuid != null && !uuid.isEmpty()) {
             nameField.setText(MainFacade.getInstance().getFullNameByUuid(uuid));
             Path picture = MainFacade.getInstance().getPhotoByUuid(uuid);
             if (picture == null || !Files.exists(picture))
                 photo.setIcon(new ImageIcon(new ImageIcon(photoPath.toString()).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
-            else
+            else {
                 photo.setIcon(new ImageIcon(new ImageIcon(picture.toString()).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+                photoPath = picture;
+            }
+
+
         } else {
             photo.setIcon(new ImageIcon(new ImageIcon(photoPath.toString()).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
         }
+
     }
 
     public class SmallPhotoListener extends MouseAdapter {
@@ -99,14 +124,13 @@ public class BasicPerson extends JPanel implements ViewListener {
          */
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("test");
             JFileChooser fileChooser = new JFileChooser();
 
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
             if (fileChooser.showOpenDialog(self) == JFileChooser.APPROVE_OPTION)
                 photoPath = fileChooser.getSelectedFile().toPath();
-            System.out.println(photoPath);
+            MainFacade.getInstance().setPhotoByUuid(uuid, photoPath);
             fireChanges(null);
         }
     }

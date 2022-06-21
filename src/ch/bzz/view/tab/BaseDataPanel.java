@@ -1,6 +1,7 @@
 package ch.bzz.view.tab;
 
 import ch.bzz.facade.MainFacade;
+import ch.bzz.util.ColorCodes;
 import ch.bzz.view.component.BasicList;
 import layout.TableLayout;
 
@@ -22,9 +23,9 @@ public class BaseDataPanel extends JPanel {
 
     public BaseDataPanel(JFrame owner) {
         this.owner = owner;
-        departmentList = new BasicList(owner, BasicList.MODE_BASE_DEPARTMENT);
-        functionList = new BasicList(owner, BasicList.MODE_BASE_FUNCTION);
-        teamList = new BasicList(owner, BasicList.MODE_BASE_TEAM);
+        departmentList = new BasicList(owner, BasicList.MODE_BASE_DEPARTMENT, null);
+        functionList = new BasicList(owner, BasicList.MODE_BASE_FUNCTION, null);
+        teamList = new BasicList(owner, BasicList.MODE_BASE_TEAM,null);
         companyField.setText(MainFacade.getInstance().getCompanyName());
         companyLabel.setMinimumSize(new Dimension(80,0));
         double[][] order = {{-3,-1},{-3,-2,-2,-2}};
@@ -38,9 +39,13 @@ public class BaseDataPanel extends JPanel {
         content.add(functionList, "0, 2, 1, 2");
         content.add(teamList, "0, 3, 1, 3");
 
+        content.setPreferredSize(new Dimension(300, 600));
+
         departmentList.setMinimumSize(new Dimension(100,0));
         functionList.setMinimumSize(new Dimension(100,0));
         teamList.setMinimumSize(new Dimension(100,0));
+        setForeground(ColorCodes.DARK_RED);
+        companyField.setForeground(ColorCodes.DARK_RED);
 
         companyField.addKeyListener(new KeyAdapter() {
             /**

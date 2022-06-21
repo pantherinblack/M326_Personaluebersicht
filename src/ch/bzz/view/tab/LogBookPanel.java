@@ -29,8 +29,10 @@ public class LogBookPanel extends JPanel implements ModelListener {
 
         textArea.setEditable(false);
 
-        setLayout(new GridLayout(1,1));
+        setLayout(new BorderLayout());
         add(scrollPane);
+
+        scrollPane.setPreferredSize(new Dimension(450,600));
     }
 
     /**
@@ -43,7 +45,7 @@ public class LogBookPanel extends JPanel implements ModelListener {
     public void readAllLogs() {
         String log = "";
         for (int i = 0; i < LogBook.getLogBookInstance().getSize(); i++) {
-            log += LogBook.getLogBookInstance().getEntry(i);
+            log += LogBook.getLogBookInstance().getEntry(i)+"\n";
         }
         textArea.setText(log);
     }

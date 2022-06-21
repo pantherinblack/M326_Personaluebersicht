@@ -28,11 +28,6 @@ public class ParticipationListModel extends DefaultComboBoxModel<String> impleme
         this.mode = mode;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-        MainFacade.getInstance().fire();
-    }
-
     /**
      * updates elements
      *
@@ -77,24 +72,6 @@ public class ParticipationListModel extends DefaultComboBoxModel<String> impleme
                 return MainFacade.getInstance().getTeamsByUuid(uuid).get(index);
         }
         return null;
-    }
-
-
-    /**
-     * Sets the element at the specific position
-     *
-     * @param element what the component is to be set to
-     * @param index   the specified index
-     */
-    public void setElementAt(String element, int index) {
-        switch (mode) {
-            case 0:
-                MainFacade.getInstance().setFunctionAtPerson(uuid, element, index);
-                break;
-            case 1:
-                MainFacade.getInstance().setTeamAtPerson(uuid, element, index);
-                break;
-        }
     }
 
     /**

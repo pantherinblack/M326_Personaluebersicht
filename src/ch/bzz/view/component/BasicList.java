@@ -6,6 +6,7 @@ import ch.bzz.facade.ParticipationListModel;
 import ch.bzz.facade.PersonNameListModel;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
+import ch.bzz.util.ColorCodes;
 import ch.bzz.view.dialog.CreateBaseData;
 import ch.bzz.view.dialog.EditPerson;
 import layout.TableLayout;
@@ -41,15 +42,10 @@ public class BasicList extends JPanel {
     private JButton removeButton = new JButton("X");
     private JButton editButton = new JButton("C");
 
-
     public BasicList(JFrame owner, int mode, String uuid) {
-        this(owner,mode);
         this.uuid = uuid;
-    }
-    public BasicList(JFrame owner, int mode) {
         this.owner = owner;
         this.mode = mode;
-        this.uuid = uuid;
         scrollPane = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         initLayout();
     }
@@ -73,7 +69,6 @@ public class BasicList extends JPanel {
         addButton.setBorder(COMPONENT_BORDER);
         removeButton.setBorder(COMPONENT_BORDER);
         editButton.setBorder(COMPONENT_BORDER);
-        topTitle.setBorder(COMPONENT_BORDER);
 
         sideTitle.setVerticalAlignment(SwingConstants.TOP);
         sideTitle.setMinimumSize(new Dimension(80, 0));
@@ -91,9 +86,6 @@ public class BasicList extends JPanel {
         setBackground(BACKGROUND);
 
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        list.setModel(new PersonNameListModel());
-        list.setSelectedIndex(1);
 
         String titleName = "";
 
@@ -155,6 +147,9 @@ public class BasicList extends JPanel {
         removeButton.addActionListener(new RemoveButtonActionListener());
         editButton.addActionListener(new EditButtonActionListener());
 
+        list.setForeground(DARK_RED);
+        list.setSelectedIndex(0);
+
     }
 
     public int getSelectedIndex() {
@@ -191,6 +186,15 @@ public class BasicList extends JPanel {
         topTitle.setVisible(visible);
     }
 
+    public String getUuid(int index) {
+        return ((PersonNameListModel)list.getModel()).getUuid(index);
+    }
+
+    public void changeUuid(String uuid) {
+        this.uuid = uuid;
+        initLayout();
+    }
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("test");
@@ -215,6 +219,10 @@ public class BasicList extends JPanel {
         frame.pack();
     }
 
+    public void setFilter(String name, String function, String department, String team, String sort) {
+        ((PersonNameListModel)list.getModel()).setFilter(name,function,department,team,sort);
+    }
+
     public class AddButtonActionListener implements ActionListener {
 
         /**
@@ -227,7 +235,7 @@ public class BasicList extends JPanel {
             try {
                 switch (mode) {
                     case 1:
-                        new EditPerson(EditPerson.MODE_CREATE, null);
+                        new EditPerson(owner, EditPerson.MODE_CREATE, null);
                         break;
                     case 2:
                         new CreateBaseData(owner, CreateBaseData.FUNCTION_CREATE, CreateBaseData.MODE_DEPARTMENT, "");
@@ -258,7 +266,7 @@ public class BasicList extends JPanel {
                 try {
                     switch (mode) {
                         case 1:
-                            new EditPerson(EditPerson.MODE_EDIT, MainFacade.getInstance().getPerson(list.getSelectedIndex()).getUuid());
+                            new EditPerson(owner, EditPerson.MODE_EDIT, MainFacade.getInstance().getPerson(list.getSelectedIndex()).getUuid());
                             break;
                         case 2:
                             new CreateBaseData(owner, CreateBaseData.FUNCTION_EDIT, CreateBaseData.MODE_DEPARTMENT, list.getSelectedValue());

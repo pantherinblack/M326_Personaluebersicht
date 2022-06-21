@@ -6,6 +6,7 @@ import ch.bzz.facade.MainFacade;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
+import ch.bzz.util.ColorCodes;
 import ch.bzz.view.component.BasicPerson;
 import layout.TableLayout;
 
@@ -25,8 +26,8 @@ public class EditPerson extends JDialog {
     private int mode;
     private BasicPerson personInfo;
     private JPanel checkBoxPanel = new JPanel();
-    private JLabel hrLabel = new JLabel("HR-Mitarbeiter");
-    private JLabel adminLabel = new JLabel("Administrator");
+    private JLabel hrLabel = new JLabel("HR-Mitarbeiter:");
+    private JLabel adminLabel = new JLabel("Administrator:");
     private JCheckBox hrCheckBox = new JCheckBox();
     private JCheckBox adminCheckBox = new JCheckBox();
     private JPanel buttonPanel = new JPanel();
@@ -38,9 +39,11 @@ public class EditPerson extends JDialog {
     private JPasswordField passwordField = new JPasswordField();
 
 
-    public EditPerson(int mode, String uuid) throws NotExistentException {
+    public EditPerson(JFrame owner, int mode, String uuid) throws NotExistentException {
+        super(owner, true);
         this.self = this;
         this.mode = mode;
+        this.uuid = uuid;
         double[][] order = {{-1, -2}, {-1, -2, -2}};
         double[][] order2 = {{-2, -1}, {-2, -2, -2, -2}};
         double[][] order3 = {{-2, -2}, {-2}};
@@ -85,7 +88,7 @@ public class EditPerson extends JDialog {
 
         } else if (mode == 1) {
             setTitle("Person Bearbeiten");
-            personInfo = new BasicPerson(BasicPerson.MODE_EDIT);
+            personInfo = new BasicPerson(BasicPerson.MODE_EDIT, uuid);
 
         } else {
             throw new NotExistentException();
@@ -101,6 +104,26 @@ public class EditPerson extends JDialog {
         adminLabel.setVisible(false);
         passwordLabel.setVisible(false);
         passwordField.setVisible(false);
+
+        passwordField.setForeground(ColorCodes.DARK_RED);
+
+
+        hrCheckBox.setSelected(false);
+        adminCheckBox.setSelected(false);
+
+        if (uuid != null && !uuid.isEmpty()) {
+            if (MainFacade.getInstance().getPersonByUuid(uuid) instanceof HRPerson) {
+                int personMode = ((HRPerson)MainFacade.getInstance().getPersonByUuid(uuid)).getModus();
+                hrCheckBox.setSelected(true);
+                adminCheckBox.setSelected(personMode==1);
+                updateCheckBoxes();
+            }
+
+            departmentBox.setSelectedIndex(
+                    MainFacade.getInstance().getIndexOfDepartment(
+                            MainFacade.getInstance().getDepartmentByUuid(uuid).getName()));
+        }
+
 
         setResizable(false);
         pack();
@@ -124,9 +147,26 @@ public class EditPerson extends JDialog {
             mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
             mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
         }
-        new EditPerson(0, "");
+        new EditPerson(null,0, "");
 
 
+    }
+
+    public void updateCheckBoxes() {
+        if (!hrCheckBox.isSelected()) {
+            adminCheckBox.setSelected(false);
+            adminCheckBox.setEnabled(false);
+            adminCheckBox.setVisible(false);
+            adminLabel.setVisible(false);
+            passwordLabel.setVisible(false);
+            passwordField.setVisible(false);
+        } else {
+            adminCheckBox.setEnabled(true);
+            adminCheckBox.setVisible(true);
+            adminLabel.setVisible(true);
+            passwordLabel.setVisible(true);
+            passwordField.setVisible(true);
+        }
     }
 
     public class HRCheckBoxListener implements ActionListener {
@@ -138,20 +178,7 @@ public class EditPerson extends JDialog {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (!hrCheckBox.isSelected()) {
-                adminCheckBox.setSelected(false);
-                adminCheckBox.setEnabled(false);
-                adminCheckBox.setVisible(false);
-                adminLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                passwordField.setVisible(false);
-            } else {
-                adminCheckBox.setEnabled(true);
-                adminCheckBox.setVisible(true);
-                adminLabel.setVisible(true);
-                passwordLabel.setVisible(true);
-                passwordField.setVisible(true);
-            }
+            updateCheckBoxes();
         }
     }
 
@@ -195,7 +222,9 @@ public class EditPerson extends JDialog {
                 }
             } else if (mode == 1) {
                 try {
-                    mF.setFullNameByUuid(personInfo.getName(), personInfo.getPhoto());
+                    mF.setFullNameByUuid(uuid, personInfo.getName());
+                    if (personInfo.getPhoto() != null)
+                        mF.setPhotoByUuid(uuid, Paths.get(personInfo.getPhoto()));
                     mF.changeDepartmentByUuid(uuid, departmentBox.getItemAt(departmentBox.getSelectedIndex()));
 
                     if (hrCheckBox.isSelected()) {

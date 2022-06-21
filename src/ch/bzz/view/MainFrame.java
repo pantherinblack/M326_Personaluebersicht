@@ -5,9 +5,7 @@ import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
 import ch.bzz.view.dialog.Authentication;
-import ch.bzz.view.tab.AssignPanel;
-import ch.bzz.view.tab.BaseDataPanel;
-import ch.bzz.view.tab.LogBookPanel;
+import ch.bzz.view.tab.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -26,9 +24,9 @@ public class MainFrame extends JFrame {
 
         setIconImage(new ImageIcon("images/img.png").getImage());
 
-        tabbedPane.addTab("Übersicht", new JLabel("Test"));
+        tabbedPane.addTab("Übersicht", new OverviewPanel(self));
         tabbedPane.addTab("Zuordnung", new AssignPanel(self));
-        tabbedPane.addTab("Personen", new JLabel("Test"));
+        tabbedPane.addTab("Personen", new PersonPanel(self));
         tabbedPane.addTab("Stammdaten", new BaseDataPanel(self));
         tabbedPane.addTab("Logbuch", new LogBookPanel());
 
@@ -78,7 +76,7 @@ public class MainFrame extends JFrame {
                     }
                 }
             }
-            pack();
+            self.pack();
         }
     }
     public static void main(String[] args) {

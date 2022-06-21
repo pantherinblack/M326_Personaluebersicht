@@ -5,6 +5,8 @@ import ch.bzz.exception.InUseException;
 import ch.bzz.exception.NotExistentException;
 import ch.bzz.interfaces.ModelListener;
 import ch.bzz.interfaces.ViewListener;
+import ch.bzz.log.LogBook;
+import ch.bzz.log.UserAction;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
@@ -130,6 +132,7 @@ public class MainFacade {
                 department1.removeMember(i);
                 getDepartmentByName(department).addMember(person);
                 fire();
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, person, UserAction.SET_ASSIGNMENT).getEntry());
                 return;
             }
         }
@@ -137,7 +140,9 @@ public class MainFacade {
     }
 
     public void createPerson(String fName, String lName, Path photo, String department) {
-        getDepartmentByName(department).addMember(new Person(fName, lName, photo));
+        Person person = new Person(fName, lName, photo);
+        getDepartmentByName(department).addMember(person);
+        LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, person, UserAction.CREATE_PERSON).getEntry());
         fire();
     }
 
@@ -146,6 +151,7 @@ public class MainFacade {
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == getPersonByUuid(uuid)) {
                 department.removeMember(i);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.DELETE_PERSON).getEntry());
                 fire();
                 return;
             }
@@ -201,10 +207,10 @@ public class MainFacade {
         if (sort != null && !sort.isEmpty()) {
 
             switch (sort) {
-                case "asc":
+                case "A-Z":
                     people.sort(Comparator.comparing(Person::getFullName));
                     break;
-                case "dsc":
+                case "Z-A":
                     people.sort(Comparator.comparing(Person::getFullName));
                     Collections.reverse(people);
                     break;
@@ -238,6 +244,7 @@ public class MainFacade {
         if (!StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).add(function);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -250,6 +257,7 @@ public class MainFacade {
         if (StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).remove(function);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -261,6 +269,7 @@ public class MainFacade {
         if (!StringListCompare.stringContains(getFunctionsByUuid(uuid), function)) {
             if (isExistentFunction(function)) {
                 getFunctionsByUuid(uuid).set(index, function);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -273,6 +282,7 @@ public class MainFacade {
         if (!StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).add(team);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -285,6 +295,7 @@ public class MainFacade {
         if (StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).remove(team);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -296,6 +307,7 @@ public class MainFacade {
         if (!StringListCompare.stringContains(getTeamsByUuid(uuid), team)) {
             if (isExistentTeam(team)) {
                 getTeamsByUuid(uuid).set(index, team);
+                LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.CHANGE_VALUE).getEntry());
                 fire();
                 return;
             }
@@ -441,6 +453,7 @@ public class MainFacade {
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == person) department.setMember(i, person.toHRPerson(modus, pwd));
         }
+        LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, person, UserAction.CHANGE_VALUE).getEntry());
         fire();
     }
 
@@ -456,6 +469,7 @@ public class MainFacade {
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == person) department.setMember(i, person);
         }
+        LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, person, UserAction.CHANGE_VALUE).getEntry());
         fire();
     }
 

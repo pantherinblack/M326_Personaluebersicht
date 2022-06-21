@@ -5,6 +5,12 @@ import ch.bzz.model.employees.Person;
 
 import javax.swing.*;
 
+/**
+ * controls the usage of the name etc. to only give back strings
+ * @author Kevin
+ * @since 20.06.2022
+ * @version 1.2
+ */
 public class PersonNameListModel extends DefaultListModel<String> implements ModelListener {
     private String name = null;
     private String function = null;
@@ -47,6 +53,14 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getUuid();
     }
 
+    /**
+     * sets the filter for further use. Maintains consistency
+     * @param name to search for
+     * @param function needed
+     * @param department needed
+     * @param team needed
+     * @param sort type of the list
+     */
     public void setFilter(String name, String function, String department, String team, String sort) {
         this.name = name;
         this.function = function;
@@ -69,6 +83,10 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
         else super.fireContentsChanged(source, index0, index1);
     }
 
+    /**
+     * removes an element at a specific position
+     * @param index   the index of the object to remove
+     */
     public void removeElementAt(int index) {
         MainFacade.getInstance().removePerson(getUuid(index));
     }

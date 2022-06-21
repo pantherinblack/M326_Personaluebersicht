@@ -3,6 +3,7 @@ package ch.bzz.view.dialog;
 import ch.bzz.facade.HRPersonBoxModel;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.model.employees.HRPerson;
+import ch.bzz.util.ColorCodes;
 import ch.bzz.view.MainFrame;
 import layout.TableLayout;
 
@@ -88,6 +89,8 @@ public class Authentication extends JDialog {
 
         nameField.setModel(new HRPersonBoxModel());
         nameField.setSelectedIndex(0);
+        nameField.setForeground(DARK_RED);
+        codeField.setForeground(DARK_RED);
 
         pack();
         setVisible(true);
@@ -135,21 +138,27 @@ public class Authentication extends JDialog {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            HRPersonBoxModel model = (HRPersonBoxModel) nameField.getModel();
-            if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) ||
-                    model.getModeAt(nameField.getSelectedIndex())<mode) {
-                tries++;
-                JOptionPane.showMessageDialog(self, "Login failed try another combination.");
-                if (tries>=3) {
-                    JOptionPane.showMessageDialog(self, "You tried to many times to login.");
-                    owner.changeTab(0);
+            if (tries<3) {
+                HRPersonBoxModel model = (HRPersonBoxModel) nameField.getModel();
+                if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) ||
+                        model.getModeAt(nameField.getSelectedIndex()) < mode) {
+                    tries++;
+                    JOptionPane.showMessageDialog(self, "Login failed try another combination.");
+                    if (tries >= 3) {
+                        JOptionPane.showMessageDialog(self, "You tried to many times to login.");
+                        owner.changeTab(0);
+                        end();
+                    }
+                } else {
+                    MainFacade.getInstance().setHrPerson(
+                            (HRPerson) MainFacade.getInstance().getPersonByUuid(
+                                    model.getUuidAt(nameField.getSelectedIndex())));
+                    owner.changeTab(tab);
                     end();
                 }
             } else {
-                MainFacade.getInstance().setHrPerson(
-                        (HRPerson) MainFacade.getInstance().getPersonByUuid(
-                                model.getUuidAt(nameField.getSelectedIndex())));
-                owner.changeTab(tab);
+                JOptionPane.showMessageDialog(self, "You tried to many times to login.");
+                owner.changeTab(0);
                 end();
             }
         }

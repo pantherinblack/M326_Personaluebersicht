@@ -42,7 +42,7 @@ public class AssignPanel extends JPanel {
         double[][] order1 = {{-1,-3},{-3}};
         double[][] order2 = {{-2},{-2,-1}};
         double[][] order3 = {{-3,-1},{-2,-2,-1,-2}};
-        basicList = new BasicList(owner, 0);
+        basicList = new BasicList(owner, 0, null);
         basicList.addListSelectionListener(new MainListSelectionListener());
         basicPerson = new BasicPerson(BasicPerson.MODE_SHOW,
                 MainFacade.getInstance().getPerson(0).getUuid());
@@ -51,7 +51,6 @@ public class AssignPanel extends JPanel {
                 0).getUuid(), SwitchList.MODE_FUNCTION);
         teamSwitch = new SwitchList(MainFacade.getInstance().getPerson(
                 0).getUuid(), SwitchList.MODE_TEAM);
-
 
         content.setBorder(new TitledBorder("Personen bearbeiten: "));
         content.setLayout(new TableLayout(order1));
@@ -84,6 +83,9 @@ public class AssignPanel extends JPanel {
         teamLabel.setMinimumSize(new Dimension(80,0));
 
         departmentField.addItemListener(new DepartmenItemListener());
+
+        departmentField.setForeground(ColorCodes.DARK_RED);
+        basicList.setPreferredSize(new Dimension(150,500));
     }
 
     private void update() {
@@ -97,6 +99,8 @@ public class AssignPanel extends JPanel {
                 MainFacade.getInstance().getDepartmentByUuid(
                         MainFacade.getInstance().getPerson(
                                 basicList.getSelectedIndex()).getUuid()).getName()));
+        basicPerson.fireChanges(MainFacade.getInstance().getPerson(
+                basicList.getSelectedIndex()).getUuid());
     }
 
     public static void main(String[] args) {
