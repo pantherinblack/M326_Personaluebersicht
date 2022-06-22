@@ -6,4 +6,5 @@ In the secon line you define the path of the default picture of a person
 The First Time the application runs it will automaticly generate some sample data.
 
 *IMPORTANT*
-DO NOT REMOVE ALL PEOPLE WITH ADMIN_RIGHTS
+Do NOT remove all people with admin rights
+If teh Application is loading, do NOT disture it (klick on someting)!
