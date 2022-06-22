@@ -18,17 +18,29 @@ import ch.bzz.util.StringListCompare;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * Manages all Dat access form the view ot hte Model and triggers back, if the data changes
+ * @author Kevin
+ * @since 12.06.2022
+ * @version 2.5
+ */
 public class MainFacade {
     private static MainFacade instance = null;
     private final Vector<ModelListener> modelListeners = new Vector<>();
-    private final Vector<ViewListener> viewListeners = new Vector<>();
     private Company company;
     private HRPerson hrPerson;
 
+    /**
+     * loads the app
+     */
     private MainFacade() {
         company = DataHandler.getInstance().loadApp();
     }
 
+    /**
+     * gets the instance of the class
+     * @return instance
+     */
     public static MainFacade getInstance() {
         if (instance == null) instance = new MainFacade();
         return instance;

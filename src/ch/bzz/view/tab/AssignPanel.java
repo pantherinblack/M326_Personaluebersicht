@@ -39,7 +39,7 @@ public class AssignPanel extends JPanel {
 
     /**
      * inits the AssignPanel and all its subcomponents
-     * @param args
+     * @param owner (JFrame)
      */
     public AssignPanel(JFrame owner) {
         this.owner = owner;

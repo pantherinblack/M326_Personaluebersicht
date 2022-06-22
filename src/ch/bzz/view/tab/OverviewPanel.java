@@ -23,7 +23,7 @@ import java.nio.file.Files;
 /**
  * @author Marko Joksimovic
  * @version 1.0
- * @date
+ * @since 21.06.2022
  */
 public class OverviewPanel extends JPanel {
 
