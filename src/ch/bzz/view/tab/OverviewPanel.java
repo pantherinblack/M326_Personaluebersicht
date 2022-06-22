@@ -33,38 +33,38 @@ public class OverviewPanel extends JPanel {
     JComboBox<String> funktionen;
     JComboBox<String> teams;
     GridBagConstraints c = new GridBagConstraints();
-    private JPanel uebersichtPane;
-    private JPanel filterPane;
-    private JPanel filterComponentPane;
-    private JPanel sortierPane;
-    private JPanel sortierPaneH;
-    private JPanel sortierPaneW;
-    private JPanel sortierButtonPane;
-    private BasicList personPane;
+    private final JPanel uebersichtPane;
+    private final JPanel filterPane;
+    private final JPanel filterComponentPane;
+    private final JPanel sortierPane;
+    private final JPanel sortierPaneH;
+    private final JPanel sortierPaneW;
+    private final JPanel sortierButtonPane;
+    private final BasicList personPane;
     private JScrollPane personPaneList;
-    private JPanel detailPane;
-    private JPanel detailPanePerson;
-    private JPanel detailPanePersonL;
-    private JPanel detailPanePersonLH;
-    private JPanel detailPanePersonLW;
-    private JPanel detailPanePersonR;
-    private JPanel detailPanePersonRH;
-    private JPanel detailPanePersonRW;
-    private JPanel detailPanePersonH;
-    private JPanel detailPanePersonW;
-    private BasicList funktionPane;
+    private final JPanel detailPane;
+    private final JPanel detailPanePerson;
+    private final JPanel detailPanePersonL;
+    private final JPanel detailPanePersonLH;
+    private final JPanel detailPanePersonLW;
+    private final JPanel detailPanePersonR;
+    private final JPanel detailPanePersonRH;
+    private final JPanel detailPanePersonRW;
+    private final JPanel detailPanePersonH;
+    private final JPanel detailPanePersonW;
+    private final BasicList funktionPane;
     private JScrollPane funktionPaneList;
-    private BasicList teamPane;
+    private final BasicList teamPane;
     private JScrollPane teamPaneList;
-    private JPanel funktionTeamPane;
-    private JRadioButton keine;
-    private JRadioButton aToZ;
-    private JRadioButton zToA;
-    private JPanel uebersichtPersonenPane = new JPanel(new GridBagLayout());
-    private ButtonGroup radioButtons = new ButtonGroup();
-    private JTextField detailNameText;
-    private JTextField suche = new JTextField();
-    private JLabel bildLabel;
+    private final JPanel funktionTeamPane;
+    private final JRadioButton keine;
+    private final JRadioButton aToZ;
+    private final JRadioButton zToA;
+    private final JPanel uebersichtPersonenPane = new JPanel(new GridBagLayout());
+    private final ButtonGroup radioButtons = new ButtonGroup();
+    private final JTextField detailNameText;
+    private final JTextField suche = new JTextField();
+    private final JLabel bildLabel;
 
     public OverviewPanel(JFrame owner) {
 
@@ -163,7 +163,7 @@ public class OverviewPanel extends JPanel {
         detailNameText.setEditable(false);
         JTextField detailAbteilungText = new JTextField(
                 MainFacade.getInstance().getDepartmentByUuid(
-                MainFacade.getInstance().getPerson(0).getUuid()).getName());
+                        MainFacade.getInstance().getPerson(0).getUuid()).getName());
         detailAbteilungText.setEditable(false);
         detailPanePersonR.add(detailNameText, BorderLayout.NORTH);
         detailPanePersonR.add(detailAbteilungText, BorderLayout.SOUTH);
@@ -182,14 +182,14 @@ public class OverviewPanel extends JPanel {
         detailPanePersonW.add(detailPanePersonH, BorderLayout.NORTH);
 
         funktionPane = new BasicList(owner, BasicList.MODE_PERSON_FUNCTION, MainFacade.getInstance().getPerson(0).getUuid());
-        funktionPane.setPreferredSize(new Dimension(150,150));
+        funktionPane.setPreferredSize(new Dimension(150, 150));
         JPanel funktionPanelH = new JPanel(new BorderLayout());
         JPanel funktionPanelW = new JPanel(new BorderLayout());
         funktionPanelH.add(funktionPane, BorderLayout.WEST);
         funktionPanelW.add(funktionPanelH, BorderLayout.NORTH);
 
         teamPane = new BasicList(owner, BasicList.MODE_PERSON_TEAM, MainFacade.getInstance().getPerson(0).getUuid());
-        teamPane.setPreferredSize(new Dimension(150,150));
+        teamPane.setPreferredSize(new Dimension(150, 150));
         JPanel teamPanelH = new JPanel(new BorderLayout());
         JPanel teamPanelW = new JPanel(new BorderLayout());
         teamPanelH.add(teamPane, BorderLayout.WEST);
@@ -251,7 +251,7 @@ public class OverviewPanel extends JPanel {
                 detailAbteilungText.setText(MainFacade.getInstance().getDepartmentByUuid(person.getUuid()).getName());
                 funktionPane.changeUuid(person.getUuid());
                 teamPane.changeUuid(person.getUuid());
-                if (person.getPhoto()!=null && Files.exists(person.getPhoto())) {
+                if (person.getPhoto() != null && Files.exists(person.getPhoto())) {
                     bildLabel.setIcon(new ImageIcon(new ImageIcon(person.getPhoto().toString()).getImage().getScaledInstance(personBild.getWidth(), personBild.getHeight(), Image.SCALE_FAST)));
                 } else {
                     bildLabel.setIcon(new ImageIcon(personBild));
@@ -262,9 +262,10 @@ public class OverviewPanel extends JPanel {
 
     /**
      * SearchListener registers when a search is made
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class SearchListener extends MouseAdapter {
         /**
@@ -281,15 +282,15 @@ public class OverviewPanel extends JPanel {
             if (keine.isSelected()) sort = keine.getText();
 
             String funktionString = null;
-            if (funktionen.getSelectedIndex()>=0 && funktionen.getSelectedIndex()<funktionen.getItemCount())
+            if (funktionen.getSelectedIndex() >= 0 && funktionen.getSelectedIndex() < funktionen.getItemCount())
                 funktionString = funktionen.getItemAt(funktionen.getSelectedIndex());
 
             String teamsString = null;
-            if (teams.getSelectedIndex()>=0 && teams.getSelectedIndex()<teams.getItemCount())
+            if (teams.getSelectedIndex() >= 0 && teams.getSelectedIndex() < teams.getItemCount())
                 teamsString = teams.getItemAt(teams.getSelectedIndex());
 
             String abteilungString = null;
-            if (abteilungen.getSelectedIndex()>=0 && abteilungen.getSelectedIndex()<abteilungen.getItemCount())
+            if (abteilungen.getSelectedIndex() >= 0 && abteilungen.getSelectedIndex() < abteilungen.getItemCount())
                 abteilungString = abteilungen.getItemAt(abteilungen.getSelectedIndex());
 
 

@@ -14,7 +14,7 @@ import javax.swing.*;
 public class ParticipationListModel extends DefaultComboBoxModel<String> implements ModelListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
-    private String uuid;
+    private final String uuid;
     private final int mode;
 
     /**

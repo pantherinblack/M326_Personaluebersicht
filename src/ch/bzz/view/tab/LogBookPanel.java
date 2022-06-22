@@ -2,7 +2,6 @@ package ch.bzz.view.tab;
 
 import ch.bzz.facade.MainFacade;
 import ch.bzz.interfaces.ModelListener;
-import ch.bzz.interfaces.ViewListener;
 import ch.bzz.log.LogBook;
 
 import javax.swing.*;
@@ -10,12 +9,12 @@ import java.awt.*;
 
 /**
  * @author Kevin
- * @since 19.06.2022
  * @version 1.0
+ * @since 19.06.2022
  */
 public class LogBookPanel extends JPanel implements ModelListener {
-    private JScrollPane scrollPane;
-    private JTextArea textArea = new JTextArea();
+    private final JScrollPane scrollPane;
+    private final JTextArea textArea = new JTextArea();
 
     /**
      * Constructor inits variables, adds the Listener and loads the data
@@ -32,7 +31,7 @@ public class LogBookPanel extends JPanel implements ModelListener {
         setLayout(new BorderLayout());
         add(scrollPane);
 
-        scrollPane.setPreferredSize(new Dimension(450,600));
+        scrollPane.setPreferredSize(new Dimension(450, 600));
     }
 
     /**
@@ -45,7 +44,7 @@ public class LogBookPanel extends JPanel implements ModelListener {
     public void readAllLogs() {
         String log = "";
         for (int i = 0; i < LogBook.getLogBookInstance().getSize(); i++) {
-            log += LogBook.getLogBookInstance().getEntry(i)+"\n";
+            log += LogBook.getLogBookInstance().getEntry(i) + "\n";
         }
         textArea.setText(log);
     }

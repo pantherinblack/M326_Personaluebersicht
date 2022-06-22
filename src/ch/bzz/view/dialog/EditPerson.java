@@ -3,8 +3,6 @@ package ch.bzz.view.dialog;
 import ch.bzz.exception.NotExistentException;
 import ch.bzz.facade.DataListModel;
 import ch.bzz.facade.MainFacade;
-import ch.bzz.model.company.Company;
-import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
 import ch.bzz.util.ColorCodes;
 import ch.bzz.view.component.BasicPerson;
@@ -14,29 +12,28 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import static ch.bzz.util.ColorCodes.COMPONENT_BORDER;
 
 public class EditPerson extends JDialog {
     public static final int MODE_CREATE = 0;
     public static final int MODE_EDIT = 1;
-    private EditPerson self;
-    private String uuid;
-    private int mode;
-    private BasicPerson personInfo;
-    private JPanel checkBoxPanel = new JPanel();
-    private JLabel hrLabel = new JLabel("HR-Mitarbeiter:");
-    private JLabel adminLabel = new JLabel("Administrator:");
-    private JCheckBox hrCheckBox = new JCheckBox();
-    private JCheckBox adminCheckBox = new JCheckBox();
-    private JPanel buttonPanel = new JPanel();
-    private JButton cancelButton = new JButton("Abbrechen");
-    private JButton saveButton = new JButton("Speichern");
-    private JLabel departmentLabel = new JLabel("Department");
-    private JComboBox<String> departmentBox = new JComboBox<>();
-    private JLabel passwordLabel = new JLabel("Password");
-    private JPasswordField passwordField = new JPasswordField();
+    private final EditPerson self;
+    private final String uuid;
+    private final int mode;
+    private final BasicPerson personInfo;
+    private final JPanel checkBoxPanel = new JPanel();
+    private final JLabel hrLabel = new JLabel("HR-Mitarbeiter:");
+    private final JLabel adminLabel = new JLabel("Administrator:");
+    private final JCheckBox hrCheckBox = new JCheckBox();
+    private final JCheckBox adminCheckBox = new JCheckBox();
+    private final JPanel buttonPanel = new JPanel();
+    private final JButton cancelButton = new JButton("Abbrechen");
+    private final JButton saveButton = new JButton("Speichern");
+    private final JLabel departmentLabel = new JLabel("Department");
+    private final JComboBox<String> departmentBox = new JComboBox<>();
+    private final JLabel passwordLabel = new JLabel("Password");
+    private final JPasswordField passwordField = new JPasswordField();
 
 
     public EditPerson(JFrame owner, int mode, String uuid) throws NotExistentException {
@@ -113,9 +110,9 @@ public class EditPerson extends JDialog {
 
         if (uuid != null && !uuid.isEmpty()) {
             if (MainFacade.getInstance().getPersonByUuid(uuid) instanceof HRPerson) {
-                int personMode = ((HRPerson)MainFacade.getInstance().getPersonByUuid(uuid)).getModus();
+                int personMode = ((HRPerson) MainFacade.getInstance().getPersonByUuid(uuid)).getModus();
                 hrCheckBox.setSelected(true);
-                adminCheckBox.setSelected(personMode==1);
+                adminCheckBox.setSelected(personMode == 1);
                 updateCheckBoxes();
             }
 
@@ -152,9 +149,10 @@ public class EditPerson extends JDialog {
 
     /**
      * Checks if the HR Checkbox is being changed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class HRCheckBoxListener implements ActionListener {
 
@@ -171,9 +169,10 @@ public class EditPerson extends JDialog {
 
     /**
      * listens if the cancel button is pressed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class CancelListener implements ActionListener {
 
@@ -190,9 +189,10 @@ public class EditPerson extends JDialog {
 
     /**
      * listens, if the save button is pressed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class SaveListener implements ActionListener {
 

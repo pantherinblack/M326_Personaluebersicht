@@ -3,8 +3,6 @@ package ch.bzz.view.component;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.facade.SwitchListModel;
 import ch.bzz.interfaces.ViewListener;
-import ch.bzz.model.company.Company;
-import ch.bzz.model.company.Department;
 import ch.bzz.util.ColorCodes;
 import layout.TableLayout;
 
@@ -14,34 +12,31 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * Generates 2 Lists, where Data can be switched from one to the other side by klicking
+ *
  * @author Kevin
- * @since 21.06.2022
  * @version 1.3
+ * @since 21.06.2022
  */
 public class SwitchList extends JPanel implements ViewListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
+    private final int mode;
+    private final JLabel title = new JLabel();
+    private final JLabel leftTitle = new JLabel();
+    private final JLabel rightTitle = new JLabel();
+    private final JList<String> leftList = new JList<>();
+    private final JList<String> rightList = new JList<>();
     private boolean input = true;
     private String uuid;
-    private int mode;
-    private JLabel title = new JLabel();
-    private JLabel leftTitle = new JLabel();
-    ;
-    private JLabel rightTitle = new JLabel();
-
     private JScrollPane leftScrollPane;
     private JScrollPane rightScrollPane;
 
-    private JList<String> leftList = new JList<>();
-    private JList<String> rightList = new JList<>();
-
     /**
      * creates the SwichList
+     *
      * @param uuid ot the person tho show data from
      * @param mode of the gui (Constants)
      */
@@ -187,9 +182,10 @@ public class SwitchList extends JPanel implements ViewListener {
          */
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (input) {
+            if (input && rightList.getSelectedIndex() != -1) {
                 input = false;
                 ((SwitchListModel) leftList.getModel()).addElement(rightList.getSelectedValue());
+                rightList.clearSelection();
                 rightList.setSelectedIndex(-1);
             }
             input = true;
@@ -204,9 +200,10 @@ public class SwitchList extends JPanel implements ViewListener {
          */
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (input) {
+            if (input && leftList.getSelectedIndex() != -1) {
                 input = false;
                 ((SwitchListModel) leftList.getModel()).removeElement(leftList.getSelectedValue());
+                leftList.clearSelection();
                 leftList.setSelectedIndex(-1);
             }
             input = true;

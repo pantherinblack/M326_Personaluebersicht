@@ -7,9 +7,10 @@ import javax.swing.*;
 
 /**
  * controls the usage of the name etc. to only give back strings
+ *
  * @author Kevin
- * @since 20.06.2022
  * @version 1.2
+ * @since 20.06.2022
  */
 public class PersonNameListModel extends DefaultListModel<String> implements ModelListener {
     private String name = null;
@@ -48,6 +49,7 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
 
     /**
      * sets an element at a specific positon
+     *
      * @param element what the component is to be set to
      * @param index   the specified index
      */
@@ -59,6 +61,7 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
 
     /**
      * gives back the uuid of a person
+     *
      * @param index of the perrson
      * @return uuid
      */
@@ -68,11 +71,12 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
 
     /**
      * sets the filter for further use. Maintains consistency
-     * @param name to search for
-     * @param function needed
+     *
+     * @param name       to search for
+     * @param function   needed
      * @param department needed
-     * @param team needed
-     * @param sort type of the list
+     * @param team       needed
+     * @param sort       type of the list
      */
     public void setFilter(String name, String function, String department, String team, String sort) {
         this.name = name;
@@ -98,7 +102,8 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
 
     /**
      * removes an element at a specific position
-     * @param index   the index of the object to remove
+     *
+     * @param index the index of the object to remove
      */
     public void removeElementAt(int index) {
         MainFacade.getInstance().removePerson(getUuid(index));

@@ -9,22 +9,24 @@ import java.util.Vector;
 
 /**
  * mode for the SwitchList
+ *
  * @author Kevin
- * @since 21.06.2022
  * @version 1.2
+ * @since 21.06.2022
  */
 public class SwitchListModel extends AbstractListModel<String> implements ModelListener {
     public static final int SIDE_LEFT = 0;
     public static final int SIDE_RIGHT = 1;
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
-    private int mode;
-    private int side;
+    private final int mode;
+    private final int side;
     private String uuid;
     private final MainFacade mF;
 
     /**
      * initializes the object and defines working parameters.
+     *
      * @param side on which it will be shown
      * @param mode what will be shown
      * @param uuid of a person (if needed)
@@ -40,6 +42,7 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
 
     /**
      * sets the uuid;
+     *
      * @param uuid to be set
      */
     public void setUuid(String uuid) {
@@ -121,10 +124,11 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
 
     /**
      * add an element
+     *
      * @param element to be added
      */
     public void addElement(String element) {
-        if (side==0) {
+        if (side == 0) {
             switch (mode) {
                 case 0:
                     mF.addFunctionAtPerson(uuid, element);
@@ -138,10 +142,11 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
 
     /**
      * removes an element
+     *
      * @param element to be removed
      */
     public void removeElement(String element) {
-        if (side==0) {
+        if (side == 0) {
             switch (mode) {
                 case 0:
                     mF.removeFunctionAtPerson(uuid, element);

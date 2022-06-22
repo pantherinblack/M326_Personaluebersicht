@@ -18,24 +18,26 @@ import static ch.bzz.util.ColorCodes.FRAME_BORDER;
 
 /**
  * shows basic information from a person
+ *
  * @author Kevin
- * @since 21.06.2022
  * @version 1.3
+ * @since 21.06.2022
  */
 public class BasicPerson extends JPanel implements ViewListener {
     public static final int MODE_SHOW = 0;
     public static final int MODE_EDIT = 1;
     public BasicPerson self;
     private String uuid;
-    private int mode;
+    private final int mode;
     private Path photoPath = Paths.get(ConfigReader.readConfig("picturePath"));
-    private JLabel nameLabel = new JLabel("Name: ");
-    private JTextField nameField = new JTextField("");
-    private JLabel photo = new JLabel();
-    private JLabel smallPhoto = new JLabel();
+    private final JLabel nameLabel = new JLabel("Name: ");
+    private final JTextField nameField = new JTextField("");
+    private final JLabel photo = new JLabel();
+    private final JLabel smallPhoto = new JLabel();
 
     /**
      * creates the object
+     *
      * @param mode to be used (Constants)
      * @param uuid of the person
      */
@@ -57,9 +59,9 @@ public class BasicPerson extends JPanel implements ViewListener {
     }
 
 
-
     /**
      * gives back the name, written in by the use
+     *
      * @return name
      */
     public String getName() {
@@ -68,6 +70,7 @@ public class BasicPerson extends JPanel implements ViewListener {
 
     /**
      * gives back the path of the photo as a string
+     *
      * @return string-path
      */
     public String getPhoto() {
@@ -105,6 +108,7 @@ public class BasicPerson extends JPanel implements ViewListener {
 
     /**
      * gives back the photoPath as Path
+     *
      * @return path
      */
     public Path getPhotoPath() {
@@ -113,10 +117,11 @@ public class BasicPerson extends JPanel implements ViewListener {
 
     /**
      * acts, the person displayed changes
+     *
      * @param uuid of the person
      */
     public void fireChanges(String uuid) {
-        if (!this.uuid.equals(uuid)) {
+        if (uuid != null && !this.uuid.equals(uuid)) {
             photoPath = Paths.get(ConfigReader.readConfig("picturePath"));
             this.uuid = uuid;
         }

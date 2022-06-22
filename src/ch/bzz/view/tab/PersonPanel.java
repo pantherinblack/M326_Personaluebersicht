@@ -14,24 +14,26 @@ import java.awt.*;
 
 /**
  * PersonPanel is here to add, remove or change People.
+ *
  * @author Kevin
- * @since 21.06.2022
  * @version 1.1
+ * @since 21.06.2022
  */
 public class PersonPanel extends JPanel {
-    private JPanel content = new JPanel();
-    private BasicList basicList;
-    private JPanel detailPanel = new JPanel();
-    private BasicPerson basicPerson;
-    private JPanel checkBoxPanel = new JPanel();
+    private final JPanel content = new JPanel();
+    private final BasicList basicList;
+    private final JPanel detailPanel = new JPanel();
+    private final BasicPerson basicPerson;
+    private final JPanel checkBoxPanel = new JPanel();
 
-    private JLabel hrLabel = new JLabel("HR-Mitarbeiter:");
-    private JLabel adminLabel = new JLabel("Administrator:");
-    private JCheckBox hrCheckBox = new JCheckBox();
-    private JCheckBox adminCheckBox = new JCheckBox();
+    private final JLabel hrLabel = new JLabel("HR-Mitarbeiter:");
+    private final JLabel adminLabel = new JLabel("Administrator:");
+    private final JCheckBox hrCheckBox = new JCheckBox();
+    private final JCheckBox adminCheckBox = new JCheckBox();
 
     /**
      * Inits the PersonPanel and all components
+     *
      * @param owner (JFrame) of the Panel
      */
     public PersonPanel(JFrame owner) {
@@ -85,6 +87,7 @@ public class PersonPanel extends JPanel {
 
     /**
      * Listener for the list
+     *
      * @author Kevin
      * @since 21.06.2022
      */

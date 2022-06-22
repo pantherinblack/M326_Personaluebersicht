@@ -15,9 +15,10 @@ import static ch.bzz.util.ColorCodes.*;
 
 /**
  * Dialog for authorising by logging in
+ *
  * @author Kevin
- * @since 19.06.2022
  * @version 1.4
+ * @since 19.06.2022
  */
 public class Authentication extends JDialog {
     private static int tries = 0;
@@ -40,9 +41,10 @@ public class Authentication extends JDialog {
 
     /**
      * Inits the Dialog and all subcomponents
+     *
      * @param owner (JFRAME) of the dialog
-     * @param mode mode of the Object (Constants)
-     * @param tab to change to, if successful
+     * @param mode  mode of the Object (Constants)
+     * @param tab   to change to, if successful
      */
     public Authentication(MainFrame owner, int mode, int tab) {
         super(owner, true);
@@ -90,7 +92,7 @@ public class Authentication extends JDialog {
         nameLabel.setMinimumSize(new Dimension(80, 0));
         codeLabel.setMinimumSize(new Dimension(80, 0));
 
-        buttonPanel.setLayout(new BorderLayout(10,10));
+        buttonPanel.setLayout(new BorderLayout(10, 10));
         buttonPanel.add(cancelButton, BorderLayout.WEST);
         buttonPanel.add(continueButton, BorderLayout.EAST);
 
@@ -117,9 +119,10 @@ public class Authentication extends JDialog {
 
     /**
      * Is being executed if the cancel button is being clicked
+     *
      * @author Kevin
-     * @since 19.06.2022
      * @version 1.0
+     * @since 19.06.2022
      */
     public class AuthenticationCancelActionListener implements ActionListener {
 
@@ -137,9 +140,10 @@ public class Authentication extends JDialog {
 
     /**
      * Is being executed if the continue button is being clicked
+     *
      * @author Kevin
-     * @since 19.06.2022
      * @version 1.0
+     * @since 19.06.2022
      */
     public class AuthenticationContinueActionListener implements ActionListener {
 
@@ -150,7 +154,7 @@ public class Authentication extends JDialog {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (tries<3) {
+            if (tries < 3) {
                 HRPersonBoxModel model = (HRPersonBoxModel) nameField.getModel();
                 if (!model.getPasswordAt(nameField.getSelectedIndex()).equals(String.valueOf(codeField.getPassword())) ||
                         model.getModeAt(nameField.getSelectedIndex()) < mode) {

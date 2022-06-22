@@ -1,8 +1,6 @@
 package ch.bzz.view;
 
 import ch.bzz.facade.MainFacade;
-import ch.bzz.model.company.Company;
-import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
 import ch.bzz.view.dialog.Authentication;
 import ch.bzz.view.tab.*;
@@ -10,11 +8,10 @@ import ch.bzz.view.tab.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * The MainFrame has all Gui components inside.
+ *
  * @author Kevin
  * @since 20.06.2022
  */
@@ -41,6 +38,7 @@ public class MainFrame extends JFrame {
         tabbedPane.addChangeListener(new MainFrameTabChangeListener());
 
         setTitle("I am looking for");
+        setResizable(false);
         pack();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -48,6 +46,7 @@ public class MainFrame extends JFrame {
 
     /**
      * changes the tab to the indicated
+     *
      * @param tab to change to
      */
     public void changeTab(int tab) {
@@ -58,9 +57,10 @@ public class MainFrame extends JFrame {
 
     /**
      * Check, if the Tab is changes
+     *
      * @author Kevin
-     * @since 19.06.2022
      * @version 1.0
+     * @since 19.06.2022
      */
     public class MainFrameTabChangeListener implements ChangeListener {
 
@@ -71,13 +71,13 @@ public class MainFrame extends JFrame {
          */
         @Override
         public void stateChanged(ChangeEvent e) {
-            if (MainFacade.getInstance().isLoggedIn()!=1) {
+            if (MainFacade.getInstance().isLoggedIn() != 1) {
                 if (isUser) {
                     int tab = tabbedPane.getSelectedIndex();
                     if (tabbedPane.getSelectedIndex() == 3) {
                         changeTab(0);
                         new Authentication(self, HRPerson.MODE_ADMIN, tab);
-                    } else if (tabbedPane.getSelectedIndex() > 0 && MainFacade.getInstance().isLoggedIn()!=0) {
+                    } else if (tabbedPane.getSelectedIndex() > 0 && MainFacade.getInstance().isLoggedIn() != 0) {
                         changeTab(0);
                         new Authentication(self, HRPerson.MODE_NORMAL, tab);
 

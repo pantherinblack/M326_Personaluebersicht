@@ -7,10 +7,11 @@ package ch.bzz.exception;
  * @version 1.0
  * @since 18.005.2022
  */
-public class NotExistentException extends Error{
+public class NotExistentException extends Error {
 
     /**
      * Constructor for the Exception with a definable message
+     *
      * @param message to be shown
      */
     public NotExistentException(String message) {

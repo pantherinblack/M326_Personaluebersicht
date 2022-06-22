@@ -2,9 +2,6 @@ package ch.bzz.view.tab;
 
 import ch.bzz.facade.DataListModel;
 import ch.bzz.facade.MainFacade;
-import ch.bzz.facade.ParticipationListModel;
-import ch.bzz.model.company.Company;
-import ch.bzz.model.company.Department;
 import ch.bzz.util.ColorCodes;
 import ch.bzz.view.component.BasicList;
 import ch.bzz.view.component.BasicPerson;
@@ -18,34 +15,33 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class AssignPanel extends JPanel {
     private boolean input = true;
     private int counter = 0;
-    private JFrame owner;
-    private JPanel content = new JPanel();
-    private JPanel detailPanel = new JPanel();
-    private BasicList basicList;
-    private BasicPerson basicPerson;
-    private JPanel dataPanel = new JPanel();
-    private JLabel departmentLabel = new JLabel("Abteilung:");
-    private JComboBox<String> departmentField = new JComboBox<>();
-    private JLabel functionLabel = new JLabel("Funktion:");
-    private SwitchList functionSwitch;
-    private JLabel teamLabel = new JLabel("Teams:");
-    private SwitchList teamSwitch;
+    private final JFrame owner;
+    private final JPanel content = new JPanel();
+    private final JPanel detailPanel = new JPanel();
+    private final BasicList basicList;
+    private final BasicPerson basicPerson;
+    private final JPanel dataPanel = new JPanel();
+    private final JLabel departmentLabel = new JLabel("Abteilung:");
+    private final JComboBox<String> departmentField = new JComboBox<>();
+    private final JLabel functionLabel = new JLabel("Funktion:");
+    private final SwitchList functionSwitch;
+    private final JLabel teamLabel = new JLabel("Teams:");
+    private final SwitchList teamSwitch;
 
     /**
      * inits the AssignPanel and all its subcomponents
+     *
      * @param owner (JFrame)
      */
     public AssignPanel(JFrame owner) {
         this.owner = owner;
-        double[][] order1 = {{-1,-3},{-3}};
-        double[][] order2 = {{-2},{-2,-1}};
-        double[][] order3 = {{-3,-1},{-2,-2,-1,-2}};
+        double[][] order1 = {{-1, -3}, {-3}};
+        double[][] order2 = {{-2}, {-2, -1}};
+        double[][] order3 = {{-3, -1}, {-2, -2, -1, -2}};
         basicList = new BasicList(owner, 0, null);
         basicList.addListSelectionListener(new MainListSelectionListener());
         basicPerson = new BasicPerson(BasicPerson.MODE_SHOW,
@@ -82,14 +78,14 @@ public class AssignPanel extends JPanel {
                         MainFacade.getInstance().getPerson(0).getUuid()).getName()));
 
         departmentField.setEditable(false);
-        departmentLabel.setMinimumSize(new Dimension(80,0));
-        functionLabel.setMinimumSize(new Dimension(80,0));
-        teamLabel.setMinimumSize(new Dimension(80,0));
+        departmentLabel.setMinimumSize(new Dimension(80, 0));
+        functionLabel.setMinimumSize(new Dimension(80, 0));
+        teamLabel.setMinimumSize(new Dimension(80, 0));
 
         departmentField.addItemListener(new DepartmenItemListener());
 
         departmentField.setForeground(ColorCodes.DARK_RED);
-        basicList.setPreferredSize(new Dimension(150,500));
+        basicList.setPreferredSize(new Dimension(150, 500));
     }
 
     /**
@@ -112,9 +108,10 @@ public class AssignPanel extends JPanel {
 
     /**
      * Registers, when the selected index of the list changes
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class MainListSelectionListener implements ListSelectionListener {
 
@@ -142,7 +139,7 @@ public class AssignPanel extends JPanel {
         public void itemStateChanged(ItemEvent e) {
             if (input) {
                 counter++;
-                if (counter%2==0) {
+                if (counter % 2 == 0) {
                     input = false;
                     if (basicList.getSelectedIndex() != -1) {
                         MainFacade.getInstance().changeDepartmentByUuid(

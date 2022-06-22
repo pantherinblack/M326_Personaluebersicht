@@ -6,9 +6,10 @@ import javax.swing.*;
 
 /**
  * Supplies a Combobox or a list with the needed Model, to utilize the data of hr-people
+ *
  * @author Kevin
- * @since 20.06.2022
  * @version 1.0
+ * @since 20.06.2022
  */
 public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements ModelListener {
 
@@ -39,6 +40,7 @@ public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements Mo
 
     /**
      * returns the number of hr-people
+     *
      * @return size
      */
     public int getSize() {
@@ -47,6 +49,7 @@ public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements Mo
 
     /**
      * gives back the name of the person requested.
+     *
      * @param index the requested index
      * @return name
      */
@@ -56,6 +59,7 @@ public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements Mo
 
     /**
      * gives back the password of the requested person
+     *
      * @param index the requested index
      * @return password
      */
@@ -65,6 +69,7 @@ public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements Mo
 
     /**
      * gives back the uuid of the person for further use.
+     *
      * @param index the requested index
      * @return uuid
      */
@@ -74,6 +79,7 @@ public class HRPersonBoxModel extends DefaultComboBoxModel<String> implements Mo
 
     /**
      * giives back the mode of the person requested
+     *
      * @param index the requested index
      * @return mode
      */

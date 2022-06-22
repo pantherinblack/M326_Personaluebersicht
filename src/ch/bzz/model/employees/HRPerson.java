@@ -22,7 +22,8 @@ public class HRPerson extends Person {
      * constructor
      * Needed for ObjectMapper
      */
-    private HRPerson() {}
+    private HRPerson() {
+    }
 
     /**
      * generates a HR-Person

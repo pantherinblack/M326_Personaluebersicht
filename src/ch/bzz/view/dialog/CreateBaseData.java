@@ -1,7 +1,6 @@
 package ch.bzz.view.dialog;
 
 import ch.bzz.facade.MainFacade;
-import ch.bzz.util.ColorCodes;
 import layout.TableLayout;
 
 import javax.swing.*;
@@ -13,9 +12,10 @@ import static ch.bzz.util.ColorCodes.*;
 
 /**
  * Dialog for creating BaseData
+ *
  * @author Kevin
- * @since 21.06.2022
  * @version 1.2
+ * @since 21.06.2022
  */
 public class CreateBaseData extends JDialog {
     public static final int FUNCTION_CREATE = 0;
@@ -23,24 +23,25 @@ public class CreateBaseData extends JDialog {
     public static final int MODE_DEPARTMENT = 0;
     public static final int MODE_FUNCTION = 1;
     public static final int MODE_TEAM = 2;
-    private int function;
-    private int mode;
-    private JFrame owner;
-    private String oldName;
-    private JPanel container = new JPanel();
-    private JLabel title = new JLabel("Title");
-    private JTextField input = new JTextField();
-    private JButton cancelButton = new JButton("Abbrechen");
-    private JButton saveButton = new JButton("Speichern");
-    private JPanel cancelButtonPanel = new JPanel();
-    private JPanel saveButtonPanel = new JPanel();
+    private final int function;
+    private final int mode;
+    private final JFrame owner;
+    private final String oldName;
+    private final JPanel container = new JPanel();
+    private final JLabel title = new JLabel("Title");
+    private final JTextField input = new JTextField();
+    private final JButton cancelButton = new JButton("Abbrechen");
+    private final JButton saveButton = new JButton("Speichern");
+    private final JPanel cancelButtonPanel = new JPanel();
+    private final JPanel saveButtonPanel = new JPanel();
 
     /**
      * creates the gui
-     * @param owner JFrame) of the Dialog
+     *
+     * @param owner    JFrame) of the Dialog
      * @param function function of the Object (Constants)
-     * @param mode mode of the Object (Constants)
-     * @param oldName old name, if in editing function
+     * @param mode     mode of the Object (Constants)
+     * @param oldName  old name, if in editing function
      */
     public CreateBaseData(JFrame owner, int function, int mode, String oldName) {
         super(owner, true);
@@ -57,7 +58,7 @@ public class CreateBaseData extends JDialog {
      * inits the gui and all subcomponents
      */
     private void init() {
-        double[][] order = {{-3,-1,-3,-2,-2},{-1,-2,-2}};
+        double[][] order = {{-3, -1, -3, -2, -2}, {-1, -2, -2}};
         add(container);
 
         container.setLayout(new TableLayout(order));
@@ -113,9 +114,10 @@ public class CreateBaseData extends JDialog {
 
     /**
      * listens, if the cancel button ist klicked
+     *
      * @author Kevin
-     * @since 20.06.2022
      * @version 1.0
+     * @since 20.06.2022
      */
     public class CancelButtonListener implements ActionListener {
 
@@ -132,9 +134,10 @@ public class CreateBaseData extends JDialog {
 
     /**
      * listens, if the save button ist klicked
+     *
      * @author Kevin
-     * @since 20.06.2022
      * @version 1.0
+     * @since 20.06.2022
      */
     public class SaveButtonListener implements ActionListener {
 
@@ -184,8 +187,8 @@ public class CreateBaseData extends JDialog {
                             break;
                     }
                 } catch (Exception | Error throwable) {
-                JOptionPane.showMessageDialog(owner, "An Error occurred during deleting\n" + throwable.getMessage());
-            }
+                    JOptionPane.showMessageDialog(owner, "An Error occurred during deleting\n" + throwable.getMessage());
+                }
             }
         }
     }

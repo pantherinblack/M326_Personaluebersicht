@@ -3,7 +3,6 @@ package ch.bzz.util;
 import ch.bzz.model.company.Company;
 import ch.bzz.model.company.Department;
 import ch.bzz.model.employees.HRPerson;
-import ch.bzz.model.employees.Person;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -87,7 +86,7 @@ public class DataHandler {
             company.addTeam("Team1");
             company.addFunction("Function1");
             company.addDepartment(new Department("Department1"));
-            HRPerson hr = new HRPerson("Max", "Mustermann", null,1);
+            HRPerson hr = new HRPerson("Max", "Mustermann", null, 1);
             hr.setPwd("");
             company.getDepartment(0).addMember(hr);
         }

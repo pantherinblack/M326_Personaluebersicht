@@ -4,9 +4,6 @@ import ch.bzz.facade.DataListModel;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.facade.ParticipationListModel;
 import ch.bzz.facade.PersonNameListModel;
-import ch.bzz.model.company.Company;
-import ch.bzz.model.company.Department;
-import ch.bzz.util.ColorCodes;
 import ch.bzz.view.dialog.CreateBaseData;
 import ch.bzz.view.dialog.EditPerson;
 import layout.TableLayout;
@@ -16,16 +13,15 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 import static ch.bzz.util.ColorCodes.*;
 
 /**
  * Creates a list with data, defined by the mode
+ *
  * @author Kevin
- * @since 19.06.2022
  * @version 1.6
+ * @since 19.06.2022
  */
 public class BasicList extends JPanel {
     public static final int MODE_PERSON = 0;
@@ -35,24 +31,25 @@ public class BasicList extends JPanel {
     public static final int MODE_BASE_TEAM = 4;
     public static final int MODE_PERSON_FUNCTION = 5;
     public static final int MODE_PERSON_TEAM = 6;
-    private int mode;
+    private final int mode;
     private String uuid;
-    private JFrame owner;
-    private JList<String> list = new JList<>();
-    private JLabel topTitle = new JLabel("Title");
-    private JLabel sideTitle = new JLabel("Title");
-    private JScrollPane scrollPane;
+    private final JFrame owner;
+    private final JList<String> list = new JList<>();
+    private final JLabel topTitle = new JLabel("Title");
+    private final JLabel sideTitle = new JLabel("Title");
+    private final JScrollPane scrollPane;
 
-    private JPanel buttonPanel = new JPanel();
-    private JButton addButton = new JButton("+");
-    private JButton removeButton = new JButton("X");
-    private JButton editButton = new JButton("C");
+    private final JPanel buttonPanel = new JPanel();
+    private final JButton addButton = new JButton("+");
+    private final JButton removeButton = new JButton("X");
+    private final JButton editButton = new JButton("C");
 
     /**
      * creates the object
+     *
      * @param owner (JFrame) of the panel
-     * @param mode of the Object (Constants)
-     * @param uuid of the person to display data of, not always needed
+     * @param mode  of the Object (Constants)
+     * @param uuid  of the person to display data of, not always needed
      */
     public BasicList(JFrame owner, int mode, String uuid) {
         this.uuid = uuid;
@@ -75,7 +72,7 @@ public class BasicList extends JPanel {
         add(scrollPane, "1, 1");
 
         buttonPanel.setBorder(BorderFactory.createLineBorder(BACKGROUND, 3));
-        buttonPanel.setLayout(new GridLayout(1,3,10,10));
+        buttonPanel.setLayout(new GridLayout(1, 3, 10, 10));
 
         buttonPanel.add(addButton);
         buttonPanel.add(removeButton);
@@ -169,6 +166,7 @@ public class BasicList extends JPanel {
 
     /**
      * returns the index of selectted position the list
+     *
      * @return index
      */
     public int getSelectedIndex() {
@@ -177,6 +175,7 @@ public class BasicList extends JPanel {
 
     /**
      * adds a SelectionListener
+     *
      * @param listener to be added
      */
     public void addListSelectionListener(ListSelectionListener listener) {
@@ -185,6 +184,7 @@ public class BasicList extends JPanel {
 
     /**
      * sets visibility of the buttons
+     *
      * @param visible boolean
      */
     public void setButtonVisible(boolean visible) {
@@ -195,6 +195,7 @@ public class BasicList extends JPanel {
 
     /**
      * sets visibility of the side title
+     *
      * @param visible boolean
      */
     private void setSideTitleVisible(boolean visible) {
@@ -207,6 +208,7 @@ public class BasicList extends JPanel {
 
     /**
      * sets visibility of the top title
+     *
      * @param visible boolean
      */
     private void setTopTitleVisible(boolean visible) {
@@ -215,15 +217,17 @@ public class BasicList extends JPanel {
 
     /**
      * gets the uuid of a person in the list
+     *
      * @param index of the person
      * @return uuid
      */
     public String getUuid(int index) {
-        return ((PersonNameListModel)list.getModel()).getUuid(index);
+        return ((PersonNameListModel) list.getModel()).getUuid(index);
     }
 
     /**
      * changes the uuid
+     *
      * @param uuid of the person
      */
     public void changeUuid(String uuid) {
@@ -232,25 +236,25 @@ public class BasicList extends JPanel {
     }
 
 
-
-
     /**
      * sets the filter for further use
-     * @param name to search for
-     * @param function a person needs
+     *
+     * @param name       to search for
+     * @param function   a person needs
      * @param department a person needs
-     * @param team a person need
-     * @param sort, "A-Z", "Z-A", else wont be sorted
+     * @param team       a person need
+     * @param sort,      "A-Z", "Z-A", else wont be sorted
      */
     public void setFilter(String name, String function, String department, String team, String sort) {
-        ((PersonNameListModel)list.getModel()).setFilter(name,function,department,team,sort);
+        ((PersonNameListModel) list.getModel()).setFilter(name, function, department, team, sort);
     }
 
     /**
      * listens, if the add button is pressed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class AddButtonActionListener implements ActionListener {
 
@@ -277,16 +281,17 @@ public class BasicList extends JPanel {
                         break;
                 }
             } catch (Exception | Error throwable) {
-                JOptionPane.showMessageDialog(owner, "An Error occurred during deleting\n"+throwable.getMessage());
+                JOptionPane.showMessageDialog(owner, "An Error occurred during deleting\n" + throwable.getMessage());
             }
         }
     }
 
     /**
      * listens, if the edit button is pressed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class EditButtonActionListener implements ActionListener {
 
@@ -297,7 +302,7 @@ public class BasicList extends JPanel {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (list.getSelectedValue()!=null) {
+            if (list.getSelectedValue() != null) {
                 try {
                     switch (mode) {
                         case 1:
@@ -322,9 +327,10 @@ public class BasicList extends JPanel {
 
     /**
      * listens, if the remove button is pressed
+     *
      * @author Kevin
-     * @since 21.06.2022
      * @version 1.0
+     * @since 21.06.2022
      */
     public class RemoveButtonActionListener implements ActionListener {
 
@@ -335,7 +341,7 @@ public class BasicList extends JPanel {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (list.getSelectedValue()!=null) {
+            if (list.getSelectedValue() != null) {
                 try {
                     switch (mode) {
                         case 1:
