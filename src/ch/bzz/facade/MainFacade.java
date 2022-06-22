@@ -150,8 +150,8 @@ public class MainFacade {
         Department department = getDepartmentByUuid(uuid);
         for (int i = 0; i < department.getNumberOfMembers(); i++) {
             if (department.getMember(i) == getPersonByUuid(uuid)) {
-                department.removeMember(i);
                 LogBook.getLogBookInstance().addEntry(new UserAction(hrPerson, getPersonByUuid(uuid), UserAction.DELETE_PERSON).getEntry());
+                department.removeMember(i);
                 fire();
                 return;
             }
@@ -174,12 +174,6 @@ public class MainFacade {
             modelListener.fireContentsChanged(this, 0, -1);
         }
         DataHandler.getInstance().saveApp();
-    }
-
-    public void fireSelected(String uuid) {
-        for (ViewListener viewListener : viewListeners) {
-            viewListener.fireChanges(uuid);
-        }
     }
 
     public Person getPerson(int index) {
@@ -230,14 +224,6 @@ public class MainFacade {
 
     public void removeModelListener(ModelListener modelListener) {
         modelListeners.remove(modelListener);
-    }
-
-    public void addViewListener(ViewListener viewListener) {
-        viewListeners.add(viewListener);
-    }
-
-    public void removeViewListener(ViewListener viewListener) {
-        viewListeners.remove(viewListener);
     }
 
     public void addFunctionAtPerson(String uuid, String function) throws DuplicateEntryException, NotExistentException {
@@ -345,12 +331,14 @@ public class MainFacade {
         return false;
     }
 
-    public void changeDepartmentName(String oldName, String newName) {
+    public void changeDepartmentName(String oldName, String newName) throws DuplicateEntryException {
+        if (isExistentDepartment(newName)) throw new DuplicateEntryException();
         getDepartmentByName(oldName).setName(newName);
         fire();
     }
 
-    public void changeTeamName(String oldName, String newName) throws NotExistentException {
+    public void changeTeamName(String oldName, String newName) throws NotExistentException, DuplicateEntryException {
+        if (isExistentTeam(newName)) throw new DuplicateEntryException();
         if (!isExistentTeam(oldName)) throw new NotExistentException();
         for (int i = 0; i < getAllTeams().size(); i++) {
             if (getAllTeams().get(i).equals(oldName)) getAllTeams().set(i, newName);
@@ -365,7 +353,8 @@ public class MainFacade {
         fire();
     }
 
-    public void changeFunctionName(String oldName, String newName) throws NotExistentException {
+    public void changeFunctionName(String oldName, String newName) throws NotExistentException, DuplicateEntryException {
+        if (isExistentFunction(newName)) throw new DuplicateEntryException();
         if (!isExistentFunction(oldName)) throw new NotExistentException();
         for (int i = 0; i < getAllTeams().size(); i++) {
             if (getAllFunctions().get(i).equals(oldName)) getAllFunctions().set(i, newName);
@@ -487,10 +476,6 @@ public class MainFacade {
             if (StringListCompare.stringContains(getTeamsByUuid(person.getUuid()), team)) return true;
         }
         return false;
-    }
-
-    private boolean isDepartmentInUse(String department) {
-        return isDepartmentInUse(getDepartmentByName(department));
     }
 
     private boolean isDepartmentInUse(Department department) {

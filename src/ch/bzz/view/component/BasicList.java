@@ -21,6 +21,12 @@ import java.util.Arrays;
 
 import static ch.bzz.util.ColorCodes.*;
 
+/**
+ * Creates a list with data, defined by the mode
+ * @author Kevin
+ * @since 19.06.2022
+ * @version 1.6
+ */
 public class BasicList extends JPanel {
     public static final int MODE_PERSON = 0;
     public static final int MODE_PERSON_EDIT = 1;
@@ -42,6 +48,12 @@ public class BasicList extends JPanel {
     private JButton removeButton = new JButton("X");
     private JButton editButton = new JButton("C");
 
+    /**
+     * creates the object
+     * @param owner (JFrame) of the panel
+     * @param mode of the Object (Constants)
+     * @param uuid of the person to display data of, not always needed
+     */
     public BasicList(JFrame owner, int mode, String uuid) {
         this.uuid = uuid;
         this.owner = owner;
@@ -50,6 +62,9 @@ public class BasicList extends JPanel {
         initLayout();
     }
 
+    /**
+     * inits the gui and all subcomponents
+     */
     private void initLayout() {
 
         double[][] order = {{-3, -1}, {-3, -1, -3}};
@@ -152,28 +167,36 @@ public class BasicList extends JPanel {
 
     }
 
+    /**
+     * returns the index of selectted position the list
+     * @return index
+     */
     public int getSelectedIndex() {
         return list.getSelectedIndex();
     }
 
-    public String getSelectedValue() {
-        return list.getSelectedValue();
-    }
-
+    /**
+     * adds a SelectionListener
+     * @param listener to be added
+     */
     public void addListSelectionListener(ListSelectionListener listener) {
         list.addListSelectionListener(listener);
     }
 
-    public void removeListSelectionListener(ListSelectionListener listener) {
-        list.removeListSelectionListener(listener);
-    }
-
+    /**
+     * sets visibility of the buttons
+     * @param visible boolean
+     */
     public void setButtonVisible(boolean visible) {
         if (visible) {
             add(buttonPanel, "1, 2");
         }
     }
 
+    /**
+     * sets visibility of the side title
+     * @param visible boolean
+     */
     private void setSideTitleVisible(boolean visible) {
         sideTitle.setVisible(visible);
         if (visible)
@@ -182,47 +205,53 @@ public class BasicList extends JPanel {
             sideTitle.setMinimumSize(new Dimension(0, 0));
     }
 
+    /**
+     * sets visibility of the top title
+     * @param visible boolean
+     */
     private void setTopTitleVisible(boolean visible) {
         topTitle.setVisible(visible);
     }
 
+    /**
+     * gets the uuid of a person in the list
+     * @param index of the person
+     * @return uuid
+     */
     public String getUuid(int index) {
         return ((PersonNameListModel)list.getModel()).getUuid(index);
     }
 
+    /**
+     * changes the uuid
+     * @param uuid of the person
+     */
     public void changeUuid(String uuid) {
         this.uuid = uuid;
         initLayout();
     }
 
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("test");
-        frame.add(new BasicList(null, 0, ""));
-        frame.setVisible(true);
-        MainFacade mF = MainFacade.getInstance();
-        mF.setCompany(new Company("test"));
-        for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3")) {
-            mF.addFunction(s);
-        }
-        for (String s1 : Arrays.asList("TestDepartment1", "TestDepartment2", "TestDepartment3")) {
-            mF.addDepartment(new Department(s1));
-        }
-        for (String s : Arrays.asList("TestTeam1", "TestTeam2", "TestTeam3")) {
-            mF.addTeam(s);
-        }
-        for (int i = 0; i < 2; i++) {
-            mF.createPerson("Niklas", "Vogel", Paths.get("test.jpg"), "TestDepartment1");
-            mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
-            mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
-        }
-        frame.pack();
-    }
 
+
+    /**
+     * sets the filter for further use
+     * @param name to search for
+     * @param function a person needs
+     * @param department a person needs
+     * @param team a person need
+     * @param sort, "A-Z", "Z-A", else wont be sorted
+     */
     public void setFilter(String name, String function, String department, String team, String sort) {
         ((PersonNameListModel)list.getModel()).setFilter(name,function,department,team,sort);
     }
 
+    /**
+     * listens, if the add button is pressed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class AddButtonActionListener implements ActionListener {
 
         /**
@@ -253,6 +282,12 @@ public class BasicList extends JPanel {
         }
     }
 
+    /**
+     * listens, if the edit button is pressed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class EditButtonActionListener implements ActionListener {
 
         /**
@@ -285,6 +320,12 @@ public class BasicList extends JPanel {
         }
     }
 
+    /**
+     * listens, if the remove button is pressed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class RemoveButtonActionListener implements ActionListener {
 
         /**

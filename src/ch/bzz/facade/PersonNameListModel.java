@@ -18,6 +18,9 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
     private String team = null;
     private String sort = null;
 
+    /**
+     * adds a listener to the MainFacade
+     */
     public PersonNameListModel() {
         MainFacade.getInstance().addModelListener(this);
     }
@@ -43,12 +46,22 @@ public class PersonNameListModel extends DefaultListModel<String> implements Mod
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getFullName();
     }
 
+    /**
+     * sets an element at a specific positon
+     * @param element what the component is to be set to
+     * @param index   the specified index
+     */
     public void setElementAt(String element, int index) {
         Person person = MainFacade.getInstance().getPerson(index, name, function, department, team, sort);
         person.setFirstName(element.split(" ")[0]);
         person.setLastName(element.split(" ")[1]);
     }
 
+    /**
+     * gives back the uuid of a person
+     * @param index of the perrson
+     * @return uuid
+     */
     public String getUuid(int index) {
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getUuid();
     }

@@ -3,7 +3,6 @@ package ch.bzz.view.dialog;
 import ch.bzz.facade.HRPersonBoxModel;
 import ch.bzz.facade.MainFacade;
 import ch.bzz.model.employees.HRPerson;
-import ch.bzz.util.ColorCodes;
 import ch.bzz.view.MainFrame;
 import layout.TableLayout;
 
@@ -14,6 +13,12 @@ import java.awt.event.ActionListener;
 
 import static ch.bzz.util.ColorCodes.*;
 
+/**
+ * Dialog for authorising by logging in
+ * @author Kevin
+ * @since 19.06.2022
+ * @version 1.4
+ */
 public class Authentication extends JDialog {
     private static int tries = 0;
     private final int mode;
@@ -32,6 +37,13 @@ public class Authentication extends JDialog {
     private final JPanel nameFieldPanel = new JPanel();
     private final JPanel codeFieldPanel = new JPanel();
     private final Authentication self;
+
+    /**
+     * Inits the Dialog and all subcomponents
+     * @param owner (JFRAME) of the dialog
+     * @param mode mode of the Object (Constants)
+     * @param tab to change to, if successful
+     */
     public Authentication(MainFrame owner, int mode, int tab) {
         super(owner, true);
 

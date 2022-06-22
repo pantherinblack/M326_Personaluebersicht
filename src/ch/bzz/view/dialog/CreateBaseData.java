@@ -11,6 +11,12 @@ import java.awt.event.ActionListener;
 
 import static ch.bzz.util.ColorCodes.*;
 
+/**
+ * Dialog for creating BaseData
+ * @author Kevin
+ * @since 21.06.2022
+ * @version 1.2
+ */
 public class CreateBaseData extends JDialog {
     public static final int FUNCTION_CREATE = 0;
     public static final int FUNCTION_EDIT = 1;
@@ -19,6 +25,7 @@ public class CreateBaseData extends JDialog {
     public static final int MODE_TEAM = 2;
     private int function;
     private int mode;
+    private JFrame owner;
     private String oldName;
     private JPanel container = new JPanel();
     private JLabel title = new JLabel("Title");
@@ -28,16 +35,27 @@ public class CreateBaseData extends JDialog {
     private JPanel cancelButtonPanel = new JPanel();
     private JPanel saveButtonPanel = new JPanel();
 
+    /**
+     * creates the gui
+     * @param owner JFrame) of the Dialog
+     * @param function function of the Object (Constants)
+     * @param mode mode of the Object (Constants)
+     * @param oldName old name, if in editing function
+     */
     public CreateBaseData(JFrame owner, int function, int mode, String oldName) {
         super(owner, true);
         this.function = function;
         this.mode = mode;
         this.oldName = oldName;
+        this.owner = owner;
         input.setText(oldName);
         init();
     }
 
 
+    /**
+     * inits the gui and all subcomponents
+     */
     private void init() {
         double[][] order = {{-3,-1,-3,-2,-2},{-1,-2,-2}};
         add(container);
@@ -93,6 +111,12 @@ public class CreateBaseData extends JDialog {
         super.dispose();
     }
 
+    /**
+     * listens, if the cancel button ist klicked
+     * @author Kevin
+     * @since 20.06.2022
+     * @version 1.0
+     */
     public class CancelButtonListener implements ActionListener {
 
         /**
@@ -106,6 +130,12 @@ public class CreateBaseData extends JDialog {
         }
     }
 
+    /**
+     * listens, if the save button ist klicked
+     * @author Kevin
+     * @since 20.06.2022
+     * @version 1.0
+     */
     public class SaveButtonListener implements ActionListener {
 
         /**
@@ -117,40 +147,45 @@ public class CreateBaseData extends JDialog {
         public void actionPerformed(ActionEvent e) {
             if (!input.getText().isEmpty()) {
                 MainFacade mF = MainFacade.getInstance();
-                switch (function) {
-                    case 0:
-                        switch (mode) {
-                            case 0:
-                                mF.addDepartment(input.getText());
-                                dispose();
-                                break;
-                            case 1:
-                                mF.addFunction(input.getText());
-                                dispose();
-                                break;
-                            case 2:
-                                mF.addTeam(input.getText());
-                                dispose();
-                                break;
-                        }
-                        break;
-                    case 1:
-                        switch (mode) {
-                            case 0:
-                                mF.changeDepartmentName(oldName, input.getText());
-                                dispose();
-                                break;
-                            case 1:
-                                mF.changeFunctionName(oldName, input.getText());
-                                dispose();
-                                break;
-                            case 2:
-                                mF.changeTeamName(oldName, input.getText());
-                                dispose();
-                                break;
-                        }
-                        break;
-                }
+                try {
+
+                    switch (function) {
+                        case 0:
+                            switch (mode) {
+                                case 0:
+                                    mF.addDepartment(input.getText());
+                                    dispose();
+                                    break;
+                                case 1:
+                                    mF.addFunction(input.getText());
+                                    dispose();
+                                    break;
+                                case 2:
+                                    mF.addTeam(input.getText());
+                                    dispose();
+                                    break;
+                            }
+                            break;
+                        case 1:
+                            switch (mode) {
+                                case 0:
+                                    mF.changeDepartmentName(oldName, input.getText());
+                                    dispose();
+                                    break;
+                                case 1:
+                                    mF.changeFunctionName(oldName, input.getText());
+                                    dispose();
+                                    break;
+                                case 2:
+                                    mF.changeTeamName(oldName, input.getText());
+                                    dispose();
+                                    break;
+                            }
+                            break;
+                    }
+                } catch (Exception | Error throwable) {
+                JOptionPane.showMessageDialog(owner, "An Error occurred during deleting\n" + throwable.getMessage());
+            }
             }
         }
     }

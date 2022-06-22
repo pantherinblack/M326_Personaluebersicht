@@ -12,6 +12,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Ints the BaseDataPanel, showing functions, teams and departments, allows adding, deleting and editing of them
+ * @author Kevin
+ * @since 21.06.2022
+ * @version 1.1
+ */
 public class BaseDataPanel extends JPanel {
     private JFrame owner;
     private JPanel content = new JPanel();
@@ -21,6 +27,10 @@ public class BaseDataPanel extends JPanel {
     public BasicList functionList;
     public BasicList teamList;
 
+    /**
+     * inits the BaseDataPanel and all components under it
+     * @param owner
+     */
     public BaseDataPanel(JFrame owner) {
         this.owner = owner;
         departmentList = new BasicList(owner, BasicList.MODE_BASE_DEPARTMENT, null);

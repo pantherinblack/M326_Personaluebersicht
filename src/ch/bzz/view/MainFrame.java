@@ -13,11 +13,19 @@ import javax.swing.event.ChangeListener;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * The MainFrame has all Gui components inside.
+ * @author Kevin
+ * @since 20.06.2022
+ */
 public class MainFrame extends JFrame {
     private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     private final MainFrame self;
     private boolean isUser = true;
 
+    /**
+     * Creates the MainFrame and sets the content.
+     */
     public MainFrame() {
         self = this;
         add(tabbedPane);
@@ -66,7 +74,7 @@ public class MainFrame extends JFrame {
             if (MainFacade.getInstance().isLoggedIn()!=1) {
                 if (isUser) {
                     int tab = tabbedPane.getSelectedIndex();
-                    if (tabbedPane.getSelectedIndex() == 4) {
+                    if (tabbedPane.getSelectedIndex() == 3) {
                         changeTab(0);
                         new Authentication(self, HRPerson.MODE_ADMIN, tab);
                     } else if (tabbedPane.getSelectedIndex() > 0 && MainFacade.getInstance().isLoggedIn()!=0) {
@@ -78,31 +86,5 @@ public class MainFrame extends JFrame {
             }
             self.pack();
         }
-    }
-    public static void main(String[] args) {
-
-        MainFacade mF = MainFacade.getInstance();
-
-        /*
-        for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3")) {
-            mF.addFunction(s);
-        }
-        for (String s1 : Arrays.asList("TestDepartment1", "TestDepartment2", "TestDepartment3")) {
-            mF.addDepartment(new Department(s1));
-        }
-        for (String s : Arrays.asList("TestTeam1", "TestTeam2", "TestTeam3")) {
-            mF.addTeam(s);
-        }
-        for (int i = 0; i < 2; i++) {
-            mF.createPerson("Niklas", "Vogel", Paths.get("test.jpg"), "TestDepartment1");
-            mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
-            mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
-            mF.changeToHR(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), HRPerson.MODE_ADMIN, "1234");
-        }
-
-         */
-
-
-        new MainFrame();
     }
 }

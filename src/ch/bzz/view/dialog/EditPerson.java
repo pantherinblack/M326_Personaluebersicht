@@ -130,28 +130,9 @@ public class EditPerson extends JDialog {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        MainFacade mF = MainFacade.getInstance();
-        mF.setCompany(new Company("test"));
-        for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3")) {
-            mF.addFunction(s);
-        }
-        for (String s1 : Arrays.asList("TestDepartment1", "TestDepartment2", "TestDepartment3")) {
-            mF.addDepartment(new Department(s1));
-        }
-        for (String s : Arrays.asList("TestTeam1", "TestTeam2", "TestTeam3")) {
-            mF.addTeam(s);
-        }
-        for (int i = 0; i < 2; i++) {
-            mF.createPerson("Niklas", "Vogel", Paths.get("test.jpg"), "TestDepartment1");
-            mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
-            mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
-        }
-        new EditPerson(null,0, "");
-
-
-    }
-
+    /**
+     * updates the checkbox visibility
+     */
     public void updateCheckBoxes() {
         if (!hrCheckBox.isSelected()) {
             adminCheckBox.setSelected(false);
@@ -169,6 +150,12 @@ public class EditPerson extends JDialog {
         }
     }
 
+    /**
+     * Checks if the HR Checkbox is being changed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class HRCheckBoxListener implements ActionListener {
 
         /**
@@ -182,6 +169,12 @@ public class EditPerson extends JDialog {
         }
     }
 
+    /**
+     * listens if the cancel button is pressed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class CancelListener implements ActionListener {
 
         /**
@@ -195,10 +188,17 @@ public class EditPerson extends JDialog {
         }
     }
 
+    /**
+     * listens, if the save button is pressed
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class SaveListener implements ActionListener {
 
         /**
          * Invoked when an action occurs.
+         * Changes data in the models
          *
          * @param e the event to be processed
          */

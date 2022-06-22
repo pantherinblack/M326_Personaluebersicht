@@ -7,6 +7,12 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * mode for the SwitchList
+ * @author Kevin
+ * @since 21.06.2022
+ * @version 1.2
+ */
 public class SwitchListModel extends AbstractListModel<String> implements ModelListener {
     public static final int SIDE_LEFT = 0;
     public static final int SIDE_RIGHT = 1;
@@ -113,6 +119,10 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
         return null;
     }
 
+    /**
+     * add an element
+     * @param element to be added
+     */
     public void addElement(String element) {
         if (side==0) {
             switch (mode) {
@@ -126,6 +136,10 @@ public class SwitchListModel extends AbstractListModel<String> implements ModelL
         }
     }
 
+    /**
+     * removes an element
+     * @param element to be removed
+     */
     public void removeElement(String element) {
         if (side==0) {
             switch (mode) {

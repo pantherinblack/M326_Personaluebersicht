@@ -12,6 +12,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+/**
+ * PersonPanel is here to add, remove or change People.
+ * @author Kevin
+ * @since 21.06.2022
+ * @version 1.1
+ */
 public class PersonPanel extends JPanel {
     private JPanel content = new JPanel();
     private BasicList basicList;
@@ -24,6 +30,10 @@ public class PersonPanel extends JPanel {
     private JCheckBox hrCheckBox = new JCheckBox();
     private JCheckBox adminCheckBox = new JCheckBox();
 
+    /**
+     * Inits the PersonPanel and all components
+     * @param owner (JFrame) of the Panel
+     */
     public PersonPanel(JFrame owner) {
         basicList = new BasicList(owner, BasicList.MODE_PERSON_EDIT, null);
         basicPerson = new BasicPerson(BasicPerson.MODE_SHOW, MainFacade.getInstance().getPerson(0).getUuid());
@@ -59,6 +69,9 @@ public class PersonPanel extends JPanel {
         update();
     }
 
+    /**
+     * handels data-changes
+     */
     public void update() {
         hrCheckBox.setSelected(false);
         adminCheckBox.setSelected(false);
@@ -70,6 +83,11 @@ public class PersonPanel extends JPanel {
         }
     }
 
+    /**
+     * Listener for the list
+     * @author Kevin
+     * @since 21.06.2022
+     */
     public class PersonListListener implements ListSelectionListener {
 
         /**

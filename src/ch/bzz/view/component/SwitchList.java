@@ -14,10 +14,15 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * Generates 2 Lists, where Data can be switched from one to the other side by klicking
+ * @author Kevin
+ * @since 21.06.2022
+ * @version 1.3
+ */
 public class SwitchList extends JPanel implements ViewListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
@@ -35,6 +40,11 @@ public class SwitchList extends JPanel implements ViewListener {
     private JList<String> leftList = new JList<>();
     private JList<String> rightList = new JList<>();
 
+    /**
+     * creates the SwichList
+     * @param uuid ot the person tho show data from
+     * @param mode of the gui (Constants)
+     */
     public SwitchList(String uuid, int mode) {
         this.uuid = uuid;
         this.mode = mode;
@@ -42,31 +52,9 @@ public class SwitchList extends JPanel implements ViewListener {
         init();
     }
 
-    public static void main(String[] args) {
-
-
-        JFrame frame = new JFrame("test");
-        frame.setVisible(true);
-        MainFacade mF = MainFacade.getInstance();
-        mF.setCompany(new Company("test"));
-        for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3", "TestFunction4")) {
-            mF.addFunction(s);
-        }
-        for (String s1 : Arrays.asList("TestDepartment1", "TestDepartment2", "TestDepartment3")) {
-            mF.addDepartment(new Department(s1));
-        }
-        for (String s : Arrays.asList("TestTeam1", "TestTeam2", "TestTeam3")) {
-            mF.addTeam(s);
-        }
-        for (int i = 0; i < 2; i++) {
-            mF.createPerson("Niklas", "Vogel", Paths.get("test.jpg"), "TestDepartment1");
-            mF.addFunctionAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestFunction1");
-            mF.addTeamAtPerson(mF.getPerson(mF.getAllPeople().size() - 1).getUuid(), "TestTeam1");
-        }
-        frame.add(new SwitchList(mF.getPerson(0).getUuid(), SwitchList.MODE_TEAM));
-        frame.pack();
-    }
-
+    /**
+     * inits the dui and all subcomponents
+     */
     private void init() {
         leftTitle.setText(MainFacade.getInstance().getFullNameByUuid(uuid));
         rightTitle.setText("Übrige");
@@ -108,6 +96,9 @@ public class SwitchList extends JPanel implements ViewListener {
         rightList.setForeground(ColorCodes.DARK_RED);
     }
 
+    /**
+     * manages updates in the gui
+     */
     private void update() {
         //Sets or updates the model
         if (leftList.getModel() instanceof SwitchListModel) {
@@ -123,71 +114,87 @@ public class SwitchList extends JPanel implements ViewListener {
         }
     }
 
+    /**
+     * changes values
+     *
+     * @param uuid of the person
+     */
+    @Override
+    public void fireChanges(String uuid) {
+        this.uuid = uuid;
+        update();
+    }
+
+    /**
+     * Listens, if the left side is being klicked
+     *
+     * @author Kevin
+     * @version 1.2
+     * @since 21.06.2022
+     */
+    public class LeftListSelectionListener implements ListSelectionListener {
+
         /**
-         * @param uuid
+         * Called whenever the value of the selection changes.
+         *
+         * @param e the event that characterizes the change.
          */
         @Override
-        public void fireChanges (String uuid){
-            this.uuid = uuid;
-            update();
-        }
+        public void valueChanged(ListSelectionEvent e) {
+            if (input && !leftList.isSelectedIndex(-1)) {
+                input = false;
+                ((SwitchListModel) leftList.getModel()).removeElement(leftList.getSelectedValue());
 
-        public class LeftListSelectionListener implements ListSelectionListener {
+                leftList.setSelectedIndex(-1);
+                rightList.setSelectedIndex(-1);
 
-            /**
-             * Called whenever the value of the selection changes.
-             *
-             * @param e the event that characterizes the change.
-             */
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (input && !leftList.isSelectedIndex(-1)) {
-                    input = false;
-                    ((SwitchListModel) leftList.getModel()).removeElement(leftList.getSelectedValue());
-
-                    leftList.setSelectedIndex(-1);
-                    rightList.setSelectedIndex(-1);
-
-                }
-                input = true;
             }
+            input = true;
         }
+    }
 
-        public class RightListSelectionListener implements ListSelectionListener {
+    /**
+     * Listens, if the right side is being klicked
+     *
+     * @author Kevin
+     * @version 1.2
+     * @since 21.06.2022
+     */
+    public class RightListSelectionListener implements ListSelectionListener {
 
-            /**
-             * Called whenever the value of the selection changes.
-             *
-             * @param e the event that characterizes the change.
-             */
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (input && !rightList.isSelectedIndex(-1)) {
-                    input = false;
-                    ((SwitchListModel) leftList.getModel()).addElement(rightList.getSelectedValue());
-                    rightList.setSelectedIndex(-1);
-                    leftList.setSelectedIndex(-1);
-                }
-                input = true;
+        /**
+         * Called whenever the value of the selection changes.
+         *
+         * @param e the event that characterizes the change.
+         */
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (input && !rightList.isSelectedIndex(-1)) {
+                input = false;
+                ((SwitchListModel) leftList.getModel()).addElement(rightList.getSelectedValue());
+                rightList.setSelectedIndex(-1);
+                leftList.setSelectedIndex(-1);
             }
+            input = true;
         }
+    }
 
-        public class RightListMouseListener extends MouseAdapter {
-            /**
-             * Invoked when a mouse button has been released on a component.
-             *
-             * @param e the event to be processed
-             */
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (input) {
-                    input = false;
-                    ((SwitchListModel) leftList.getModel()).addElement(rightList.getSelectedValue());
-                    rightList.setSelectedIndex(-1);
-                }
-                input = true;
+    public class RightListMouseListener extends MouseAdapter {
+        /**
+         * Invoked when a mouse button has been released on a component.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if (input) {
+                input = false;
+                ((SwitchListModel) leftList.getModel()).addElement(rightList.getSelectedValue());
+                rightList.setSelectedIndex(-1);
             }
+            input = true;
         }
+    }
 
     public class LeftListMouseListener extends MouseAdapter {
         /**
@@ -205,4 +212,4 @@ public class SwitchList extends JPanel implements ViewListener {
             input = true;
         }
     }
-    }
+}

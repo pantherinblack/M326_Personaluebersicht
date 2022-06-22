@@ -260,6 +260,12 @@ public class OverviewPanel extends JPanel {
         });
     }
 
+    /**
+     * SearchListener registers when a search is made
+     * @author Kevin
+     * @since 21.06.2022
+     * @version 1.0
+     */
     public class SearchListener extends MouseAdapter {
         /**
          * Invoked when the mouse button has been clicked (pressed

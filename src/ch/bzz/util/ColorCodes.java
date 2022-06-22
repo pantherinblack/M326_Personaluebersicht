@@ -4,6 +4,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+/**
+ * Class for Constants to choose form, creating the gui
+ * @author Kevin
+ * @since 18.06.2022
+ * @version 1.1
+ */
 public class ColorCodes {
     public static final Color DARK_RED = new Color(180,0,0);
     public static final Color EXTRA_LIGHT_GRAY = new Color(230,230,230);
