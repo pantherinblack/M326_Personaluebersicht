@@ -1,6 +1,6 @@
 package ch.bzz.facade;
 
-import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.interfaces.ModelListener;
 import ch.bzz.model.company.Department;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import javax.swing.*;
  * @version 1.0
  * @since 18.06.2022
  */
-public class DataListModel extends DefaultComboBoxModel<String> implements ChangesModel {
+public class DataListModel extends DefaultComboBoxModel<String> implements ModelListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
     public static final int MODE_DEPARTMENT = 2;
@@ -24,15 +24,15 @@ public class DataListModel extends DefaultComboBoxModel<String> implements Chang
      * @param mode to be used
      */
     public DataListModel(int mode) {
-        MainFacade.getInstance().addModel(this);
+        MainFacade.getInstance().addModelListener(this);
         this.mode = mode;
     }
 
     /**
      * removes the model from the MainFacade
      */
-    public void remove() {
-        MainFacade.getInstance().removeModel(this);
+    public void removeSelf() {
+        MainFacade.getInstance().removeModelListener(this);
     }
 
     /**

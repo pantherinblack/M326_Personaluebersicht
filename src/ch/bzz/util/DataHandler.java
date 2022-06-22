@@ -1,6 +1,8 @@
 package ch.bzz.util;
 
 import ch.bzz.model.company.Company;
+import ch.bzz.model.company.Department;
+import ch.bzz.model.employees.HRPerson;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -80,7 +82,13 @@ public class DataHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             company = objectMapper.readValue(jsonData, Company.class);
         } catch (IOException e) {
-            company = new Company("Empty");
+            company = new Company("Company-name");
+            company.addTeam("Team1");
+            company.addFunction("Function1");
+            company.addDepartment(new Department("Department1"));
+            HRPerson hr = new HRPerson("Max", "Mustermann", null, 1);
+            hr.setPwd("");
+            company.getDepartment(0).addMember(hr);
         }
 
         //TODO

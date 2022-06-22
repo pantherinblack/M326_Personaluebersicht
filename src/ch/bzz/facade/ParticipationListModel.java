@@ -1,6 +1,6 @@
 package ch.bzz.facade;
 
-import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.interfaces.ModelListener;
 
 import javax.swing.*;
 
@@ -11,7 +11,7 @@ import javax.swing.*;
  * @version 1.5
  * @since 17.06.2022
  */
-public class ParticipationListModel extends DefaultListModel<String> implements ChangesModel {
+public class ParticipationListModel extends DefaultComboBoxModel<String> implements ModelListener {
     public static final int MODE_FUNCTION = 0;
     public static final int MODE_TEAM = 1;
     private final String uuid;
@@ -23,7 +23,7 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
      * @param uuid of the person
      */
     public ParticipationListModel(String uuid, int mode) {
-        MainFacade.getInstance().addModel(this);
+        MainFacade.getInstance().addModelListener(this);
         this.uuid = uuid;
         this.mode = mode;
     }
@@ -74,25 +74,6 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
         return null;
     }
 
-
-    /**
-     * Sets the element at the specific position
-     *
-     * @param element what the component is to be set to
-     * @param index   the specified index
-     */
-    @Override
-    public void setElementAt(String element, int index) {
-        switch (mode) {
-            case 0:
-                MainFacade.getInstance().setFunctionAtPerson(uuid, element, index);
-                break;
-            case 1:
-                MainFacade.getInstance().setTeamAtPerson(uuid, element, index);
-                break;
-        }
-    }
-
     /**
      * adds an element
      *
@@ -127,6 +108,6 @@ public class ParticipationListModel extends DefaultListModel<String> implements 
      * removes the model from the MainFacade
      */
     public void remove() {
-        MainFacade.getInstance().removeModel(this);
+        MainFacade.getInstance().removeModelListener(this);
     }
 }

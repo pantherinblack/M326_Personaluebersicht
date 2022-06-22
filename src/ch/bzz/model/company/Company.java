@@ -2,7 +2,6 @@ package ch.bzz.model.company;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -14,7 +13,7 @@ import java.util.Vector;
  */
 public class Company {
     private String name;
-    private List<Department> departments = new Vector<>();
+    private Vector<Department> departments = new Vector<>();
     private JobFunctions functions = new JobFunctions();
     private Teams teams = new Teams();
 
@@ -30,7 +29,6 @@ public class Company {
      *
      * @param name to be set
      */
-    @JsonIgnore
     public Company(String name) {
         this.name = name;
     }
@@ -38,19 +36,18 @@ public class Company {
     /**
      * gets the name of the company
      *
-     * @return company-name
+     * @return name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * sets the name of the company
-     * Needed for ObjectMapper
+     * sets the comany name
      *
      * @param name to be set
      */
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -69,7 +66,7 @@ public class Company {
      *
      * @return departments
      */
-    public List<Department> getDepartments() {
+    public Vector<Department> getDepartments() {
         return departments;
     }
 
@@ -79,7 +76,7 @@ public class Company {
      *
      * @param departments to be set
      */
-    public void setDepartments(List<Department> departments) {
+    public void setDepartments(Vector<Department> departments) {
         this.departments = departments;
     }
 

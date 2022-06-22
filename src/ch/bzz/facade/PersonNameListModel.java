@@ -1,19 +1,29 @@
 package ch.bzz.facade;
 
-import ch.bzz.interfaces.ChangesModel;
+import ch.bzz.interfaces.ModelListener;
 import ch.bzz.model.employees.Person;
 
 import javax.swing.*;
 
-public class PersonNameListModel extends DefaultListModel<String> implements ChangesModel {
+/**
+ * controls the usage of the name etc. to only give back strings
+ *
+ * @author Kevin
+ * @version 1.2
+ * @since 20.06.2022
+ */
+public class PersonNameListModel extends DefaultListModel<String> implements ModelListener {
     private String name = null;
     private String function = null;
     private String department = null;
     private String team = null;
     private String sort = null;
 
+    /**
+     * adds a listener to the MainFacade
+     */
     public PersonNameListModel() {
-        MainFacade.getInstance().addModel(this);
+        MainFacade.getInstance().addModelListener(this);
     }
 
     /**
@@ -37,16 +47,37 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getFullName();
     }
 
+    /**
+     * sets an element at a specific positon
+     *
+     * @param element what the component is to be set to
+     * @param index   the specified index
+     */
     public void setElementAt(String element, int index) {
         Person person = MainFacade.getInstance().getPerson(index, name, function, department, team, sort);
         person.setFirstName(element.split(" ")[0]);
         person.setLastName(element.split(" ")[1]);
     }
 
+    /**
+     * gives back the uuid of a person
+     *
+     * @param index of the perrson
+     * @return uuid
+     */
     public String getUuid(int index) {
         return MainFacade.getInstance().getPerson(index, name, function, department, team, sort).getUuid();
     }
 
+    /**
+     * sets the filter for further use. Maintains consistency
+     *
+     * @param name       to search for
+     * @param function   needed
+     * @param department needed
+     * @param team       needed
+     * @param sort       type of the list
+     */
     public void setFilter(String name, String function, String department, String team, String sort) {
         this.name = name;
         this.function = function;
@@ -69,6 +100,11 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
         else super.fireContentsChanged(source, index0, index1);
     }
 
+    /**
+     * removes an element at a specific position
+     *
+     * @param index the index of the object to remove
+     */
     public void removeElementAt(int index) {
         MainFacade.getInstance().removePerson(getUuid(index));
     }
@@ -77,6 +113,6 @@ public class PersonNameListModel extends DefaultListModel<String> implements Cha
      * removes the model from the MainFacade
      */
     public void remove() {
-        MainFacade.getInstance().removeModel(this);
+        MainFacade.getInstance().removeModelListener(this);
     }
 }

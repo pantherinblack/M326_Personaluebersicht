@@ -21,7 +21,7 @@ public class ConfigReader {
     public static String readConfig(String attribute) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("settings.properties"));
-            if (reader.ready()) {
+            while (reader.ready()) {
                 String line = reader.readLine();
                 if (line.split("=")[0].equals(attribute)) return line.split("=")[1];
             }

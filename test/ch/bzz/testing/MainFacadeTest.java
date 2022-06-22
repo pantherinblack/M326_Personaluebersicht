@@ -15,15 +15,17 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test-class for MeinFacade, test happy cases and most unhappy cases
+ *
  * @author Kevin
- * @since 18.06.2022
  * @version 1.0
+ * @since 18.06.2022
  */
 class MainFacadeTest {
 
@@ -32,6 +34,7 @@ class MainFacadeTest {
     @BeforeEach
     public void setUp() {
         mF.setCompany(new Company("test"));
+        mF.setHrPerson(new HRPerson("Karl", "Heinz", null, 1));
         for (String s : Arrays.asList("TestFunction1", "TestFunction2", "TestFunction3")) {
             mF.addFunction(s);
         }
@@ -124,12 +127,12 @@ class MainFacadeTest {
     void removeToManyPerson() {
         mF.removePerson(mF.getPerson(0).getUuid());
         mF.removePerson(mF.getPerson(0).getUuid());
-        assertThrowsExactly(ArrayIndexOutOfBoundsException.class, () -> mF.getPerson(-1));
+        assertThrowsExactly(ArrayIndexOutOfBoundsException.class, () -> mF.removePerson(mF.getPerson(0).getUuid()));
     }
 
     @Test
     void getAllPeople() {
-        assertEquals(2,mF.getAllPeople().size());
+        assertEquals(2, mF.getAllPeople().size());
     }
 
 
@@ -157,44 +160,46 @@ class MainFacadeTest {
     @org.junit.jupiter.api.Test
     void sortPeopleWell() {
         Vector<Person> all = mF.getAllPeople();
-        assertEquals(all, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", ""));
+        assertEquals(all, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleAsc() {
         Vector<Person> all = mF.getAllPeople();
-        assertEquals(all, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "asc"));
+        all.sort(Comparator.comparing(Person::getFullName));
+        assertEquals(all, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleWrongName() {
         Vector<Person> empty = new Vector<>();
-        assertEquals(empty, mF.sortPeople("Franz", "TestFunction1", "TestDepartment1", "TestTeam1", "asc"));
+        assertEquals(empty, mF.sortPeople("Franz", "TestFunction1", "TestDepartment1", "TestTeam1", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleWrongFunction() {
         Vector<Person> empty = new Vector<>();
-        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction", "TestDepartment1", "TestTeam1", "asc"));
+        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction", "TestDepartment1", "TestTeam1", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleWrongDepartment() {
         Vector<Person> empty = new Vector<>();
-        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment", "TestTeam1", "asc"));
+        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment", "TestTeam1", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleWrongTeam() {
         Vector<Person> empty = new Vector<>();
-        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam", "asc"));
+        assertEquals(empty, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam", "A-Z"));
     }
 
     @org.junit.jupiter.api.Test
     void sortPeopleDsc() {
         Vector<Person> reverse = mF.getAllPeople();
+        reverse.sort(Comparator.comparing(Person::getFullName));
         Collections.reverse(reverse);
-        assertEquals(reverse, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "dsc"));
+        assertEquals(reverse, mF.sortPeople("Niklas", "TestFunction1", "TestDepartment1", "TestTeam1", "Z-A"));
     }
 
     @Test
@@ -261,7 +266,7 @@ class MainFacadeTest {
     @Test
     void removeTeamAtPerson() {
         mF.removeTeamAtPerson(mF.getPerson(0).getUuid(), "TestTeam1");
-        assertEquals(0,mF.getTeamsByUuid(mF.getPerson(0).getUuid()).size());
+        assertEquals(0, mF.getTeamsByUuid(mF.getPerson(0).getUuid()).size());
     }
 
     @Test
@@ -355,7 +360,7 @@ class MainFacadeTest {
     @Test
     void addDepartment() {
         mF.addDepartment(new Department("test"));
-        assertEquals(4,mF.getAllDepartments().size());
+        assertEquals(4, mF.getAllDepartments().size());
     }
 
     @Test
@@ -367,7 +372,7 @@ class MainFacadeTest {
     @Test
     void testAddDepartment() {
         mF.addDepartment("test");
-        assertEquals(4,mF.getAllDepartments().size());
+        assertEquals(4, mF.getAllDepartments().size());
     }
 
     @Test
@@ -379,7 +384,7 @@ class MainFacadeTest {
     @Test
     void addFunction() {
         mF.addFunction("Test");
-        assertEquals(4,mF.getAllFunctions().size());
+        assertEquals(4, mF.getAllFunctions().size());
     }
 
     @Test
@@ -391,7 +396,7 @@ class MainFacadeTest {
     @Test
     void addTeam() {
         mF.addTeam("Team");
-        assertEquals(4,mF.getAllTeams().size());
+        assertEquals(4, mF.getAllTeams().size());
     }
 
     @Test
@@ -403,7 +408,7 @@ class MainFacadeTest {
     @Test
     void removeDepartment() {
         mF.removeDepartment(2);
-        assertEquals(2,mF.getAllDepartments().size());
+        assertEquals(2, mF.getAllDepartments().size());
     }
 
     @Test
@@ -421,7 +426,7 @@ class MainFacadeTest {
     @Test
     void removeFunction() {
         mF.removeFunction(2);
-        assertEquals(2,mF.getAllFunctions().size());
+        assertEquals(2, mF.getAllFunctions().size());
     }
 
     @Test
@@ -450,14 +455,14 @@ class MainFacadeTest {
 
     @Test
     void changeToHR() {
-        mF.changeToHR(mF.getPerson(0).getUuid(), HRPerson.MODE_NORMAL,"password");
+        mF.changeToHR(mF.getPerson(0).getUuid(), HRPerson.MODE_NORMAL, "password");
         assertTrue(mF.getPerson(0) instanceof HRPerson);
     }
 
 
     @Test
     void changeToPerson() {
-        mF.changeToHR(mF.getPerson(0).getUuid(), HRPerson.MODE_NORMAL,"password");
+        mF.changeToHR(mF.getPerson(0).getUuid(), HRPerson.MODE_NORMAL, "password");
         mF.changeToPerson(mF.getPerson(0).getUuid());
         assertTrue(mF.getPerson(0) instanceof HRPerson);
     }
