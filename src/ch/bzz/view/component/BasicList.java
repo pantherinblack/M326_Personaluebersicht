@@ -20,7 +20,7 @@ import static ch.bzz.util.ColorCodes.*;
  * Creates a list with data, defined by the mode
  *
  * @author Kevin
- * @version 1.6
+ * @version 1.06.2022
  * @since 19.06.2022
  */
 public class BasicList extends JPanel {
